@@ -11,9 +11,9 @@ const channelType = {
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Mirror.FM`,
+    description: `Songs availability & discovery`,
+    author: `@mirrorfm`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -54,7 +54,7 @@ module.exports = {
 
         // Name of the data to be downloaded.  Will show in graphQL or be saved to a file
         // using this name. i.e. posts.json
-        name: `channel`,
+        name: `channels`,
 
         // Nested level of entities in response object, example: `data.posts`
         entityLevel: `youtube.channels`,

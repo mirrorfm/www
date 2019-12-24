@@ -36,9 +36,9 @@ const Layout = ({ children }) => {
       >
         <main>{children}</main>
         <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
+          <div style={{ "text-align": `center` }}>
+            <iframe src={`https://open.spotify.com/follow/1/?uri=spotify:user:xlqeojt6n7on0j7coh9go8ifd&size=detail&theme=dark`} width="300" height="56" scrolling="no" frameborder="0" style={{ border: "none", overflow: "hidden" }} allowtransparency="true"></iframe>
+          </div>
         </footer>
       </div>
     </>
