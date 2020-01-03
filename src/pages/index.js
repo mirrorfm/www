@@ -8,7 +8,7 @@ import SEO from "../components/seo"
 const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
-    <p>{data.allInternalChannels.totalCount} YouTube channels</p>
+    <p style={{ "textAlign": "right" }}>{data.allInternalChannels.totalCount} YouTube channels</p>
     <ul style={{ columns: `6`, 'listStyleType': `none` }}>
       {data.allInternalChannels.nodes
         .map(({ channel_name, channel_id, thumbnails }, index) => (
