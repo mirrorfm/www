@@ -1,7 +1,6 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
-import ForkMeOnGithub from 'fork-me-on-github';
 
 const Header = ({ siteTitle }) => (
   <header
@@ -32,11 +31,6 @@ const Header = ({ siteTitle }) => (
         >
           {siteTitle}
         </Link>
-        <ForkMeOnGithub
-          repo="https://github.com/mirrorfm/mirror.fm"
-          colorBackground="white"
-          colorOctocat="black"
-        />
       </h1>
     </div>
   </header>
