@@ -176,6 +176,9 @@ textarea {
 [type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
 }
+.textwidget.custom-html-widget {
+  text-align: center;
+}
 ::-webkit-input-placeholder {
   color: inherit;
   opacity: 0.54;

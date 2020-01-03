@@ -8,9 +8,8 @@ import SEO from "../components/seo"
 const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
-    <h1>yt</h1>
-    {/* <p>x channels</p> */}
-    <ul style={{ columns: `5`, 'list-style-type': `none` }}>
+    <p>{data.allInternalChannels.totalCount} YouTube channels</p>
+    <ul style={{ columns: `6`, 'listStyleType': `none` }}>
       {data.allInternalChannels.nodes
         .map(({ channel_name, channel_id, thumbnails }, index) => (
           <li key={index}>
@@ -31,7 +30,7 @@ export default IndexPage
 
 export const query = graphql`
   query {
-    allInternalChannels {
+    allInternalChannels(filter: {id: {ne: "dummy"}}) {
       nodes {
         id
         channel_name
@@ -44,5 +43,6 @@ export const query = graphql`
           }
         }
       }
+      totalCount
     }
   }`
