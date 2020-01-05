@@ -8,17 +8,22 @@ import SEO from "../components/seo"
 const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
-    <p style={{ "textAlign": "right" }}>{data.allInternalChannels.totalCount} YouTube channels</p>
-    <ul style={{ columns: `6`, 'listStyleType': `none` }}>
+    <p style={{ textAlign: "right" }}>{data.allInternalChannels.totalCount} YouTube channels</p>
+    <ul style={{ columns: `3`, listStyleType: `none` }}>
       {data.allInternalChannels.nodes
-        .map(({ channel_name, channel_id, thumbnails }, index) => (
+        .map((c, index) => (
           <li key={index}>
-            <a href={`https://youtube.com/channel/${channel_id}`}>
-              {/* {channel_name} */}
-              <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-                <img style={{ opacity: 0.9 }} src={thumbnails.medium.url} />
+            <div class="container">
+              <div class="content content-top">
+                <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>{c.channel_name}</a>
               </div>
-            </a>
+              <img src={c.thumbnails.medium.url} />
+              <div class="content content-bottom">
+                <a style={{float: `right`}} href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
+                  {Math.round(c.found_tracks * 100 / c.count_tracks)}%
+                </a>
+              </div>
+            </div>
           </li>
         ))}
     </ul>
@@ -34,7 +39,7 @@ export const query = graphql`
       nodes {
         id
         channel_name
-        channel_id
+        upload_playlist_id
         thumbnails {
           medium {
             width
@@ -42,6 +47,10 @@ export const query = graphql`
             height
           }
         }
+        spotify_playlist_id
+        found_tracks
+        count_tracks
+        count_followers
       }
       totalCount
     }

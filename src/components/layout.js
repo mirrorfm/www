@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
       >
         <main>{children}</main>
         <footer style={{ "textAlign": "center" }}>
-        Also check out <a href="https://resident-archive.github.io/">Resident Archive</a>.
+          Also check out <a href="https://resident-archive.github.io/">Resident Archive</a>.
         </footer>
       </div>
     </>
