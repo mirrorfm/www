@@ -118,16 +118,32 @@ img {
   padding: 1px 5px;
 }
 
-.container .content-top a {
-  background: rgba(255, 255, 255, 0.95);
+.container .content-top span {
   color: black;
+  background-color: white;
+  border-radius: 25px;
 }
 
 .container .content-bottom a {
-  background: rgba(30, 215, 96, 1);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: black;
   font-weight: 100;
   text-align: center;
+}
+
+.container .content-bottom-left a {
+  font-weight: 100;
+  text-align: center;
+}
+
+.container .content-bottom-low a {
+  background: #FF0000;
+}
+.container .content-bottom-medium a {
+  background: #FFA500;
+}
+.container .content-bottom-high a {
+  background: rgba(30, 215, 96, 1);
 }
 
 .container img {vertical-align: middle;}

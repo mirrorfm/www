@@ -1,7 +1,6 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
-import { OutboundLink } from 'gatsby-plugin-google-analytics'
 
 const Header = ({ siteTitle }) => (
   <header
