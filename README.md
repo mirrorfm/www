@@ -1,7 +1,7 @@
 <!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
 <p align="center">
-  <a href="https://www.gatsbyjs.org">
-    <img alt="Gatsby" src="https://www.gatsbyjs.org/monogram.svg" width="60" />
+  <a href="https://www.mirror.fm">
+    <img alt="Gatsby" src="https://raw.githubusercontent.com/mirrorfm/www/master/src/images/mirrorfm-icon.png" width="60" />
   </a>
 </p>
 <h1 align="center">
