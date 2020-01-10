@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from "gatsby"
 import axios from 'axios'
 
 import Layout from "../components/layout"
@@ -23,42 +22,38 @@ class Home extends Component {
 
   render() {
     const { youtube } = this.state.data;
-    console.log(youtube);
+
     return (
       <Layout>
         <SEO title="Home" />
-        <p style={{ textAlign: "right" }}>{youtube.total_channels} YouTube channels</p>
-        <ul style={{ columns: `3`, listStyleType: `none` }}>
-          {youtube.channels.map((c, index) => (
-              <li key={index}>
-                <div class="container">
-                  <div class="content content-bottom">
-                    <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>{c.channel_name}</a>
-                  </div>
-                  <img src={c.thumbnails.medium.url} />
-                  <div class="content content-bottom content-bottom-high">
-                    <a style={{float: `right`}} href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
-                      {Math.round(c.found_tracks * 100 / c.count_tracks)}%
-                    </a>
-                  </div>
-                </div>
-              </li>
-            ))}
-        </ul>
-        {/* <div style={{ textAlign: 'center', width: '600px', margin: '50px auto' }}>
-          <div>
-            {this.state.loading ? (
-              <p>Please hold, pupper incoming!</p>
-            ) : img && breed ? (
-              <>
-                <h2>{`${breed} pupper!`}</h2>
-                <img src={img} alt={`cute random `} style={{ maxWidth: 300 }} />
-              </>
-            ) : (
-              <p>Oh noes, error fetching pupper :(</p>
-            )}
-          </div>
-        </div> */}
+        <div>
+          {this.state.loading ? (
+            <p style={{ textAlign: "center" }}>Loading...</p>
+          ) : this.state.data ? (
+            <>
+              <p style={{ textAlign: "right" }}>{youtube.total_channels} YouTube channels</p>
+              <ul style={{ columns: `3`, listStyleType: `none` }}>
+                {youtube.channels.map((c, index) => (
+                  <li key={index}>
+                    <div class="container">
+                      <div class="content content-top">
+                        <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>{c.channel_name}</a>
+                      </div>
+                      <img src={c.thumbnails.medium.url} alt={c.channel_name} />
+                      <div class="content content-bottom content-bottom-high">
+                        <a style={{float: `right`}} href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
+                          {Math.round(c.found_tracks * 100 / c.count_tracks)}%
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p>Oh noes, error fetching channels :(</p>
+          )}
+        </div>
         {/* <Link to="/page-2/">Go to page 2</Link> */}
       </Layout>
     )

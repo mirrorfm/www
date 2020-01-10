@@ -114,14 +114,13 @@ img {
 }
 
 .container .content a {
-  text-decoration: none;
   padding: 1px 5px;
+  text-decoration: none;
 }
 
-.container .content-top span {
+.container .content-top a {
   color: black;
   background-color: white;
-  border-radius: 25px;
 }
 
 .container .content-bottom a {
@@ -136,12 +135,6 @@ img {
   text-align: center;
 }
 
-.container .content-bottom-low a {
-  background: #FF0000;
-}
-.container .content-bottom-medium a {
-  background: #FFA500;
-}
 .container .content-bottom-high a {
   background: rgba(30, 215, 96, 1);
 }

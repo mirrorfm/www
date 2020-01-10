@@ -33,7 +33,7 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
         <div style={{  "display": `inline`, "marginBottom": "0" }}>
-          <iframe src="https://open.spotify.com/follow/1/?uri=spotify:user:xlqeojt6n7on0j7coh9go8ifd&size=basic&theme=light" width="200" height="27" scrolling="no" frameBorder="0" style={{border: `none`, overflow: `hidden`, marginBottom: `0`, paddingLeft: `35px` }} allowtransparency="true"></iframe>
+          <iframe src="https://open.spotify.com/follow/1/?uri=spotify:user:xlqeojt6n7on0j7coh9go8ifd&size=basic&theme=light" title="Follow Mirror.FM on Spotify" width="200" height="27" scrolling="no" frameBorder="0" style={{border: `none`, overflow: `hidden`, marginBottom: `0`, paddingLeft: `35px` }} allowtransparency="true"></iframe>
         </div>
       </h1>
 
