@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 class Home extends Component {
   state = {
@@ -31,16 +32,21 @@ class Home extends Component {
             <p style={{ textAlign: "center" }}>Loading...</p>
           ) : this.state.data ? (
             <>
-              <p style={{ textAlign: "right" }}>{youtube.total_channels} YouTube channels</p>
-              <ul style={{ columns: `3`, listStyleType: `none` }}>
+              <p style={{ textAlign: "right" }}>{Math.round(youtube.found_tracks * 100 / youtube.total_tracks)}% tracks in {youtube.total_channels} YouTube channels</p>
+              <ul style={{ columns: `4`, listStyleType: `none` }}>
                 {youtube.channels.map((c, index) => (
                   <li key={index}>
-                    <div class="container">
-                      <div class="content content-top">
+                    <div className="container">
+                      <div className="content content-top">
                         <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>{c.channel_name}</a>
                       </div>
-                      <img src={c.thumbnails.medium.url} alt={c.channel_name} />
-                      <div class="content content-bottom content-bottom-high">
+                      <LazyLoadImage
+                        alt={c.channel_name}
+                        height={c.thumbnails.medium.height}
+                        src={c.thumbnails.medium.url}
+                        width={c.thumbnails.medium.width} />
+
+                      <div className="content content-bottom content-bottom-high">
                         <a style={{float: `right`}} href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
                           {Math.round(c.found_tracks * 100 / c.count_tracks)}%
                         </a>
@@ -54,7 +60,6 @@ class Home extends Component {
             <p>Oh noes, error fetching channels :(</p>
           )}
         </div>
-        {/* <Link to="/page-2/">Go to page 2</Link> */}
       </Layout>
     )
   }
