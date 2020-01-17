@@ -7,7 +7,7 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 
 import Header from "./header"
 import "./layout.css"
@@ -36,7 +36,6 @@ const Layout = ({ children }) => {
       >
         <main>{children}</main>
         <footer style={{ "textAlign": "center" }}>
-          Also check out <a href="https://resident-archive.github.io/">Resident Archive</a>.
         </footer>
       </div>
     </>
