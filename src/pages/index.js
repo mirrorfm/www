@@ -21,7 +21,7 @@ import Moment from 'react-moment';
 function generate(genres) {
   return Object.entries((genres || {}))
                .sort((a, b) => (b[1] - a[1]))
-               .slice(0, 5);
+               .slice(0, 4);
 }
 
 class Home extends Component {
@@ -99,47 +99,49 @@ class Home extends Component {
                             <ButtonBase className={classes.image}>
                             <LazyLoadImage
                               alt={c.channel_name}
-                              height={c.thumbnails.medium.height}
+                              height="170px"
                               src={c.thumbnails.medium.url}
-                              width={c.thumbnails.medium.width} />
+                              width="170px" />
                             </ButtonBase>
                           </Grid>
-                          <Grid item xs={12} sm container>
+                          <Grid item xs={12} sm container direction="row">
                             <Grid item xs container direction="column" spacing={2}>
-                              <Grid item xs>
+                              <Grid item>
                                 <Typography gutterBottom variant="subtitle1">
+                                  {c.channel_name} on&nbsp;
                                   <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>
-                                    {c.channel_name}
+                                    YouTube
                                   </a>
                                 </Typography>
                                 <Typography variant="body2" gutterBottom>
-                                  Updated <Moment fromNow unix>{c.last_search_time}</Moment>
+                                  {c.count_tracks} tracks
                                 </Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                  {c.count_followers} followers
+                                <Typography variant="body2" gutterBottom color="textSecondary">
+                                  Updated <Moment fromNow unix>{c.last_search_time}</Moment> • {c.count_followers} followers
                                 </Typography>
                               </Grid>
-                              <Grid item>
-                                <Typography>
-                                  <div className={classes.root}>
-                                    {generate(c.genres).map(([label, count]) =>
-                                      <Chip
-                                        avatar={<Avatar>{count}</Avatar>}
-                                        key={label}
-                                        size="small"
-                                        label={label}
-                                        style={{ margin: `2px` }}
-                                      />
-                                    )}
-                                  </div>
+                              <Grid item xs={5}>
+                                <Typography style={{ float: `right` }} variant="subtitle1" gutterBottom>
+                                  {Math.round(c.found_tracks * 100 / c.count_tracks)}% found on&nbsp;
+                                  <a href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
+                                    Spotify
+                                  </a>
                                 </Typography>
                               </Grid>
                             </Grid>
-                            <Grid item>
-                              <Typography variant="body1">
-                                <a href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
-                                  {Math.round(c.found_tracks * 100 / c.count_tracks)}% found on Spotify
-                                </a>
+                            <Grid item xs={12}>
+                              <Typography>
+                                <div className={classes.root}>
+                                  {generate(c.genres).map(([label, count]) =>
+                                    <Chip
+                                      avatar={<Avatar>{count}</Avatar>}
+                                      key={label}
+                                      size="small"
+                                      label={label}
+                                      style={{ margin: `2px` }}
+                                    />
+                                  )}
+                                </div>
                               </Typography>
                             </Grid>
                           </Grid>
