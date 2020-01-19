@@ -7,6 +7,23 @@ import SEO from "../components/seo"
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from "gatsby"
 
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
+
+
+import Moment from 'react-moment';
+
+function generate(genres) {
+  return Object.entries((genres || {}))
+               .sort((a, b) => (b[1] - a[1]))
+               .slice(0, 5);
+}
+
 class Home extends Component {
   state = {
     loading: false,
@@ -25,41 +42,109 @@ class Home extends Component {
 
   render() {
     const { youtube } = this.state.data;
+    const classes = makeStyles(theme => ({
+      root: {
+        flexGrow: 1,
+      },
+      paper: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+        maxWidth: 500,
+      },
+      image: {
+        width: 128,
+        height: 128,
+      },
+      img: {
+        margin: 'auto',
+        display: 'block',
+        maxWidth: '100%',
+        maxHeight: '100%',
+      },
+      root: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        '& > *': {
+          margin: theme.spacing(0.5),
+        },
+      },
+    }));
 
     return (
       <Layout>
         <SEO title="Home" />
         <div>
           {this.state.loading ? (
-            <p style={{ textAlign: "center" }}>
-              <Loader
-                type="Grid"
-                color="lightgrey"
-                height={50}
-                width={50}
-                timeout={3000}
-              />
-            </p>
+            <Loader
+              type="Grid"
+              color="lightgrey"
+              height={50}
+              width={50}
+              timeout={3000}
+              style={{ textAlign: "center" }}
+            />
           ) : this.state.data ? (
             <>
               <p style={{ textAlign: `right` }}>
                 <Link style={{ fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
               </p>
-              <ul style={{ columns: `6`, columnGap: `20px`, listStyleType: `none`, marginLeft: `0` }}>
+              <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
                 {youtube.channels.map((c, index) => (
                   <li style={{ marginBottom: `20px` }} key={index}>
-                    <div className="container">
-                      <LazyLoadImage
-                        alt={c.channel_name}
-                        height={c.thumbnails.medium.height}
-                        src={c.thumbnails.medium.url}
-                        width={c.thumbnails.medium.width} />
-                      <div style={{ whiteSpace: `nowrap`, overflow: `hidden`, height: `20px`, fontSize: `12px` }}>
-                        <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>{c.channel_name}</a>
-                        <a style={{float: `right`}} href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
-                          {Math.round(c.found_tracks * 100 / c.count_tracks)}%
-                        </a>
-                      </div>
+                    <div className={classes.root}>
+                      <Paper className={classes.paper}>
+                        <Grid container spacing={2}>
+                          <Grid item>
+                            <ButtonBase className={classes.image}>
+                            <LazyLoadImage
+                              alt={c.channel_name}
+                              height={c.thumbnails.medium.height}
+                              src={c.thumbnails.medium.url}
+                              width={c.thumbnails.medium.width} />
+                            </ButtonBase>
+                          </Grid>
+                          <Grid item xs={12} sm container>
+                            <Grid item xs container direction="column" spacing={2}>
+                              <Grid item xs>
+                                <Typography gutterBottom variant="subtitle1">
+                                  <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>
+                                    {c.channel_name}
+                                  </a>
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  Updated <Moment fromNow unix>{c.last_search_time}</Moment>
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                  {c.count_followers} followers
+                                </Typography>
+                              </Grid>
+                              <Grid item>
+                                <Typography>
+                                  <div className={classes.root}>
+                                    {generate(c.genres).map(([label, count]) =>
+                                      <Chip
+                                        avatar={<Avatar>{count}</Avatar>}
+                                        key={label}
+                                        size="small"
+                                        label={label}
+                                        style={{ margin: `2px` }}
+                                      />
+                                    )}
+                                  </div>
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                            <Grid item>
+                              <Typography variant="body1">
+                                <a href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
+                                  {Math.round(c.found_tracks * 100 / c.count_tracks)}% found on Spotify
+                                </a>
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Paper>
                     </div>
                   </li>
                 ))}
