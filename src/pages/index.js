@@ -117,7 +117,7 @@ class Home extends Component {
                                   {c.count_tracks} tracks
                                 </Typography>
                                 <Typography variant="body2" gutterBottom color="textSecondary">
-                                  Updated <Moment fromNow unix>{c.last_search_time}</Moment> • {c.count_followers} followers
+                                  Updated <Moment fromNow unix>{c.last_found_time}</Moment> • {c.count_followers} followers
                                 </Typography>
                               </Grid>
                               <Grid item xs={5}>
@@ -169,7 +169,7 @@ class Home extends Component {
     this.setState({ loading: true })
 
     axios
-      .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/get`)
+      .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/mirrorfm/channels`)
       .then(({ data }) => {
         this.setState({
           loading: false,

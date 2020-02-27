@@ -6,8 +6,7 @@ const Header = ({ siteTitle }) => (
   <header
     style={{
       background: `#f8f8f8`,
-      marginBottom: `1.45rem`,
-      borderBottom: `3px solid #eee`,
+      borderBottom: `1px solid #eee`,
       position: `fixed`,
       overflow: `hidden`,
       top: `0`,
@@ -17,7 +16,7 @@ const Header = ({ siteTitle }) => (
   >
     <div
       style={{
-        margin: `0 auto`,
+        margin: `6px auto`,
         maxWidth: 960,
         padding: `1rem 1.0875rem`,
       }}
