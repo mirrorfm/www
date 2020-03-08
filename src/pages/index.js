@@ -6,6 +6,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from "gatsby"
+import NumberFormat from 'react-number-format';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -43,9 +44,6 @@ class Home extends Component {
   render() {
     const { youtube } = this.state.data;
     const classes = makeStyles(theme => ({
-      root: {
-        flexGrow: 1,
-      },
       paper: {
         padding: theme.spacing(2),
         margin: 'auto',
@@ -114,7 +112,7 @@ class Home extends Component {
                                   </a>
                                 </Typography>
                                 <Typography variant="body2" gutterBottom>
-                                  {c.count_tracks} tracks
+                                  <NumberFormat value={c.count_tracks} displayType={'text'} thousandSeparator={true} /> tracks
                                 </Typography>
                                 <Typography variant="body2" gutterBottom color="textSecondary">
                                   Updated <Moment fromNow unix>{c.last_found_time}</Moment> • {c.count_followers} followers
@@ -152,7 +150,7 @@ class Home extends Component {
                 ))}
               </ul>
               <span>
-                <span style={{ fontWeight: `bold`}}>{Math.round(youtube.found_tracks * 100 / youtube.total_tracks)}%</span> tracks found in <span style={{ fontWeight: `bold`}}>{youtube.total_channels}</span> YouTube channels
+                Found <span style={{ fontWeight: `bold`}}>{Math.round(youtube.found_tracks * 100 / youtube.total_tracks)}%</span> of <span style={{ fontWeight: `bold`}}><NumberFormat value={youtube.total_tracks} displayType={'text'} thousandSeparator={true} /></span> total tracks in <span style={{ fontWeight: `bold`}}>{youtube.total_channels}</span> YouTube channels.
                 <Link style={{ float: `right` }} to="/about/">About</Link>
               </span>
             </>
