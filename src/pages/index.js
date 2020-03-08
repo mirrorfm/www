@@ -4,20 +4,13 @@ import Loader from 'react-loader-spinner'
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Thumbnail from "../components/thumbnail"
+
 import { Link } from "gatsby"
 import NumberFormat from 'react-number-format';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
 
-
-import Moment from 'react-moment';
 
 function generate(genres) {
   return Object.entries((genres || {}))
@@ -87,66 +80,11 @@ class Home extends Component {
               <p style={{ textAlign: `right` }}>
                 <Link style={{ fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
               </p>
-              <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
+              <ul style={{ columns: `5`, columnGap: `20px`, listStyleType: `none`, marginLeft: `0` }}>
                 {youtube.channels.map((c, index) => (
-                  <li style={{ marginBottom: `20px` }} key={index}>
-                    <div className={classes.root}>
-                      <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                          <Grid item>
-                            <ButtonBase className={classes.image}>
-                            <LazyLoadImage
-                              alt={c.channel_name}
-                              height="170px"
-                              src={c.thumbnails.medium.url}
-                              width="170px" />
-                            </ButtonBase>
-                          </Grid>
-                          <Grid item xs={12} sm container direction="row">
-                            <Grid item xs container direction="column" spacing={2}>
-                              <Grid item>
-                                <Typography gutterBottom variant="subtitle1">
-                                  {c.channel_name} on&nbsp;
-                                  <a href={`https://youtube.com/playlist?list=${c.upload_playlist_id}`}>
-                                    YouTube
-                                  </a>
-                                </Typography>
-                                <Typography variant="body2" gutterBottom>
-                                  <NumberFormat value={c.count_tracks} displayType={'text'} thousandSeparator={true} /> tracks
-                                </Typography>
-                                <Typography variant="body2" gutterBottom color="textSecondary">
-                                  Updated <Moment fromNow unix>{c.last_found_time}</Moment> • {c.count_followers} followers
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={5}>
-                                <Typography style={{ float: `right` }} variant="subtitle1" gutterBottom>
-                                  {Math.round(c.found_tracks * 100 / c.count_tracks)}% found on&nbsp;
-                                  <a href={`https://open.spotify.com/playlist/${c.spotify_playlist_id}`}>
-                                    Spotify
-                                  </a>
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography>
-                                <div className={classes.root}>
-                                  {generate(c.genres).map(([label, count]) =>
-                                    <Chip
-                                      avatar={<Avatar>{count}</Avatar>}
-                                      key={label}
-                                      size="small"
-                                      label={label}
-                                      style={{ margin: `2px` }}
-                                    />
-                                  )}
-                                </div>
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                    </div>
-                  </li>
+                    <li style={{ marginBottom: `20px` }} key={index}>
+                      <Thumbnail channel={c} />
+                    </li>
                 ))}
               </ul>
               <span>
