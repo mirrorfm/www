@@ -123,6 +123,7 @@ img {
 .container .content-top a {
   color: black;
   background-color: white;
+  font-size: 24px;
 }
 
 .container .content-bottom a {
@@ -268,6 +269,14 @@ body {
   -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
   font-feature-settings: "kern", "liga", "clig", "calt";
 }
+.chip-mui {
+  margin: 2px;
+}
+.chip-mui:hover {
+  background-color: #1DB954;
+  color: white;
+}
+
 img {
   max-width: 100%;
   margin-left: 0;
@@ -278,7 +287,13 @@ img {
   padding-right: 0;
   padding-top: 0;
   margin-bottom: 0px;
-  height: auto
+  height: auto;
+}
+.container img {
+  filter: grayscale(70%);
+}
+.container img:hover {
+  filter: grayscale(0%);
 }
 h1 {
   margin-left: 0;
