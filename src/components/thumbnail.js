@@ -13,11 +13,13 @@ function generate(genres) {
 
 const Thumbnail = ({ channel }) => (
     <div className="container">
-      <LazyLoadImage
+      <div style={{ height: `100%%`, width: `100%` }}>
+        <LazyLoadImage
           alt={channel.channel_name}
           height={channel.thumbnails.medium.height}
           src={channel.thumbnails.medium.url}
           width={channel.thumbnails.medium.width} />
+      </div>
       {/*<div className="content content-top">*/}
       {/*  <a href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>*/}
       {/*</div>*/}
@@ -26,16 +28,16 @@ const Thumbnail = ({ channel }) => (
       {/*    {Math.round(channel.found_tracks * 100 / channel.count_tracks)}%*/}
       {/*  </a>*/}
       {/*</div>*/}
-      <div style={{ height: `130px` }}>
+      <div style={{ height: `170px` }}>
+        <a style={{ paddingTop: `7px`, paddingBottom: `5px`, paddingLeft: `5px`, fontWeight: 700, textDecoration: `none`, display: `block`, whiteSpace: `nowrap`, overflow: `hidden`, textOverflow: `ellipsis` }} href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>
         <Typography>
           {generate(channel.genres).map(([label, count]) =>
-              <Chip
-                  avatar={<Avatar>{count}</Avatar>}
-                  key={label}
-                  size="small"
-                  label={label}
-                  className="chip-mui"
-              />
+            <Chip
+              key={label}
+              size="small"
+              label={label}
+              className="chip-mui"
+            />
           )}
         </Typography>
       </div>

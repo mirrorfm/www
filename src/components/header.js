@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import React from "react"
 const logo = require('../images/mirrorfm-icon.png');
 
-
 const Header = ({ siteTitle }) => (
   <header
     style={{

@@ -86,7 +86,7 @@ class Home extends Component {
                   </p>
                   <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
                     {events.map((e, index) => (
-                        <li style={{ marginBottom: `20px` }} key={index}>
+                        <li key={index}>
                           Added {e.added} {Object.keys(e.genres)[0]} tracks to {e.channel_name} <Moment fromNow unix>{e.timestamp}</Moment>
                         </li>
                     ))}
