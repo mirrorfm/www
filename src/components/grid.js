@@ -25,13 +25,13 @@ const styles = theme => ({
 
 function Grid(props) {
   const {classes} = props;
-  const channels = props.channels.slice(0, 96);
+  const channels = props.channels.slice(0, 24);
   return (
     <ul className={classes.root}>
       {channels.map((c, index) => (
         <li style={{
           marginBottom: `20px`,
-          webkitColumnBreakInside: `avoid`,
+          WebkitColumnBreakInside: `avoid`,
           pageBreakInside: `avoid`,
           breakInside: `avoid`
         }} key={index}>

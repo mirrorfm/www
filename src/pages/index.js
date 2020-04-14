@@ -27,8 +27,23 @@ class Home extends Component {
 
   render() {
     const { youtube } = this.state.data;
+    var targetObj = {};
+
+    for (let i=0; i < youtube.channels.length; i++) {
+      for (let genre in youtube.channels[i].genres) {
+        if (!targetObj.hasOwnProperty(genre)) {
+          targetObj[genre] = 0;
+        }
+        targetObj[genre] += youtube.channels[i].genres[genre];
+      }
+    }
+    var newArr = [];
+    for (let genre in targetObj) {
+      newArr.push({ genre, count: targetObj[genre] });
+    }
+    console.log(newArr)
     return (
-      <Layout>
+      <Layout genres={newArr}>
         <SEO title="Home" />
         <div>
           {this.state.loading ? (
@@ -42,12 +57,14 @@ class Home extends Component {
             />
           ) : this.state.data ? (
             <>
-              <p style={{ textAlign: `right` }}>
-                <Link style={{ fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
+              <p style={{ textAlign: `left` }}>
+                Found <span style={{ fontWeight: `bold`}}>{Math.round(youtube.found_tracks * 100 / youtube.total_tracks)}%</span> of <span style={{ fontWeight: `bold`}}><NumberFormat value={youtube.total_tracks} displayType={'text'} thousandSeparator={true} /></span> total tracks in <span style={{ fontWeight: `bold`}}>{youtube.total_channels}</span> YouTube channels.
+
+                <Link style={{ float: `right`, fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
               </p>
               <Grid channels={ youtube.channels } />
               <span>
-                Found <span style={{ fontWeight: `bold`}}>{Math.round(youtube.found_tracks * 100 / youtube.total_tracks)}%</span> of <span style={{ fontWeight: `bold`}}><NumberFormat value={youtube.total_tracks} displayType={'text'} thousandSeparator={true} /></span> total tracks in <span style={{ fontWeight: `bold`}}>{youtube.total_channels}</span> YouTube channels.
+                <Link style={{ float: `left` }} to="/about/">Add a channel</Link>
                 <Link style={{ float: `right` }} to="/about/">About</Link>
               </span>
             </>
