@@ -1,53 +1,88 @@
 import PropTypes from "prop-types"
 import React from "react"
-import {LazyLoadImage} from "react-lazy-load-image-component";
-import Typography from "@material-ui/core/Typography";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import Chip from "@material-ui/core/Chip";
-import Avatar from "@material-ui/core/Avatar";
-import Modal from '@material-ui/core/Modal';
+import { Link } from 'gatsby'
 
 function generate(genres) {
   return Object.entries((genres || {}))
-      .sort((a, b) => (b[1] - a[1]))
-      .slice(0, 4);
+    .sort((a, b) => (b[1] - a[1]))
+    .slice(0, 4);
 }
 
+let touched = false
 
-function Thumbnail({ channel }) {
-  const [open, setOpen] = React.useState(false);
+class Thumbnail extends React.Component {
+  static propTypes = {
+    channel: PropTypes.shape({
+      channel_id: PropTypes.string.isRequired,
+    }).isRequired,
+  }
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  constructor() {
+    super()
+    this.state = {
+      hovering: false,
+    }
+  }
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
+  render() {
+    const channel = this.props.channel
+    return (
       <div className="container">
-        <div style={{height: `100%%`, width: `100%`}} onClick={handleOpen}>
-          <LazyLoadImage
-              alt={channel.channel_name}
-              height={channel.thumbnails.medium.height}
-              src={channel.thumbnails.medium.url}
-              width={channel.thumbnails.medium.width}/>
+        <div style={{height: `100%`, width: `100%`}}>
+          <Link
+            data-testid="channel"
+            to={`/${channel.channel_id}/`}
+            state={{
+              modal: true
+            }}
+            onTouchStart={() => (touched = true)}
+            onMouseEnter={() => {
+              if (!touched) {
+                this.setState({hovering: true})
+              }
+            }}
+            onMouseLeave={() => {
+              if (!touched) {
+                this.setState({hovering: false})
+              }
+            }}
+            css={{
+              display: `block`,
+              flex: `1 0 0%`,
+              width: `100%`,
+              maxWidth: 290.1,
+              position: `relative`,
+              ":last-child": {
+                marginRight: 0,
+              },
+            }}
+          >
+            <LazyLoadImage
+                alt={channel.channel_name}
+                height={channel.thumbnails.medium.height}
+                src={channel.thumbnails.medium.url}
+                width={channel.thumbnails.medium.width}/>
+          </Link>
         </div>
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-        >
-          <div>
-            <a href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>
-            <a href={`https://open.spotify.com/playlist/${channel.spotify_playlist_id}`}>
-              {Math.round(channel.found_tracks * 100 / channel.count_tracks)}%
-            </a>
-            <iframe src={`https://open.spotify.com/embed/playlist/${channel.spotify_playlist_id}`} width="350" height="680"
-                    frameBorder="0" allowTransparency="true" allow="encrypted-media"></iframe>
-          </div>
-        </Modal>
+
+
+        {/*<Modal*/}
+        {/*    open={open}*/}
+        {/*    onClose={handleClose}*/}
+        {/*    aria-labelledby="simple-modal-title"*/}
+        {/*    aria-describedby="simple-modal-description"*/}
+        {/*>*/}
+        {/*  <div>*/}
+        {/*    <a href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>*/}
+        {/*    <a href={`https://open.spotify.com/playlist/${channel.spotify_playlist_id}`}>*/}
+        {/*      {Math.round(channel.found_tracks * 100 / channel.count_tracks)}%*/}
+        {/*    </a>*/}
+        {/*    <iframe src={`https://open.spotify.com/embed/playlist/${channel.spotify_playlist_id}`} width="100%" height="680"*/}
+        {/*            frameBorder="0" allow="encrypted-media"></iframe>*/}
+        {/*  </div>*/}
+        {/*</Modal>*/}
         <div style={{height: `170px`}}>
           <a style={{
             paddingTop: `7px`,
@@ -60,30 +95,18 @@ function Thumbnail({ channel }) {
             overflow: `hidden`,
             textOverflow: `ellipsis`
           }} href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>
-          <Typography>
-            {generate(channel.genres).map(([label, count]) =>
-                <Chip
-                    key={label}
-                    size="small"
-                    label={label}
-                    className="chip-mui"
-                />
-            )}
-          </Typography>
+          {generate(channel.genres).map(([label, count]) =>
+            <Chip
+                key={label}
+                size="small"
+                label={label}
+                className="chip-mui"
+            />
+          )}
         </div>
       </div>
-  )
-}
-
-Thumbnail.propTypes = {
-  channel: PropTypes.object,
-}
-
-Thumbnail.defaultProps = {
-  channel: {
-    count_followers: 0,
-    last_found_time: null
-  },
+    )
+  }
 }
 
 export default Thumbnail

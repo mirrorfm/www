@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Loader from 'react-loader-spinner'
 
-import Layout from "../components/layout"
+import Layout from "../layouts/index"
 import SEO from "../components/seo"
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from "gatsby"
@@ -40,31 +40,6 @@ class Home extends Component {
 
   render() {
     const { events } = this.state.data;
-    const classes = makeStyles(theme => ({
-      paper: {
-        padding: theme.spacing(2),
-        margin: 'auto',
-        maxWidth: 500,
-      },
-      image: {
-        width: 128,
-        height: 128,
-      },
-      img: {
-        margin: 'auto',
-        display: 'block',
-        maxWidth: '100%',
-        maxHeight: '100%',
-      },
-      root: {
-        display: 'flex',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        '& > *': {
-          margin: theme.spacing(0.5),
-        },
-      },
-    }));
 
     return (
         <Layout>

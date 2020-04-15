@@ -14,7 +14,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const CheckBoxesTag = ({ genres }) => (
   <Autocomplete
     multiple
-    options={genres.slice(0, 100)}
+    options={genres}
     limitTags={5}
     size="small"
     disableCloseOnSelect
@@ -37,11 +37,11 @@ const CheckBoxesTag = ({ genres }) => (
 )
 
 CheckBoxesTag.propTypes = {
-  genres: PropTypes.object,
+  genres: PropTypes.array,
 }
 
 CheckBoxesTag.defaultProps = {
-  genres: {},
+  genres: [],
 }
 
 export default CheckBoxesTag

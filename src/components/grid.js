@@ -43,12 +43,12 @@ function Grid(props) {
 }
 
 Grid.propTypes = {
-  channels: PropTypes.object,
+  channels: PropTypes.array,
   classes: PropTypes.object.isRequired,
 }
 
 Grid.defaultProps = {
-  channels: {}
+  channels: []
 }
 
 export default withStyles(styles)(Grid);

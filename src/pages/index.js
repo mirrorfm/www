@@ -1,8 +1,9 @@
+import * as PropTypes from "prop-types"
 import React, { Component } from 'react'
 import axios from 'axios'
 import Loader from 'react-loader-spinner'
 
-import Layout from "../components/layout"
+import Layout from "../layouts/index"
 import SEO from "../components/seo"
 import Grid from "../components/grid"
 
@@ -10,6 +11,16 @@ import { Link } from "gatsby"
 import NumberFormat from 'react-number-format';
 
 class Home extends Component {
+  static propTypes = {
+    location: PropTypes.object.isRequired,
+    isModal: PropTypes.bool,
+    data: PropTypes.shape({
+      youtube: PropTypes.shape({
+        channels: PropTypes.array
+      })
+    })
+  }
+
   state = {
     loading: false,
     error: false,
@@ -26,24 +37,26 @@ class Home extends Component {
   }
 
   render() {
-    const { youtube } = this.state.data;
-    var targetObj = {};
+    const { location } = this.props
 
-    for (let i=0; i < youtube.channels.length; i++) {
-      for (let genre in youtube.channels[i].genres) {
+    const { youtube } = this.state.data;
+    let targetObj = {};
+    let channels = youtube.channels.slice(0, 24);
+    for (let i=0; i < channels.length; i++) {
+      for (let genre in channels[i].genres) {
         if (!targetObj.hasOwnProperty(genre)) {
           targetObj[genre] = 0;
         }
-        targetObj[genre] += youtube.channels[i].genres[genre];
+        targetObj[genre] += channels[i].genres[genre];
       }
     }
-    var newArr = [];
+    let newArr = [];
     for (let genre in targetObj) {
       newArr.push({ genre, count: targetObj[genre] });
     }
-    console.log(newArr)
+
     return (
-      <Layout genres={newArr}>
+      <Layout location={ location } genres={ newArr } channels={ youtube.channels }>
         <SEO title="Home" />
         <div>
           {this.state.loading ? (
@@ -53,7 +66,7 @@ class Home extends Component {
               height={50}
               width={50}
               timeout={9000}
-              style={{ paddingTop: 200, textAlign: "center" }}
+              style={{ textAlign: "center" }}
             />
           ) : this.state.data ? (
             <>
