@@ -33,9 +33,11 @@ class Thumbnail extends React.Component {
         <div style={{height: `100%`, width: `100%`}}>
           <Link
             data-testid="channel"
-            to={`/${channel.channel_id}/`}
+            to={`/youtube/${channel.channel_id}/`}
             state={{
-              modal: true
+              modal: true,
+              channels: this.props.channels,
+              channel
             }}
             onTouchStart={() => (touched = true)}
             onMouseEnter={() => {
@@ -66,14 +68,6 @@ class Thumbnail extends React.Component {
                 width={channel.thumbnails.medium.width}/>
           </Link>
         </div>
-
-
-        {/*<Modal*/}
-        {/*    open={open}*/}
-        {/*    onClose={handleClose}*/}
-        {/*    aria-labelledby="simple-modal-title"*/}
-        {/*    aria-describedby="simple-modal-description"*/}
-        {/*>*/}
         {/*  <div>*/}
         {/*    <a href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>*/}
         {/*    <a href={`https://open.spotify.com/playlist/${channel.spotify_playlist_id}`}>*/}
@@ -82,7 +76,6 @@ class Thumbnail extends React.Component {
         {/*    <iframe src={`https://open.spotify.com/embed/playlist/${channel.spotify_playlist_id}`} width="100%" height="680"*/}
         {/*            frameBorder="0" allow="encrypted-media"></iframe>*/}
         {/*  </div>*/}
-        {/*</Modal>*/}
         <div style={{height: `170px`}}>
           <a style={{
             paddingTop: `7px`,

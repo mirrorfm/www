@@ -697,3 +697,7 @@ pre tt:after {
   }
 }
 .clear {clear:both;}
+
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+  z-index: 10;
+}

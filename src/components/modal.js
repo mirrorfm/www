@@ -16,6 +16,7 @@ class GatsbyGramModal extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool,
     location: PropTypes.object.isRequired,
+    channels: PropTypes.array
   }
 
   componentDidMount() {
@@ -31,13 +32,8 @@ class GatsbyGramModal extends React.Component {
   }
 
   findCurrentIndex() {
-    let index
-    index = findIndex(
-        channels,
-        channel => channel.channel_id === this.props.location.pathname.split(`/`)[1]
-    )
-
-    return index
+    let id = this.props.location.pathname.split(`/youtube/`)[1].replace(/\/$/, "")
+    return channels.findIndex(c => c.channel_id === id)
   }
 
   next(e) {
@@ -53,7 +49,7 @@ class GatsbyGramModal extends React.Component {
       } else {
         nextChannel = channels[currentIndex + 1]
       }
-      navigate(`/${nextChannel.channel_id}/`, {state: {modal: true}})
+      navigate(`/youtube/${nextChannel.channel_id}/`, {state: {modal: true, channels, channel: nextChannel }})
     }
   }
 
@@ -70,13 +66,13 @@ class GatsbyGramModal extends React.Component {
       } else {
         previousChannel = channels[currentIndex - 1]
       }
-      navigate(`/${previousChannel.channel_id}/`, {state: {modal: true}})
+      navigate(`/youtube/${previousChannel.channel_id}/`, {state: {modal: true, channels, channel: previousChannel }})
     }
   }
 
   render() {
     if (!channels) {
-      channels = this.props.channels
+      channels = this.props.location.state.channels
     }
     return (
         <div
@@ -97,7 +93,7 @@ class GatsbyGramModal extends React.Component {
               }}
           >
             <FaCaretLeft
-                data-testid="previous-post"
+                data-testid="previous-channel"
                 css={{
                   cursor: `pointer`,
                   fontSize: `50px`,
@@ -108,7 +104,7 @@ class GatsbyGramModal extends React.Component {
             />
             {this.props.children}
             <FaCaretRight
-                data-testid="next-post"
+                data-testid="next-channel"
                 css={{
                   cursor: `pointer`,
                   fontSize: `50px`,

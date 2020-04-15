@@ -35,7 +35,7 @@ function Grid(props) {
           pageBreakInside: `avoid`,
           breakInside: `avoid`
         }} key={index}>
-          <Thumbnail channel={c}/>
+          <Thumbnail channel={c} channels={channels} />
         </li>
       ))}
     </ul>

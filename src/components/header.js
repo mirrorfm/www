@@ -13,7 +13,7 @@ const Header = ({ siteTitle, genres }) => (
     overflow: `hidden`,
     top: `0`,
     width: `100%`,
-    zIndex: `100`
+    zIndex: `1`
   }}>
     <div style={{
       margin: `0 auto`,

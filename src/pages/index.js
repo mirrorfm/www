@@ -38,7 +38,6 @@ class Home extends Component {
 
   render() {
     const { location } = this.props
-
     const { youtube } = this.state.data;
     let targetObj = {};
     let channels = youtube.channels.slice(0, 24);
