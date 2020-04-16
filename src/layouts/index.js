@@ -36,7 +36,7 @@ class Layout extends React.Component {
                   </GatsbyGramModal>
               ) : (
                   <>
-                    <Header siteTitle="ewf" genres={this.props.genres}/>
+                    <Header siteTitle="Mirror.FM" genres={this.props.genres}/>
                     <div
                         style={{
                           margin: `0 auto`,

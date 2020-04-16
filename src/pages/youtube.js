@@ -4,6 +4,8 @@ import React, { Component } from 'react'
 import { Router } from "@reach/router"
 
 import Layout from "../layouts/index"
+import ChannelDetail from "../components/channel-detail"
+
 import axios from "axios";
 
 class Home extends Component {
@@ -21,9 +23,7 @@ class Home extends Component {
     const { location } = this.props
     if (location.state) {
       this.setState({
-        channel: {
-          spotify_playlist_id: location.state.channel.spotify_playlist_id
-        }
+        channel: location.state.channel
       })
     } else {
       const id = location.pathname.split(`/youtube/`)[1].replace(/\/$/, "")
@@ -32,15 +32,11 @@ class Home extends Component {
   }
 
   render() {
-    const SomeSubPage = () => {
-      return <iframe src={`https://open.spotify.com/embed/playlist/${this.state.channel.spotify_playlist_id}`}
-                     width="600" height="380" frameBorder="0" allow="encrypted-media"></iframe>
-    }
     const { location } = this.props
     return (
       <Layout location={location}>
         <Router>
-          <SomeSubPage path="/youtube/:id" />
+          <ChannelDetail path="/youtube/:id" channel={this.state.channel} />
         </Router>
       </Layout>
     )
@@ -51,16 +47,16 @@ class Home extends Component {
     this.setState({ loading: true })
 
     axios
-        .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/mirrorfm/channels?id=${id}`)
-        .then(({ data }) => {
-          this.setState({
-            loading: false,
-            channel: data
-          })
+      .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/mirrorfm/channels?id=${id}`)
+      .then(({ data }) => {
+        this.setState({
+          loading: false,
+          channel: data
         })
-        .catch(error => {
-          this.setState({ loading: false, error })
-        })
+      })
+      .catch(error => {
+        this.setState({ loading: false, error })
+      })
   }
 }
 

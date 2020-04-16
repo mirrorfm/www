@@ -8,10 +8,9 @@ import mousetrap from "mousetrap"
 import * as PropTypes from "prop-types"
 import { navigate } from "gatsby"
 
-
 let channels
 
-class GatsbyGramModal extends React.Component {
+class Modal extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool,
     location: PropTypes.object.isRequired,
@@ -42,7 +41,6 @@ class GatsbyGramModal extends React.Component {
     const currentIndex = this.findCurrentIndex()
     if (currentIndex || currentIndex === 0) {
       let nextChannel
-      // Wrap around if at end.
       if (currentIndex + 1 === channels.length) {
         nextChannel = channels[0]
       } else {
@@ -59,7 +57,6 @@ class GatsbyGramModal extends React.Component {
     const currentIndex = this.findCurrentIndex()
     if (currentIndex || currentIndex === 0) {
       let previousChannel
-      // Wrap around if at start.
       if (currentIndex === 0) {
         previousChannel = channels.slice(-1)[0]
       } else {
@@ -75,56 +72,63 @@ class GatsbyGramModal extends React.Component {
     }
     return (
         <div
-            onClick={() => navigate(`/`, {state: {noScroll: true}})}
-            css={{
-              display: `flex`,
-              position: `relative`,
-              height: `100vh`,
-            }}
+          onClick={() => navigate(`/`, {state: {noScroll: true}})}
+          style={{
+            display: `flex`,
+            position: `relative`,
+            height: `100vh`,
+          }}
         >
           <div
-              css={{
-                display: `flex`,
-                alignItems: `center`,
-                justifyItems: `center`,
-                margin: `auto`,
-                width: `100%`,
-              }}
+            style={{
+              display: `flex`,
+              alignItems: `center`,
+              justifyItems: `center`,
+              margin: `auto`,
+              width: `100%`,
+            }}
           >
             <FaCaretLeft
-                data-testid="previous-channel"
-                css={{
-                  cursor: `pointer`,
-                  fontSize: `50px`,
-                  color: `rgba(255, 255, 255, 0.7)`,
-                  userSelect: `none`,
-                }}
-                onClick={e => this.previous(e)}
+              data-testid="previous-channel"
+              style={{
+                cursor: `pointer`,
+                fontSize: `50px`,
+                color: `rgba(255, 255, 255, 0.7)`,
+                userSelect: `none`,
+                display: `flex`,
+                justifyContent: `space-between`,
+                width: `20rem`
+              }}
+              onClick={e => this.previous(e)}
             />
             {this.props.children}
             <FaCaretRight
-                data-testid="next-channel"
-                css={{
-                  cursor: `pointer`,
-                  fontSize: `50px`,
-                  color: `rgba(255, 255, 255, 0.7)`,
-                  userSelect: `none`,
-                }}
-                onClick={e => this.next(e)}
+              data-testid="next-channel"
+              style={{
+                cursor: `pointer`,
+                fontSize: `50px`,
+                color: `white`,
+                userSelect: `none`,
+                display: `flex`,
+                justifyContent: `space-between`,
+                width: `20rem`
+              }}
+              onClick={e => this.next(e)}
             />
           </div>
           <MdClose
-              data-testid="modal-close"
-              onClick={() => navigate(`/`, {state: {noScroll: true}})}
-              css={{
-                cursor: `pointer`,
-                color: `rgba(255, 255, 255, 0.8)`,
-                fontSize: `30px`,
-                position: `absolute`
-              }}
+            data-testid="modal-close"
+            onClick={() => navigate(`/`, {state: {noScroll: true}})}
+            style={{
+              cursor: `pointer`,
+              color: `rgba(255,255,255,0.8)`,
+              fontSize: `30px`,
+              position: `absolute`,
+            }}
           />
         </div>
     )
   }
 }
-export default GatsbyGramModal
+
+export default Modal

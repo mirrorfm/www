@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import React from "react"
 import CheckboxesTag from "./checkboxestag";
 const logo = require('../images/mirrorfm-icon.png');
-import Grid from "@material-ui/core/Grid";
 
 const Header = ({ siteTitle, genres }) => (
   <header style={{

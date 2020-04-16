@@ -16,7 +16,7 @@ const About = () => (
       <li>Find channels genres</li>
       <li>Provide a backup solution in case channels or songs are deleted</li>
     </ul>
-    <h3>Follow us on</h3>
+    <h2>Follow on:</h2>
     <ul>
       <li><a href="https://facebook.com/www.mirror.fm">Facebook</a></li>
       <li><a href="https://twitter.com/mirror_fm">Twitter</a></li>

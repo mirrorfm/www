@@ -68,14 +68,6 @@ class Thumbnail extends React.Component {
                 width={channel.thumbnails.medium.width}/>
           </Link>
         </div>
-        {/*  <div>*/}
-        {/*    <a href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>*/}
-        {/*    <a href={`https://open.spotify.com/playlist/${channel.spotify_playlist_id}`}>*/}
-        {/*      {Math.round(channel.found_tracks * 100 / channel.count_tracks)}%*/}
-        {/*    </a>*/}
-        {/*    <iframe src={`https://open.spotify.com/embed/playlist/${channel.spotify_playlist_id}`} width="100%" height="680"*/}
-        {/*            frameBorder="0" allow="encrypted-media"></iframe>*/}
-        {/*  </div>*/}
         <div style={{height: `170px`}}>
           <a style={{
             paddingTop: `7px`,

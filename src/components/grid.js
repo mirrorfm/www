@@ -25,7 +25,7 @@ const styles = theme => ({
 
 function Grid(props) {
   const {classes} = props;
-  const channels = props.channels.slice(0, 24);
+  const channels = props.channels
   return (
     <ul className={classes.root}>
       {channels.map((c, index) => (

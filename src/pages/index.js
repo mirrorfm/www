@@ -40,7 +40,7 @@ class Home extends Component {
     const { location } = this.props
     const { youtube } = this.state.data;
     let targetObj = {};
-    let channels = youtube.channels.slice(0, 24);
+    let channels = youtube.channels
     for (let i=0; i < channels.length; i++) {
       for (let genre in channels[i].genres) {
         if (!targetObj.hasOwnProperty(genre)) {
