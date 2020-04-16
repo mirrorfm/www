@@ -4,7 +4,6 @@ import { MdClose } from 'react-icons/md'
 import { FaCaretLeft } from 'react-icons/fa'
 import { FaCaretRight } from 'react-icons/fa'
 
-import findIndex from "lodash/findIndex"
 import mousetrap from "mousetrap"
 import * as PropTypes from "prop-types"
 import { navigate } from "gatsby"
