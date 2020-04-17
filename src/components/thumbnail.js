@@ -62,25 +62,25 @@ class Thumbnail extends React.Component {
             }}
           >
             <LazyLoadImage
-                alt={channel.channel_name}
-                height={channel.thumbnails.medium.height}
-                src={channel.thumbnails.medium.url}
-                width={channel.thumbnails.medium.width}/>
+              alt={channel.channel_name}
+              height={channel.thumbnails.medium.height}
+              src={channel.thumbnails.medium.url}
+              width={channel.thumbnails.medium.width}/>
+            <div style={{
+              paddingTop: `7px`,
+              paddingBottom: `5px`,
+              paddingLeft: `5px`,
+              fontWeight: 700,
+              textDecoration: `none`,
+              display: `block`,
+              whiteSpace: `nowrap`,
+              overflow: `hidden`,
+              textOverflow: `ellipsis`
+            }}>{channel.channel_name}</div>
           </Link>
         </div>
-        <div style={{height: `170px`}}>
-          <a style={{
-            paddingTop: `7px`,
-            paddingBottom: `5px`,
-            paddingLeft: `5px`,
-            fontWeight: 700,
-            textDecoration: `none`,
-            display: `block`,
-            whiteSpace: `nowrap`,
-            overflow: `hidden`,
-            textOverflow: `ellipsis`
-          }} href={`https://youtube.com/playlist?list=${channel.upload_playlist_id}`}>{channel.channel_name}</a>
-          {generate(channel.genres).map(([label, count]) =>
+        <div style={{ height: `140px` }}>
+          {generate(channel.genres).map(([label]) =>
             <Chip
                 key={label}
                 size="small"

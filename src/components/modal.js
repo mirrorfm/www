@@ -7,8 +7,25 @@ import { FaCaretRight } from 'react-icons/fa'
 import mousetrap from "mousetrap"
 import * as PropTypes from "prop-types"
 import { navigate } from "gatsby"
+import {useTheme, withStyles} from "@material-ui/core/styles";
 
 let channels
+
+const styles = theme => ({
+  caret: {
+    fontSize: `50px`,
+    width: `20rem`,
+    [useTheme().breakpoints.up('md')]: {
+      width: `10rem`,
+    },
+    [useTheme().breakpoints.down('sm')]: {
+      width: `2.5rem`,
+    },
+    [useTheme().breakpoints.down('xs')]: {
+      width: `2rem`,
+    },
+  }
+});
 
 class Modal extends React.Component {
   static propTypes = {
@@ -67,68 +84,66 @@ class Modal extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     if (!channels) {
       channels = this.props.location.state.channels
     }
     return (
+      <div
+        onClick={() => navigate(`/`, {state: {noScroll: true}})}
+        style={{
+          display: `flex`,
+          position: `relative`,
+          height: `100vh`,
+        }}
+      >
         <div
-          onClick={() => navigate(`/`, {state: {noScroll: true}})}
           style={{
+            margin: `0 auto`,
             display: `flex`,
-            position: `relative`,
-            height: `100vh`,
+            alignItems: `center`,
+            justifyItems: `center`,
           }}
         >
-          <div
-            style={{
-              display: `flex`,
-              alignItems: `center`,
-              justifyItems: `center`,
-              margin: `auto`,
-              width: `100%`,
-            }}
-          >
-            <FaCaretLeft
-              data-testid="previous-channel"
-              style={{
-                cursor: `pointer`,
-                fontSize: `50px`,
-                color: `rgba(255, 255, 255, 0.7)`,
-                userSelect: `none`,
-                display: `flex`,
-                justifyContent: `space-between`,
-                width: `20rem`
-              }}
-              onClick={e => this.previous(e)}
-            />
-            {this.props.children}
-            <FaCaretRight
-              data-testid="next-channel"
-              style={{
-                cursor: `pointer`,
-                fontSize: `50px`,
-                color: `white`,
-                userSelect: `none`,
-                display: `flex`,
-                justifyContent: `space-between`,
-                width: `20rem`
-              }}
-              onClick={e => this.next(e)}
-            />
-          </div>
-          <MdClose
-            data-testid="modal-close"
-            onClick={() => navigate(`/`, {state: {noScroll: true}})}
+          <FaCaretLeft
+            data-testid="previous-channel"
+            className={classes.caret}
             style={{
               cursor: `pointer`,
-              color: `rgba(255,255,255,0.8)`,
-              fontSize: `30px`,
-              position: `absolute`,
+              color: `rgba(255, 255, 255, 0.7)`,
+              userSelect: `none`,
+              display: `flex`,
+              justifyContent: `space-between`,
             }}
+            onClick={e => this.previous(e)}
+          />
+          {this.props.children}
+          <FaCaretRight
+            data-testid="next-channel"
+            className={classes.caret}
+            style={{
+              cursor: `pointer`,
+              color: `white`,
+              userSelect: `none`,
+              display: `flex`,
+              justifyContent: `space-between`,
+            }}
+            onClick={e => this.next(e)}
           />
         </div>
+        <MdClose
+          data-testid="modal-close"
+          onClick={() => navigate(`/`, {state: {noScroll: true}})}
+          style={{
+            cursor: `pointer`,
+            color: `rgba(255,255,255,0.8)`,
+            fontSize: `30px`,
+            position: `absolute`,
+          }}
+        />
+      </div>
     )
   }
 }
 
-export default Modal
+export default withStyles(styles)(Modal);
