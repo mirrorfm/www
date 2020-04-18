@@ -3,6 +3,7 @@ import React from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Chip from "@material-ui/core/Chip";
 import { Link } from 'gatsby'
+import slugify from 'react-slugify';
 
 function generate(genres) {
   return Object.entries((genres || {}))
@@ -33,7 +34,7 @@ class Thumbnail extends React.Component {
         <div style={{height: `100%`, width: `100%`}}>
           <Link
             data-testid="channel"
-            to={`/youtube/${channel.channel_id}/`}
+            to={`/youtube/${channel.channel_id}/${slugify(channel.channel_name)}/`}
             state={{
               modal: true,
               channels: this.props.channels,

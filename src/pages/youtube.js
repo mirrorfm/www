@@ -27,7 +27,7 @@ class Home extends Component {
         channel: location.state.channel
       })
     } else {
-      const id = location.pathname.split(`/youtube/`)[1].replace(/\/$/, "")
+      const id = location.pathname.split(`/`)[2];
       this.fetchChannel(id)
     }
   }
@@ -39,7 +39,7 @@ class Home extends Component {
       <Layout location={location}>
         <SEO title={`${channel.channel_name} YouTube channel on Spotify`} />
         <Router>
-          <ChannelDetail path="/youtube/:id" channel={channel} />
+          <ChannelDetail path="/youtube/:id/*" channel={channel} />
         </Router>
       </Layout>
     )

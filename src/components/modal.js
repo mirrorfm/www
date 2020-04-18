@@ -3,6 +3,7 @@ import React from "react"
 import { MdClose } from 'react-icons/md'
 import { FaCaretLeft } from 'react-icons/fa'
 import { FaCaretRight } from 'react-icons/fa'
+import slugify from 'react-slugify';
 
 import mousetrap from "mousetrap"
 import * as PropTypes from "prop-types"
@@ -47,7 +48,7 @@ class Modal extends React.Component {
   }
 
   findCurrentIndex() {
-    let id = this.props.location.pathname.split(`/youtube/`)[1].replace(/\/$/, "")
+    let id = this.props.location.pathname.split(`/`)[2];
     return channels.findIndex(c => c.channel_id === id)
   }
 
@@ -63,7 +64,7 @@ class Modal extends React.Component {
       } else {
         nextChannel = channels[currentIndex + 1]
       }
-      navigate(`/youtube/${nextChannel.channel_id}/`, {state: {modal: true, channels, channel: nextChannel }})
+      navigate(`/youtube/${nextChannel.channel_id}/${slugify(nextChannel.channel_name)}/`, {state: {modal: true, channels, channel: nextChannel }})
     }
   }
 
@@ -79,7 +80,7 @@ class Modal extends React.Component {
       } else {
         previousChannel = channels[currentIndex - 1]
       }
-      navigate(`/youtube/${previousChannel.channel_id}/`, {state: {modal: true, channels, channel: previousChannel }})
+      navigate(`/youtube/${previousChannel.channel_id}/${slugify(previousChannel.channel_name)}/`, {state: {modal: true, channels, channel: previousChannel }})
     }
   }
 
