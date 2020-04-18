@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 function generate(genres) {
   return Object.entries((genres || {}))
       .sort((a, b) => (b[1] - a[1]))
-      .slice(0, 20);
+      .slice(0, 12);
 }
 
 const styles = theme => ({

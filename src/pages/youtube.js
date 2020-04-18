@@ -7,6 +7,7 @@ import Layout from "../layouts/index"
 import ChannelDetail from "../components/channel-detail"
 
 import axios from "axios";
+import SEO from "../components/seo";
 
 class Home extends Component {
   static propTypes = {
@@ -33,10 +34,12 @@ class Home extends Component {
 
   render() {
     const { location } = this.props
+    const { channel } = this.state
     return (
       <Layout location={location}>
+        <SEO title={`${channel.channel_name} YouTube channel on Spotify`} />
         <Router>
-          <ChannelDetail path="/youtube/:id" channel={this.state.channel} />
+          <ChannelDetail path="/youtube/:id" channel={channel} />
         </Router>
       </Layout>
     )
