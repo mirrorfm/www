@@ -36,7 +36,7 @@ const styles = theme => ({
 function ChannelDetail(props) {
   const { classes, channel } = props;
   const {
-    spotify_playlist_id,
+    playlist_id,
     upload_playlist_id,
     channel_name,
     found_tracks,
@@ -46,16 +46,19 @@ function ChannelDetail(props) {
 
   const found_ratio = Math.round(found_tracks * 100 / count_tracks)
   const all_genres = generate(genres);
-  const primary_genres = all_genres.slice(0, 4)
-  const secondary_genres = all_genres.slice(4)
+  const primary_genres = []; // all_genres.slice(0, 4)
+  const secondary_genres = []; // all_genres.slice(4)
 
   return (
     <div className={classes.root}>
       <h4>{channel_name} <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}>YouTube</a> channel</h4>
-      <iframe src={`https://open.spotify.com/embed/playlist/${spotify_playlist_id}`}
-              className={classes.frame} frameBorder="0" allow="encrypted-media"></iframe>
+      {playlist_id ? (
+          <iframe src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
+                  className={classes.frame} frameBorder="0" allow="encrypted-media"></iframe>
+      ) : <p>Loading playlist...</p>
+      }
       <p>
-        {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${spotify_playlist_id}`}>Spotify</a> • {found_tracks} tracks
+        {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
       </p>
       <p>
         {primary_genres.map(([label, count]) =>
@@ -72,7 +75,6 @@ function ChannelDetail(props) {
         {secondary_genres.map(([label, count]) =>
           <Chip
             key={label}
-            label={label}
             avatar={<Avatar>{count}</Avatar>}
             size="small"
             className="chip-mui"

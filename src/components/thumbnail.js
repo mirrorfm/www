@@ -64,9 +64,9 @@ class Thumbnail extends React.Component {
           >
             <LazyLoadImage
               alt={channel.channel_name}
-              height={channel.thumbnails.medium.height}
-              src={channel.thumbnails.medium.url}
-              width={channel.thumbnails.medium.width}/>
+              height="240"
+              src={channel.thumbnail_default}
+              width="240" />
             <div style={{
               paddingTop: `7px`,
               paddingBottom: `5px`,

@@ -40,7 +40,7 @@ class Home extends Component {
     const { location } = this.props
     const { youtube } = this.state.data;
     let targetObj = {};
-    let channels = youtube.channels
+    const { channels } = youtube;
     for (let i=0; i < channels.length; i++) {
       for (let genre in channels[i].genres) {
         if (!targetObj.hasOwnProperty(genre)) {
@@ -55,7 +55,8 @@ class Home extends Component {
     }
 
     return (
-      <Layout location={ location } genres={ newArr } channels={ youtube.channels }>
+
+      <Layout location={ location } genres={ newArr } channels={ channels }>
         <SEO title="Home" />
         <div>
           {this.state.loading ? (
@@ -93,11 +94,18 @@ class Home extends Component {
     this.setState({ loading: true })
 
     axios
-      .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/mirrorfm/channels`)
-      .then(({ data }) => {
+      .get(process.env['GATSBY_API_URL'], {
+        responseType: 'json',
+      })
+      .then(({data}) => {
         this.setState({
           loading: false,
-          data
+          data: {
+            youtube: {
+              channels: data.youtube,
+              total_channels: 0
+            }
+          }
         })
       })
       .catch(error => {
