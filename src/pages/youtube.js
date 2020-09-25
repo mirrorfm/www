@@ -50,7 +50,7 @@ class Home extends Component {
     this.setState({ loading: true })
 
     axios
-      .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/mirrorfm/channels?id=${id}`)
+      .get(process.env['GATSBY_API_URL'] + `channels?id=${id}`)
       .then(({ data }) => {
         this.setState({
           loading: false,
