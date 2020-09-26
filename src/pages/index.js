@@ -55,7 +55,6 @@ class Home extends Component {
     }
 
     return (
-
       <Layout location={ location } genres={ newArr } channels={ channels }>
         <SEO title="Home" />
         <div>
@@ -97,13 +96,15 @@ class Home extends Component {
       .get(process.env['GATSBY_API_URL'] + 'channels', {
         responseType: 'json',
       })
-      .then(({data}) => {
+      .then(({ data }) => {
         this.setState({
           loading: false,
           data: {
             youtube: {
               channels: data.youtube,
-              total_channels: 0
+              total_channels: data.total_channels,
+              found_tracks: data.found_tracks,
+              total_tracks: data.total_tracks
             }
           }
         })

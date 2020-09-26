@@ -48,13 +48,12 @@ class Home extends Component {
   // This data is fetched at run time on the client.
   fetchChannel = id => {
     this.setState({ loading: true })
-
     axios
-      .get(process.env['GATSBY_API_URL'] + `channels?id=${id}`)
+      .get(process.env['GATSBY_API_URL'] + `channels/${id}`)
       .then(({ data }) => {
         this.setState({
           loading: false,
-          channel: data
+          channel: data.channel
         })
       })
       .catch(error => {
