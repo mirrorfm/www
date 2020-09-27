@@ -18,12 +18,6 @@ import Avatar from '@material-ui/core/Avatar';
 
 import Moment from 'react-moment';
 
-function generate(genres) {
-  return Object.entries((genres || {}))
-      .sort((a, b) => (b[1] - a[1]))
-      .slice(0, 4);
-}
-
 class Home extends Component {
   state = {
     loading: false,

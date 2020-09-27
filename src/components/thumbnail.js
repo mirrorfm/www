@@ -5,12 +5,6 @@ import Chip from "@material-ui/core/Chip";
 import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 
-function generate(genres) {
-  return Object.entries((genres || {}))
-    .sort((a, b) => (b[1] - a[1]))
-    .slice(0, 4);
-}
-
 let touched = false
 
 class Thumbnail extends React.Component {
@@ -29,12 +23,15 @@ class Thumbnail extends React.Component {
 
   render() {
     const channel = this.props.channel
+    const channelName = channel.channel_name || channel.channel.channel_name;
+    const thumbnail = channel.thumbnail_default || channel.channel.thumbnail_default;
+    const genres = channel.genres || (channel.channel ? channel.channel.genres : []) || [];
     return (
       <div className="container">
         <div style={{height: `100%`, width: `100%`}}>
           <Link
             data-testid="channel"
-            to={`/youtube/${channel.channel_id}/${slugify(channel.channel_name)}/`}
+            to={`/youtube/${channel.channel_id}/${slugify(channelName)}/`}
             state={{
               modal: true,
               channels: this.props.channels,
@@ -63,9 +60,9 @@ class Thumbnail extends React.Component {
             }}
           >
             <LazyLoadImage
-              alt={channel.channel_name}
+              alt={channelName}
               height="240"
-              src={channel.thumbnail_default}
+              src={thumbnail}
               width="240" />
             <div style={{
               paddingTop: `7px`,
@@ -77,16 +74,16 @@ class Thumbnail extends React.Component {
               whiteSpace: `nowrap`,
               overflow: `hidden`,
               textOverflow: `ellipsis`
-            }}>{channel.channel_name}</div>
+            }}>{channelName}</div>
           </Link>
         </div>
-        <div style={{ height: `140px` }}>
-          {generate(channel.genres).map(([label]) =>
+        <div style={{ height: `80px` }}>
+          {genres.map((g) =>
             <Chip
-                key={label}
-                size="small"
-                label={label}
-                className="chip-mui"
+              key={g.name}
+              size="small"
+              label={g.name}
+              className="chip-mui"
             />
           )}
         </div>

@@ -4,6 +4,8 @@ import {graphql, Link, PageRenderer, useStaticQuery} from "gatsby"
 import { ModalRoutingContext } from "gatsby-plugin-modal-routing"
 import GatsbyGramModal from "../components/modal"
 import Header from "../components/header";
+import Footer from "../components/footer";
+
 import "./layout.css"
 
 class Layout extends React.Component {
@@ -46,9 +48,8 @@ class Layout extends React.Component {
                         }}
                     >
                       <main>{this.props.children}</main>
-                      <footer style={{ "textAlign": "center" }}>
-                      </footer>
                     </div>
+                    <Footer />
                   </>
               )
           )}

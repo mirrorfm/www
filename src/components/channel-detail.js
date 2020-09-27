@@ -4,12 +4,6 @@ import Avatar from '@material-ui/core/Avatar';
 import {useTheme, withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
-function generate(genres) {
-  return Object.entries((genres || {}))
-      .sort((a, b) => (b[1] - a[1]))
-      .slice(0, 12);
-}
-
 const styles = theme => ({
   frame: {
     height: 380,
@@ -35,7 +29,7 @@ const styles = theme => ({
 
 function ChannelDetail(props) {
   const { classes, channel } = props;
-  const {
+  let {
     playlist_id,
     upload_playlist_id,
     channel_name,
@@ -45,9 +39,9 @@ function ChannelDetail(props) {
   } = channel
 
   const found_ratio = Math.round(found_tracks * 100 / count_tracks)
-  const all_genres = generate(genres);
-  const primary_genres = []; // all_genres.slice(0, 4)
-  const secondary_genres = []; // all_genres.slice(4)
+  genres = genres || [];
+  let primary_genres = genres.slice(0, 4)
+  let secondary_genres = genres.slice(4)
 
   return (
     <div className={classes.root}>
@@ -61,24 +55,24 @@ function ChannelDetail(props) {
         {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
       </p>
       <p>
-        {primary_genres.map(([label, count]) =>
+        {primary_genres.map((g) =>
           <Chip
-            key={label}
-            label={label}
+            key={g.name}
+            label={g.name}
             className="chip-mui"
             style={{ margin: `2px` }}
-            avatar={<Avatar>{count}</Avatar>}
+            avatar={<Avatar>{g.count}</Avatar>}
           />
         )}
       </p>
       <p>
-        {secondary_genres.map(([label, count]) =>
+        {secondary_genres.map((g) =>
           <Chip
-            key={label}
-            avatar={<Avatar>{count}</Avatar>}
+            key={g.name}
+            avatar={<Avatar>{g.count}</Avatar>}
             size="small"
             className="chip-mui"
-            label={label}
+            label={g.name}
             style={{ margin: `2px` }}
           />
         )}
