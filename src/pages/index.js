@@ -80,7 +80,7 @@ class Home extends Component {
     this.setState({ loading: true })
 
     axios
-      .get(process.env['GATSBY_API_URL'], {
+      .get(process.env['GATSBY_API_URL'] + "home", {
         responseType: 'json',
       })
       .then(({ data }) => {
