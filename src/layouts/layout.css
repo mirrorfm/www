@@ -701,3 +701,18 @@ pre tt:after {
 .ReactModal__Overlay.ReactModal__Overlay--after-open {
   z-index: 10;
 }
+
+/* Sticky footer */
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-content {
+  flex-grow: 1;
+}
+
+.social-icon {
+  margin: 5px;
+}

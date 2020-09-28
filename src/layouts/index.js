@@ -37,9 +37,10 @@ class Layout extends React.Component {
                     {this.props.children}
                   </GatsbyGramModal>
               ) : (
-                  <>
+                  <div className="site">
                     <Header siteTitle="Mirror.FM" genres={this.props.genres}/>
                     <div
+                        className="site-content"
                         style={{
                           margin: `0 auto`,
                           maxWidth: 1280,
@@ -50,7 +51,7 @@ class Layout extends React.Component {
                       <main>{this.props.children}</main>
                     </div>
                     <Footer />
-                  </>
+                  </div>
               )
           )}
         </ModalRoutingContext.Consumer>

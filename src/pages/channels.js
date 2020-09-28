@@ -76,8 +76,6 @@ class Home extends Component {
                   </p>
                   <Grid channels={ youtube.channels } />
                   <span>
-                <Link style={{ float: `left` }} to="/add/">Add a channel</Link>
-                <Link style={{ float: `right` }} to="/about/">About</Link>
               </span>
                 </>
             ) : (
