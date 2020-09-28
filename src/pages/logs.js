@@ -41,9 +41,6 @@ class Home extends Component {
                 />
             ) : this.state.data ? (
                 <>
-                  <p style={{ textAlign: `right` }}>
-                    <Link style={{ fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
-                  </p>
                   <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
                     {this.state.data.map((e, index) => (
                         <li key={index}>
@@ -51,8 +48,6 @@ class Home extends Component {
                         </li>
                     ))}
                   </ul>
-                  <span>
-              </span>
                 </>
             ) : (
                 <p>Oh noes, error fetching logs :(</p>

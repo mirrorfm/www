@@ -20,7 +20,7 @@ const Footer = () => (
       }}>
         <span>
           <p style={{ float: `left` }}>
-            <Link to="/home/">Home</Link><br />
+            <Link to="/">Home</Link><br />
             <Link to="/channels/">All channels</Link><br />
             <Link to="/add/">Add a channel</Link><br />
             <Link to="/about/">About</Link><br />
