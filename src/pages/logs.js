@@ -1,31 +1,24 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Loader from 'react-loader-spinner'
+import * as PropTypes from "prop-types"
 
 import Layout from "../layouts/index"
 import SEO from "../components/seo"
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from "gatsby"
-
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-
 
 import Moment from 'react-moment';
 
 class Home extends Component {
+  static propTypes = {
+    location: PropTypes.object.isRequired,
+    data: PropTypes.array
+  }
+
   state = {
     loading: false,
     error: false,
-    data: {
-      events: [],
-      total: 0,
-    }
+    data: []
   }
 
   componentDidMount() {
@@ -33,8 +26,6 @@ class Home extends Component {
   }
 
   render() {
-    const { events } = this.state.data;
-
     return (
         <Layout>
           <SEO title="Home" />
@@ -54,9 +45,9 @@ class Home extends Component {
                     <Link style={{ fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
                   </p>
                   <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
-                    {events.map((e, index) => (
+                    {this.state.data.map((e, index) => (
                         <li key={index}>
-                          Added {e.added} {Object.keys(e.genres)[0]} tracks to {e.channel_name} <Moment fromNow unix>{e.timestamp}</Moment>
+                          Added {e.added} tracks to {e.channel.channel_name} <Moment fromNow unix>{e.timestamp}</Moment>
                         </li>
                     ))}
                   </ul>
@@ -76,7 +67,7 @@ class Home extends Component {
     this.setState({ loading: true })
 
     axios
-        .get(`https://qdfngarl1b.execute-api.eu-west-1.amazonaws.com/mirrorfm/events`)
+        .get(process.env['GATSBY_API_URL'] + 'events')
         .then(({ data }) => {
           this.setState({
             loading: false,

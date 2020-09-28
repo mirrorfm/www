@@ -26,7 +26,7 @@ class Thumbnail extends React.Component {
     const channelName = channel.channel_name || channel.channel.channel_name;
     const thumbnail = channel.thumbnail_default || channel.channel.thumbnail_default;
     let genres = channel.genres || (channel.channel ? channel.channel.genres : []) || [];
-    genres = genres.slice(4);
+    genres = genres.slice(0, 6);
     return (
       <div className="container">
         <div style={{height: `100%`, width: `100%`}}>
