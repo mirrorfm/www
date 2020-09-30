@@ -44,7 +44,9 @@ function ChannelDetail(props) {
   let secondary_genres = genres.slice(4)
 
   return (
-    <div className={classes.root}>
+    <div
+      onClick={e => e.stopPropagation()}
+      className={classes.root}>
       <h4>{channel_name} <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}>YouTube</a> channel</h4>
       {playlist_id ? (
           <iframe src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
