@@ -44,7 +44,7 @@ class Home extends Component {
                   <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
                     {this.state.data.map((e, index) => (
                         <li key={index}>
-                          Added {e.added} tracks to {e.channel.channel_name} <Moment fromNow unix>{e.timestamp}</Moment>
+                          Added {e.added} tracks to {e.channel_name} <Moment fromNow unix>{e.timestamp}</Moment>
                         </li>
                     ))}
                   </ul>

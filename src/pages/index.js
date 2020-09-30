@@ -6,6 +6,7 @@ import Loader from 'react-loader-spinner'
 import Layout from "../layouts/index"
 import SEO from "../components/seo"
 import Grid from "../components/grid"
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { Link } from "gatsby"
 
@@ -17,7 +18,8 @@ class Home extends Component {
       lastUpdated: PropTypes.array,
       mostFollowed: PropTypes.array,
       mostUploads: PropTypes.array,
-      recentlyAdded: PropTypes.array
+      recentlyAdded: PropTypes.array,
+      lastTerminated: PropTypes.array,
     })
   }
 
@@ -28,7 +30,8 @@ class Home extends Component {
       lastUpdated: [],
       mostFollowed: [],
       mostUploads: [],
-      recentlyAdded: []
+      recentlyAdded: [],
+      lastTerminated: [],
     }
   }
 
@@ -38,7 +41,7 @@ class Home extends Component {
 
   render() {
     const { location } = this.props
-    const { lastUpdated, mostFollowed, mostUploads, recentlyAdded } = this.state.data;
+    const { lastUpdated, mostFollowed, mostUploads, recentlyAdded, lastTerminated } = this.state.data;
 
     return (
       <Layout location={ location } channels={ lastUpdated }>
@@ -66,6 +69,8 @@ class Home extends Component {
               <Grid channels={ mostFollowed } />
               <h4>Largest channels</h4>
               <Grid channels={ mostUploads } />
+              <h4>Terminated channels</h4>
+              <Grid channels={ lastTerminated } />
             </>
           ) : (
             <p>Oh noes, error fetching channels :(</p>
