@@ -56,7 +56,7 @@ class Home extends Component {
 
     return (
         <Layout location={ location } genres={ newArr } channels={ channels }>
-          <SEO title="Home" />
+          <SEO title="All YouTube channels" />
           <div>
             {this.state.loading ? (
                 <Loader

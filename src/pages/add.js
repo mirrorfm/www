@@ -6,7 +6,7 @@ import SEO from "../components/seo"
 
 const Add = () => (
   <Layout>
-    <SEO title="Add" />
+    <SEO title="Add a channel" />
     <Link style={{ float: `right`, textDecoration: `none`, fontSize: `30px` }} to="/">←</Link>
     <h2>Add</h2>
     <div>

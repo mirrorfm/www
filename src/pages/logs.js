@@ -29,7 +29,7 @@ class Home extends Component {
   render() {
     return (
         <Layout>
-          <SEO title="Home" />
+          <SEO title="Event logs" />
           <div>
             {this.state.loading ? (
                 <Loader
