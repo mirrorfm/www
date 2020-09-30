@@ -8,6 +8,7 @@ import SEO from "../components/seo"
 import { Link } from "gatsby"
 
 import Moment from 'react-moment';
+import slugify from 'react-slugify';
 
 class Home extends Component {
   static propTypes = {
@@ -44,7 +45,9 @@ class Home extends Component {
                   <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
                     {this.state.data.map((e, index) => (
                         <li key={index}>
-                          Added {e.added} tracks to {e.channel_name} <Moment fromNow unix>{e.timestamp}</Moment>
+                          Added {e.added} tracks to <a
+                            href={`/youtube/${e.channel_id}/${slugify(e.channel_name)}/`}
+                        >{e.channel_name}</a> <Moment fromNow unix>{e.timestamp}</Moment>
                         </li>
                     ))}
                   </ul>

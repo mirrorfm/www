@@ -11,13 +11,17 @@ import SEO from "../components/seo";
 
 class Home extends Component {
   static propTypes = {
-    location: PropTypes.object.isRequired
+    channel: PropTypes.shape({
+      channel_name: PropTypes.object.isRequired
+    })
   }
 
   state = {
     loading: false,
     error: false,
-    channel: {}
+    channel: {
+      channel_name: ""
+    }
   }
 
   componentDidMount() {
