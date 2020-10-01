@@ -27,6 +27,11 @@ class Home extends Component {
   }
 
   render() {
+    this.state.data = Object.values(this.state.data.reduce((eventsSoFar, event) => {
+      if (!eventsSoFar[event.channel_id]) eventsSoFar[event.channel_id] = event;
+      eventsSoFar[event.channel_id].added = parseInt(eventsSoFar[event.channel_id].added) + parseInt(event.added);
+      return eventsSoFar;
+    }, {}));
     return (
         <Layout>
           <SEO title="Event logs" />
