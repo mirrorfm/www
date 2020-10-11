@@ -7,6 +7,7 @@ import Layout from "../layouts/index"
 import ChannelDetail from "../components/channel-detail"
 
 import axios from "axios";
+import Loader from 'react-loader-spinner'
 import SEO from "../components/seo";
 
 class Home extends Component {
@@ -17,7 +18,7 @@ class Home extends Component {
   }
 
   state = {
-    loading: false,
+    loading: true,
     error: false,
     channel: {
       channel_name: ""
@@ -41,17 +42,31 @@ class Home extends Component {
     const { channel } = this.state
     return (
       <Layout location={location}>
-        <SEO title={`${channel.channel_name} YouTube channel on Spotify`} />
-        <Router>
-          <ChannelDetail path="/youtube/:id/*" channel={channel} />
-        </Router>
+        {this.state.loading && !this.state.channel ? (
+          <Loader
+            type="Grid"
+            color="lightgrey"
+            height={50}
+            width={50}
+            timeout={9000}
+            style={{ textAlign: "center" }}
+          />
+        ) : this.state.channel ? (
+          <>
+            <SEO title={`${channel.channel_name} YouTube channel on Spotify`} />
+            <Router>
+              <ChannelDetail path="/youtube/:id/:name" channel={channel} />
+            </Router>
+          </>
+        ) : (
+          <p>Error fetching YouTube channel</p>
+        )}
       </Layout>
     )
   }
 
   // This data is fetched at run time on the client.
   fetchChannel = id => {
-    this.setState({ loading: true })
     axios
       .get(process.env['GATSBY_API_URL'] + `channels/${id}`)
       .then(({ data }) => {

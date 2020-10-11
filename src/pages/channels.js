@@ -22,7 +22,7 @@ class Home extends Component {
   }
 
   state = {
-    loading: false,
+    loading: true,
     error: false,
     data: {
       youtube: {
@@ -74,11 +74,9 @@ class Home extends Component {
                     <Link style={{ float: `right`, fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
                   </p>
                   <Grid channels={ youtube.channels } />
-                  <span>
-              </span>
                 </>
             ) : (
-                <p>Oh noes, error fetching channels :(</p>
+                <p>Error fetching channels</p>
             )}
           </div>
         </Layout>
@@ -87,8 +85,6 @@ class Home extends Component {
 
   // This data is fetched at run time on the client.
   fetchChannels = () => {
-    this.setState({ loading: true })
-
     axios
         .get(process.env['GATSBY_API_URL'] + 'channels', {
           responseType: 'json',

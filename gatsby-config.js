@@ -67,5 +67,6 @@ module.exports = {
         head: true
       },
     },
+    `gatsby-plugin-netlify`
   ],
 }

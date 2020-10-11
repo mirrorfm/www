@@ -24,7 +24,7 @@ class Home extends Component {
   }
 
   state = {
-    loading: false,
+    loading: true,
     error: false,
     data: {
       lastUpdated: [],
@@ -73,7 +73,7 @@ class Home extends Component {
               <Grid channels={ lastTerminated } />
             </>
           ) : (
-            <p>Oh noes, error fetching channels :(</p>
+            <p>Error fetching channels</p>
           )}
         </div>
       </Layout>
@@ -82,8 +82,6 @@ class Home extends Component {
 
   // This data is fetched at run time on the client.
   fetchChannels = () => {
-    this.setState({ loading: true })
-
     axios
       .get(process.env['GATSBY_API_URL'] + "home", {
         responseType: 'json',

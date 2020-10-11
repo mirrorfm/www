@@ -17,7 +17,7 @@ class Home extends Component {
   }
 
   state = {
-    loading: false,
+    loading: true,
     error: false,
     data: []
   }
@@ -58,7 +58,7 @@ class Home extends Component {
                   </ul>
                 </>
             ) : (
-                <p>Oh noes, error fetching logs :(</p>
+                <p>Error fetching event logs</p>
             )}
           </div>
         </Layout>
@@ -67,8 +67,6 @@ class Home extends Component {
 
   // This data is fetched at run time on the client.
   fetchChannels = () => {
-    this.setState({ loading: true })
-
     axios
         .get(process.env['GATSBY_API_URL'] + 'events')
         .then(({ data }) => {
