@@ -3,6 +3,7 @@ import Chip from "@material-ui/core/Chip";
 import Avatar from '@material-ui/core/Avatar';
 import {useTheme, withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
+import Loader from 'react-loader-spinner'
 
 const styles = theme => ({
   frame: {
@@ -47,38 +48,48 @@ function ChannelDetail(props) {
     <div
       onClick={e => e.stopPropagation()}
       className={classes.root}>
-      <h4>{channel_name} <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}>YouTube</a> channel</h4>
       {playlist_id ? (
+        <>
+          <h4>{channel_name} <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}>YouTube</a> channel</h4>
           <iframe src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
-                  className={classes.frame} frameBorder="0" allow="encrypted-media"></iframe>
-      ) : <p>Loading playlist...</p>
+  className={classes.frame} frameBorder="0" allow="encrypted-media"/>
+          <p>
+            {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
+          </p>
+          <p>
+            {primary_genres.map((g) =>
+              <Chip
+                key={g.name}
+                label={g.name}
+                className="chip-mui"
+                style={{ margin: `2px` }}
+                avatar={<Avatar>{g.count}</Avatar>}
+              />
+            )}
+          </p>
+          <p>
+            {secondary_genres.map((g) =>
+              <Chip
+                key={g.name}
+                avatar={<Avatar>{g.count}</Avatar>}
+                size="small"
+                className="chip-mui"
+                label={g.name}
+                style={{ margin: `2px` }}
+              />
+            )}
+          </p>
+        </>
+      ) :
+        <Loader
+          type="Grid"
+          color="lightgrey"
+          height={50}
+          width={50}
+          timeout={9000}
+          style={{ textAlign: "center" }}
+        />
       }
-      <p>
-        {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
-      </p>
-      <p>
-        {primary_genres.map((g) =>
-          <Chip
-            key={g.name}
-            label={g.name}
-            className="chip-mui"
-            style={{ margin: `2px` }}
-            avatar={<Avatar>{g.count}</Avatar>}
-          />
-        )}
-      </p>
-      <p>
-        {secondary_genres.map((g) =>
-          <Chip
-            key={g.name}
-            avatar={<Avatar>{g.count}</Avatar>}
-            size="small"
-            className="chip-mui"
-            label={g.name}
-            style={{ margin: `2px` }}
-          />
-        )}
-      </p>
     </div>
   )
 }
