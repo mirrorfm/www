@@ -26,6 +26,7 @@ const styles = theme => ({
 function Grid(props) {
   const {classes} = props;
   const channels = props.channels
+  const category = props.category
   return (
     <ul className={classes.root}>
       {channels.map((c, index) => (
@@ -35,7 +36,9 @@ function Grid(props) {
           pageBreakInside: `avoid`,
           breakInside: `avoid`
         }} key={index}>
-          <Thumbnail channel={c} channels={channels} />
+          <Thumbnail channel={c}
+                     channels={channels}
+                     category={category} />
         </li>
       ))}
     </ul>

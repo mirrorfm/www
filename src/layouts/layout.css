@@ -270,12 +270,18 @@ body {
   font-feature-settings: "kern", "liga", "clig", "calt";
 }
 .chip-mui {
-  font-size: 14px !important;
-  margin: 2px;
+  font-size: 11px !important;
+  margin: 0px !important;
+  border: 1px solid white !important;
+  border-radius: 14px !important;
 }
 .chip-mui:hover {
   background-color: #1DB954;
   color: white;
+}
+
+.MuiChip-labelSmall {
+  padding: 5px !important;
 }
 
 img {
@@ -361,8 +367,10 @@ h4 {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
-  font-size: 1rem;
+  font-size: 18px;
   line-height: 1.1;
+  font-variant: small-caps;
+  text-transform: uppercase;
 }
 h5 {
   margin-left: 0;

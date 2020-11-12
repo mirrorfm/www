@@ -62,15 +62,17 @@ class Home extends Component {
                 <Link style={{ float: `right`, fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
               </p>
               <h4>Last updated</h4>
-              <Grid channels={ lastUpdated } />
+              <Grid channels={ lastUpdated } category={"lastUpdated"} />
               <h4>Recently added</h4>
-              <Grid channels={ recentlyAdded } />
+              <Grid channels={ recentlyAdded } category={"recentlyAdded"} />
               <h4>Most popular playlists</h4>
-              <Grid channels={ mostFollowed } />
+              <Grid channels={ mostFollowed } category={"mostFollowed"}  />
               <h4>Largest channels</h4>
-              <Grid channels={ mostUploads } />
+              <Grid channels={ mostUploads } category={"mostUploads"} />
               <h4>Terminated channels</h4>
-              <Grid channels={ lastTerminated } />
+              <Grid channels={ lastTerminated } category={"lastTerminated"}  />
+              <h4>Channels with rare uploads</h4>
+              <Grid channels={ lastTerminated } category={"rarestUploads"}  />
             </>
           ) : (
             <p>Error fetching channels</p>

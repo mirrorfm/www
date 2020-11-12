@@ -5,7 +5,6 @@ import * as PropTypes from "prop-types"
 
 import Layout from "../layouts/index"
 import SEO from "../components/seo"
-import { Link } from "gatsby"
 
 import Moment from 'react-moment';
 import slugify from 'react-slugify';

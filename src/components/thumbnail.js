@@ -4,6 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import Chip from "@material-ui/core/Chip";
 import { Link } from 'gatsby'
 import slugify from 'react-slugify';
+import Moment from 'react-moment';
 
 let touched = false
 
@@ -23,6 +24,41 @@ class Thumbnail extends React.Component {
 
   render() {
     const channel = this.props.channel
+    const category = this.props.category
+    console.log(channel.terminated_datetime.Time);
+    let sortDiv;
+    switch(category) {
+      case "lastUpdated":
+        sortDiv = (
+          <div>Updated <Moment fromNow>{channel.last_found_time}</Moment></div>
+        )
+        break;
+      case "mostFollowed":
+        sortDiv = (
+          <div>{channel.count_followers} followers</div>
+        )
+        break;
+      case "mostUploads":
+        sortDiv = (
+          <div>{channel.count_tracks} uploads</div>
+        )
+        break;
+      case "rarestUploads":
+        sortDiv = (
+          <div></div>
+        )
+        break;
+      case "lastTerminated":
+        sortDiv = (
+          <div>Terminated <Moment fromNow>{channel.terminated_datetime.Time}</Moment></div>
+        )
+        break;
+      case "recentlyAdded":
+        sortDiv = (
+          <div>Submitted <Moment fromNow>{channel.last_upload_datetime}</Moment></div>
+        )
+        break;
+    }
     const channelName = channel.channel_name || channel.channel.channel_name;
     const thumbnail = channel.thumbnail_medium || channel.channel.thumbnail_medium;
     let genres = channel.genres || (channel.channel ? channel.channel.genres : []) || [];
@@ -57,20 +93,22 @@ class Thumbnail extends React.Component {
               position: `relative`,
               ":last-child": {
                 marginRight: 0,
-              },
+              }
+            }}
+            style={{
+              textDecoration: `none`
             }}
           >
             <LazyLoadImage
               alt={channelName}
               height="240"
               src={thumbnail}
-              width="240" />
+              width="240"
+            />
             <div style={{
-              paddingTop: `7px`,
-              paddingBottom: `5px`,
-              paddingLeft: `5px`,
+              paddingTop: `5px`,
               fontWeight: 700,
-              textDecoration: `none`,
+              fontSize: 15,
               display: `block`,
               whiteSpace: `nowrap`,
               overflow: `hidden`,
@@ -78,7 +116,8 @@ class Thumbnail extends React.Component {
             }}>{channelName}</div>
           </Link>
         </div>
-        <div style={{ height: `80px` }}>
+        <div style={{ fontFamily: `Arial`, fontVariant: `small-caps`, textTransform: `uppercase`, fontSize: 12 }}>{sortDiv}</div>
+        <div style={{ height: `140px` }}>
           {genres.map((g) =>
             <Chip
               key={g.name}
