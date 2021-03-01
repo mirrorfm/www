@@ -25,7 +25,7 @@ class Thumbnail extends React.Component {
   render() {
     const channel = this.props.channel
     const category = this.props.category
-    console.log(channel.terminated_datetime.Time);
+
     let sortDiv;
     switch(category) {
       case "lastUpdated":
@@ -40,12 +40,12 @@ class Thumbnail extends React.Component {
         break;
       case "mostUploads":
         sortDiv = (
-          <div>{channel.count_tracks} uploads</div>
+          <div>{channel.count_tracks} YouTube uploads</div>
         )
         break;
       case "rarestUploads":
         sortDiv = (
-          <div></div>
+          <div>{(channel.count_tracks / channel.found_tracks).toFixed(2)}% found</div>
         )
         break;
       case "lastTerminated":
@@ -55,7 +55,7 @@ class Thumbnail extends React.Component {
         break;
       case "recentlyAdded":
         sortDiv = (
-          <div>Submitted <Moment fromNow>{channel.last_upload_datetime}</Moment></div>
+          <div>Submitted <Moment fromNow>{channel.added_datetime.Time}</Moment></div>
         )
         break;
     }

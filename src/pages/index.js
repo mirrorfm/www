@@ -41,7 +41,7 @@ class Home extends Component {
 
   render() {
     const { location } = this.props
-    const { lastUpdated, mostFollowed, mostUploads, recentlyAdded, lastTerminated } = this.state.data;
+    const { lastUpdated, mostFollowed, mostUploads, recentlyAdded, lastTerminated, rarestUploads } = this.state.data;
 
     return (
       <Layout location={ location } channels={ lastUpdated }>
@@ -61,18 +61,18 @@ class Home extends Component {
               <p style={{ textAlign: `left` }}>
                 <Link style={{ float: `right`, fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
               </p>
+              <h4>Most popular playlists</h4>
+              <Grid channels={ mostFollowed } category={"mostFollowed"}  />
               <h4>Last updated</h4>
               <Grid channels={ lastUpdated } category={"lastUpdated"} />
               <h4>Recently added</h4>
               <Grid channels={ recentlyAdded } category={"recentlyAdded"} />
-              <h4>Most popular playlists</h4>
-              <Grid channels={ mostFollowed } category={"mostFollowed"}  />
               <h4>Largest channels</h4>
               <Grid channels={ mostUploads } category={"mostUploads"} />
               <h4>Terminated channels</h4>
               <Grid channels={ lastTerminated } category={"lastTerminated"}  />
               <h4>Channels with rare uploads</h4>
-              <Grid channels={ lastTerminated } category={"rarestUploads"}  />
+              <Grid channels={ rarestUploads } category={"rarestUploads"}  />
             </>
           ) : (
             <p>Error fetching channels</p>
