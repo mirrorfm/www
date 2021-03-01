@@ -45,7 +45,7 @@ class Thumbnail extends React.Component {
         break;
       case "rarestUploads":
         sortDiv = (
-          <div>{(channel.count_tracks / channel.found_tracks).toFixed(2)}% found</div>
+          <div>{(channel.found_tracks * 100 / channel.count_tracks).toFixed(2)}% found</div>
         )
         break;
       case "lastTerminated":
