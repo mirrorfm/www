@@ -19,6 +19,8 @@ const styles = theme => ({
     },
     [useTheme().breakpoints.down('xs')]: {
       columns: 2,
+      columnGap: 5,
+      columnWidth: 0,
     },
   },
 });

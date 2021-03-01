@@ -1,10 +1,31 @@
 import PropTypes from "prop-types"
 import React from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import {useTheme, withStyles} from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
+
+const styles = theme => ({
+  root: {
+    columnGap: 20,
+    marginLeft: 0,
+    listStyleType: `none`,
+    [useTheme().breakpoints.up('lg')]: {
+      columns: 6,
+    },
+    [useTheme().breakpoints.down('md')]: {
+      columns: 5,
+    },
+    [useTheme().breakpoints.down('sm')]: {
+      columns: 4,
+    },
+    [useTheme().breakpoints.down('xs')]: {
+      columns: 2,
+    },
+  },
+});
 
 let touched = false
 
@@ -23,6 +44,8 @@ class Thumbnail extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     const channel = this.props.channel
     const category = this.props.category
 
@@ -132,4 +155,4 @@ class Thumbnail extends React.Component {
   }
 }
 
-export default Thumbnail
+export default withStyles(styles, { withTheme: true })(Thumbnail);

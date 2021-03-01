@@ -40,7 +40,6 @@ const Footer = () => (
             <SocialIcon url="https://facebook.com/www.mirror.fm" />
             <SocialIcon url="https://open.spotify.com/user/xlqeojt6n7on0j7coh9go8ifd?si=oj2_z5gQRt2TVfQhA4vDCw" />
             <SocialIcon url="https://github.com/mirrorfm" />
-
           </div>
         </span>
       </div>
