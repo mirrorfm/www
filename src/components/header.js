@@ -14,41 +14,64 @@ const Header = ({ siteTitle, genres }) => (
     width: `100%`,
     zIndex: `1`
   }}>
-    <div style={{
-      margin: `0 auto`,
-      maxWidth: 1280,
-      padding: `0px 1.0875rem`,
-      display: `table`,
-      width: `100%`,
-      minHeight: 80
-    }}>
+    {genres ? (
       <div style={{
-        display: `table-cell`,
-        width: 100,
-        float: `left`
-      }}>
-        <Link
-          to="/"
-          style={{
-            color: `black`,
-            textDecoration: `none`,
-            width: `80px`,
-            float: `left`,
-            position:`relative`
-          }}>
-          <img style={{
-            position:`absolute`
-          }} src={logo} />
-        </Link>
-      </div>
-      <div style={{
-        display: `table-cell`,
+        margin: `0 auto`,
+        maxWidth: 1280,
+        padding: `0px 1.0875rem`,
+        display: `table`,
         width: `100%`,
-        paddingTop: 20
+        minHeight: 80
       }}>
-        <CheckboxesTag genres={genres}/>
+        <div style={{
+          display: `table-cell`,
+          width: 100,
+          float: `left`
+        }}>
+          <Link
+            to="/"
+            style={{
+              color: `black`,
+              textDecoration: `none`,
+              width: `80px`,
+              float: `left`,
+              position:`relative`
+            }}>
+            <img style={{
+              position:`absolute`
+            }} src={logo} />
+          </Link>
+        </div>
+        <div style={{
+          display: `table-cell`,
+          width: `100%`,
+          paddingTop: 20
+        }}>
+          <CheckboxesTag genres={genres}/>
+        </div>
       </div>
-    </div>
+     ) : (
+      <div style={{
+        margin: `0 auto`,
+        maxWidth: 1280,
+        padding: `0px 1.0875rem`,
+        width: `100%`,
+        minHeight: 80
+      }}>
+        <h1 style={{ margin: 0, textAlign: `center` }}>
+          <Link
+            to="/"
+            style={{
+              color: `black`,
+              textDecoration: `none`,
+            }}
+          >
+            <img width="80" src={logo} />
+          </Link>
+
+        </h1>
+      </div>
+    )}
   </header>
 )
 
