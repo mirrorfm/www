@@ -11,30 +11,35 @@ import PropTypes from "prop-types";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const CheckBoxesTag = ({ genres }) => (
-  <Autocomplete
+const CheckBoxesTag = ({ genres }) => {
+  // const [value, setValue] = React.useState(options[0]);
+
+  return <Autocomplete
     multiple
     options={genres}
     limitTags={5}
     size="small"
+    onChange={(event, newValue) => {
+      // setValue(newValue);
+    }}
     disableCloseOnSelect
     getOptionLabel={option => option.genre}
-    renderOption={(option, { selected }) => (
+    renderOption={(option, {selected}) => (
       <React.Fragment>
         <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            checked={selected}
-            size="small"
+          icon={icon}
+          checkedIcon={checkedIcon}
+          checked={selected}
+          size="small"
         />
         {option.genre}
       </React.Fragment>
     )}
     renderInput={params => (
-      <TextField {...params} variant="outlined" label="Music genres" placeholder="" />
+      <TextField {...params} variant="outlined" label="Music genres" placeholder=""/>
     )}
   />
-)
+}
 
 CheckBoxesTag.propTypes = {
   genres: PropTypes.array,

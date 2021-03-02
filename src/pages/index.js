@@ -6,7 +6,6 @@ import Loader from 'react-loader-spinner'
 import Layout from "../layouts/index"
 import SEO from "../components/seo"
 import Grid from "../components/grid"
-import Tooltip from '@material-ui/core/Tooltip';
 
 import { Link } from "gatsby"
 

@@ -26,6 +26,7 @@ class Layout extends React.Component {
   //     }
   //   }
   // `)
+
     return (
         <ModalRoutingContext.Consumer>
           {({ modal, channels }) => (

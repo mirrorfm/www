@@ -39,23 +39,24 @@ class Home extends Component {
   render() {
     const { location } = this.props
     const { youtube } = this.state.data;
-    let targetObj = {};
+    let allGenres = {};
     const { channels } = youtube;
     for (let i=0; i < channels.length; i++) {
-      for (let genre in channels[i].genres) {
-        if (!targetObj.hasOwnProperty(genre)) {
-          targetObj[genre] = 0;
+      channels[i].genres.forEach(function(genre) {
+        if (!allGenres[genre.name]) {
+          allGenres[genre.name] = 0
         }
-        targetObj[genre] += channels[i].genres[genre];
-      }
+        allGenres[genre.name] += genre.count
+      });
     }
-    let newArr = [];
-    for (let genre in targetObj) {
-      newArr.push({ genre, count: targetObj[genre] });
+
+    let genresArray = [];
+    for (let genre in allGenres) {
+      genresArray.push({ genre, count: allGenres[genre] });
     }
 
     return (
-        <Layout location={ location } genres={ newArr } channels={ channels }>
+        <Layout location={ location } genres={ genresArray } channels={ channels }>
           <SEO title="All YouTube channels" />
           <div>
             {this.state.loading ? (

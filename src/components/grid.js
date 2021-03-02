@@ -12,10 +12,10 @@ const styles = theme => ({
       columns: 6,
     },
     [useTheme().breakpoints.down('md')]: {
-      columns: 5,
+      columns: 4,
     },
     [useTheme().breakpoints.down('sm')]: {
-      columns: 4,
+      columns: 2,
     },
     [useTheme().breakpoints.down('xs')]: {
       columns: 2,
