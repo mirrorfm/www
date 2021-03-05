@@ -1,6 +1,5 @@
 import * as PropTypes from "prop-types"
 import React from "react"
-import {graphql, Link, PageRenderer, useStaticQuery} from "gatsby"
 import { ModalRoutingContext } from "gatsby-plugin-modal-routing"
 import GatsbyGramModal from "../components/modal"
 import Header from "../components/header";
@@ -12,21 +11,11 @@ class Layout extends React.Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
     isModal: PropTypes.bool,
-    channels: PropTypes.array
+    channels: PropTypes.array,
   }
 
   render() {
     const { location } = this.props
-  //   const data = useStaticQuery(graphql`
-  //   query SiteTitleQuery {
-  //     site {
-  //       siteMetadata {
-  //         title
-  //       }
-  //     }
-  //   }
-  // `)
-
     return (
         <ModalRoutingContext.Consumer>
           {({ modal, channels }) => (
@@ -39,7 +28,7 @@ class Layout extends React.Component {
                   </GatsbyGramModal>
               ) : (
                   <div className="site">
-                    <Header siteTitle="Mirror.FM" genres={this.props.genres}/>
+                    <Header siteTitle="Mirror.FM" genres={this.props.genres} handleClick={this.props.handleClick} />
                     <div
                         className="site-content"
                         style={{

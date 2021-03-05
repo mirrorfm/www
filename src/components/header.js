@@ -4,7 +4,7 @@ import React from "react"
 import CheckboxesTag from "./checkboxestag";
 const logo = require('../images/mirrorfm-icon.png');
 
-const Header = ({ siteTitle, genres }) => (
+const Header = ({ siteTitle, genres, selectedGenres, handleClick }) => (
   <header style={{
     background: `rgba(245, 245, 245, 0.98)`,
     borderBottom: `1px solid #eee`,
@@ -47,7 +47,7 @@ const Header = ({ siteTitle, genres }) => (
           width: `100%`,
           paddingTop: 20
         }}>
-          <CheckboxesTag genres={genres}/>
+          <CheckboxesTag genres={genres} selectedGenres={selectedGenres} handleClick={handleClick} />
         </div>
       </div>
      ) : (
@@ -68,7 +68,6 @@ const Header = ({ siteTitle, genres }) => (
           >
             <img width="80" src={logo} />
           </Link>
-
         </h1>
       </div>
     )}

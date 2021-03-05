@@ -44,10 +44,7 @@ class Thumbnail extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-
-    const channel = this.props.channel
-    const category = this.props.category
+    const { channel, category, selectedGenresArr } = this.props
 
     let sortDiv;
     switch(category) {
@@ -146,7 +143,7 @@ class Thumbnail extends React.Component {
               key={g.name}
               size="small"
               label={g.name}
-              className="chip-mui"
+              className={selectedGenresArr.includes(g.name) ? "chip-mui-selected" : "chip-mui"}
             />
           )}
         </div>
