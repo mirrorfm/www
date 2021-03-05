@@ -26,16 +26,13 @@ const styles = theme => ({
 });
 
 function Grid(props) {
-  let { classes, channels=[], category, selectedGenres = [] } = props;
-  if (channels == null) {
-    channels = []
-  }
+  let { classes, channels, category, selectedGenres = [] } = props;
 
   let selectedGenresArr = selectedGenres.map(g => g.genre)
   return (
     <ul className={classes.root}>
       {channels.map((c, index) => (
-        (selectedGenresArr.length === 0 || c.genres.map(t => t.name).some(g => selectedGenresArr.includes(g))) ? (
+        (selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))) ? (
           <li style={{
             marginBottom: `20px`,
             WebkitColumnBreakInside: `avoid`,
