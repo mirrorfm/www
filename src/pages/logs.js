@@ -22,13 +22,13 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.fetchChannels()
+    this.fetchEvents()
   }
 
   render() {
     this.state.data = Object.values(this.state.data.reduce((eventsSoFar, event) => {
-      if (!eventsSoFar[event.channel_id]) eventsSoFar[event.channel_id] = event;
-      eventsSoFar[event.channel_id].added = parseInt(eventsSoFar[event.channel_id].added) + parseInt(event.added);
+      if (!eventsSoFar[event.entity_id]) eventsSoFar[event.entity_id] = event;
+      eventsSoFar[event.entity_id].added = parseInt(eventsSoFar[event.entity_id].added) + parseInt(event.added);
       return eventsSoFar;
     }, {}));
     return (
@@ -46,12 +46,13 @@ class Home extends Component {
                 />
             ) : this.state.data ? (
                 <>
+                  <h2>Event logs (last 24 hours)</h2>
                   <ul style={{ listStyleType: `none`, marginLeft: `0` }}>
                     {this.state.data.map((e, index) => (
                         <li key={index}>
                           Added {e.added} tracks to <a
-                            href={`/youtube/${e.channel_id}/${slugify(e.channel_name)}/`}
-                        >{e.channel_name}</a> <Moment fromNow unix>{e.timestamp}</Moment>
+                            href={`/${e.host === "yt" ? "youtube" : "discogs"}/${e.entity_id}/${slugify(e.entity_name)}/`}
+                        >{e.host === "yt" ? "YouTube channel" : "Discogs label"} {e.entity_name}</a> <Moment fromNow unix>{e.timestamp}</Moment>
                         </li>
                     ))}
                   </ul>
@@ -65,7 +66,7 @@ class Home extends Component {
   }
 
   // This data is fetched at run time on the client.
-  fetchChannels = () => {
+  fetchEvents = () => {
     axios
         .get(process.env['GATSBY_API_URL'] + 'events')
         .then(({ data }) => {
