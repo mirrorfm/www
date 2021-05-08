@@ -22,7 +22,8 @@ const Footer = () => (
           <p style={{ float: `left` }}>
             <Link to="/">Home</Link><br />
             <Link to="/channels/">All channels</Link><br />
-            <Link to="/add/">Add a channel</Link><br />
+            <Link to="/labels/">All labels</Link><br />
+            <Link to="/add/">Add</Link><br />
             <Link to="/about/">About</Link><br />
             <Link to="/logs/">Event logs</Link>
           </p>
