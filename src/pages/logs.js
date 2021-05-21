@@ -26,11 +26,16 @@ class Home extends Component {
   }
 
   render() {
+    // Group events by entity
     this.state.data = Object.values(this.state.data.reduce((eventsSoFar, event) => {
-      if (!eventsSoFar[event.entity_id]) eventsSoFar[event.entity_id] = event;
-      eventsSoFar[event.entity_id].added = parseInt(eventsSoFar[event.entity_id].added) + parseInt(event.added);
+      let id = event["spotify_playlist"]
+      if (!eventsSoFar[id]) {
+        eventsSoFar[id] = event;
+      }
+      eventsSoFar[id].added += event.added;
       return eventsSoFar;
     }, {}));
+
     return (
         <Layout>
           <SEO title="Event logs" />
