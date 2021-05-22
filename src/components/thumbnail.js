@@ -136,7 +136,12 @@ class Thumbnail extends React.Component {
               overflow: `hidden`,
               textOverflow: `ellipsis`
             }}>
-              <img src={ytLogo} style={{ paddingBottom: 3}} alt="Youtube logo" width={20} /> {channelName}
+              <LazyLoadImage
+                alt="Youtube logo"
+                height="20"
+                src={ytLogo}
+                width="20"
+              /> {channelName}
             </div>
           </Link>
         </div>

@@ -139,7 +139,12 @@ class Thumbnail extends React.Component {
               overflow: `hidden`,
               textOverflow: `ellipsis`
             }}>
-              <img src={dgLogo} style={{ paddingBottom: 3}} alt="Discogs logo" width={20} /> {labelName}
+              <LazyLoadImage
+                alt="Discogs logo"
+                height="20"
+                src={dgLogo}
+                width="20"
+              /> {labelName}
             </div>
           </Link>
         </div>
