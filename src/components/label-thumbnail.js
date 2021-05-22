@@ -6,7 +6,9 @@ import Chip from "@material-ui/core/Chip";
 import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
+
 const whiteBg = require('../images/white-bg.png');
+const dgLogo = require('../images/dg-logo.png');
 
 const styles = theme => ({
   root: {
@@ -85,7 +87,7 @@ class Thumbnail extends React.Component {
     let genres = label.genres || (label.label ? label.label.genres : []) || [];
     genres = genres.slice(0, 6);
     return (
-      <div className="container label">
+      <div className="container">
         <div style={{height: `100%`, width: `100%`}}>
           <Link
             data-testid="label"
@@ -120,12 +122,14 @@ class Thumbnail extends React.Component {
               textDecoration: `none`
             }}
           >
-            <LazyLoadImage
-              alt={labelName}
-              height="240"
-              src={thumbnail ? thumbnail : whiteBg }
-              width="240"
-            />
+            <div className="label">
+              <LazyLoadImage
+                alt={labelName}
+                height="240"
+                src={thumbnail ? thumbnail : whiteBg }
+                width="240"
+              />
+            </div>
             <div style={{
               paddingTop: `5px`,
               fontWeight: 700,
@@ -134,7 +138,9 @@ class Thumbnail extends React.Component {
               whiteSpace: `nowrap`,
               overflow: `hidden`,
               textOverflow: `ellipsis`
-            }}>{labelName}</div>
+            }}>
+              <img src={dgLogo} style={{ paddingBottom: 3}} alt="Discogs logo" width={20} /> {labelName}
+            </div>
           </Link>
         </div>
         <div style={{ fontFamily: `Arial`, fontVariant: `small-caps`, textTransform: `uppercase`, fontSize: 12 }}>{sortDiv}</div>

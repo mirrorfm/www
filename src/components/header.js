@@ -39,7 +39,7 @@ const Header = ({ siteTitle, genres, selectedGenres, handleClick }) => (
             }}>
             <img style={{
               position:`absolute`
-            }} src={logo} />
+            }} alt="Mirror.FM logo" src={logo} />
           </Link>
         </div>
         <div style={{

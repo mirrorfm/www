@@ -7,6 +7,8 @@ import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
 
+const ytLogo = require('../images/yt-logo.png');
+
 const styles = theme => ({
   root: {
     columnGap: 20,
@@ -121,8 +123,8 @@ class Thumbnail extends React.Component {
           >
             <LazyLoadImage
               alt={channelName}
-              height="240"
               src={thumbnail}
+              height="240"
               width="240"
             />
             <div style={{
@@ -133,7 +135,9 @@ class Thumbnail extends React.Component {
               whiteSpace: `nowrap`,
               overflow: `hidden`,
               textOverflow: `ellipsis`
-            }}>{channelName}</div>
+            }}>
+              <img src={ytLogo} style={{ paddingBottom: 3}} alt="Youtube logo" width={20} /> {channelName}
+            </div>
           </Link>
         </div>
         <div style={{ fontFamily: `Arial`, fontVariant: `small-caps`, textTransform: `uppercase`, fontSize: 12 }}>{sortDiv}</div>

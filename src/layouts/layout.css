@@ -146,8 +146,7 @@ img {
   vertical-align: middle;
 }
 
-.container.label img {
-  vertical-align: middle;
+.container .label img {
   object-fit: scale-down;
   height:240px;
   width: 240px;
