@@ -142,7 +142,16 @@ img {
   background: rgba(30, 215, 96, 1);
 }
 
-.container img {vertical-align: middle;}
+.container img {
+  vertical-align: middle;
+}
+
+.container.label img {
+  vertical-align: middle;
+  object-fit: scale-down;
+  height:240px;
+  width: 240px;
+}
 
 svg:not(:root) {
   overflow: hidden;

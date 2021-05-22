@@ -6,6 +6,7 @@ import Chip from "@material-ui/core/Chip";
 import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
+const whiteBg = require('../images/white-bg.png');
 
 const styles = theme => ({
   root: {
@@ -80,11 +81,11 @@ class Thumbnail extends React.Component {
         break;
     }
     const labelName = label.label_name || label.label.label_name;
-    const thumbnail = label.thumbnail_medium.Valid ? label.thumbnail_medium.String : "";
+    const thumbnail = label.thumbnail_medium.Valid ? label.thumbnail_medium.String : undefined;
     let genres = label.genres || (label.label ? label.label.genres : []) || [];
     genres = genres.slice(0, 6);
     return (
-      <div className="container">
+      <div className="container label">
         <div style={{height: `100%`, width: `100%`}}>
           <Link
             data-testid="label"
@@ -122,7 +123,7 @@ class Thumbnail extends React.Component {
             <LazyLoadImage
               alt={labelName}
               height="240"
-              src={thumbnail}
+              src={thumbnail ? thumbnail : whiteBg }
               width="240"
             />
             <div style={{
