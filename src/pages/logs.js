@@ -31,8 +31,9 @@ class Home extends Component {
       let id = event["spotify_playlist"]
       if (!eventsSoFar[id]) {
         eventsSoFar[id] = event;
+      } else {
+        eventsSoFar[id].added += event.added;
       }
-      eventsSoFar[id].added += event.added;
       return eventsSoFar;
     }, {}));
 
