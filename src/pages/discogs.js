@@ -4,24 +4,24 @@ import React, { Component } from 'react'
 import { Router } from "@reach/router"
 
 import Layout from "../layouts/index"
-import ChannelDetail from "../components/channel-detail"
+import LabelDetail from "../components/label-detail"
 
 import axios from "axios";
 import Loader from 'react-loader-spinner'
 import SEO from "../components/seo";
 
-class YouTube extends Component {
+class Discogs extends Component {
   static propTypes = {
-    channel: PropTypes.shape({
-      channel_name: PropTypes.object.isRequired
+    label: PropTypes.shape({
+      label_name: PropTypes.object.isRequired
     })
   }
 
   state = {
     loading: true,
     error: false,
-    channel: {
-      channel_name: ""
+    label: {
+      label_name: ""
     }
   }
 
@@ -29,20 +29,20 @@ class YouTube extends Component {
     const { location } = this.props
     if (location.state) {
       this.setState({
-        channel: location.state.channel
+        label: location.state.label
       })
     } else {
       const id = location.pathname.split(`/`)[2];
-      this.fetchChannel(id)
+      this.fetchLabel(id)
     }
   }
 
   render() {
     const { location } = this.props
-    const { channel } = this.state
+    const { label } = this.state
     return (
       <Layout location={location}>
-        {this.state.loading && !this.state.channel ? (
+        {this.state.loading && !this.state.label ? (
           <Loader
             type="Grid"
             color="lightgrey"
@@ -51,28 +51,28 @@ class YouTube extends Component {
             timeout={9000}
             style={{ textAlign: "center" }}
           />
-        ) : this.state.channel ? (
+        ) : this.state.label ? (
           <>
-            <SEO title={`${channel.channel_name} YouTube channel on Spotify`} />
+            <SEO title={`${label.label_name} Discogs label on Spotify`} />
             <Router>
-              <ChannelDetail path="/youtube/:id/:name" channel={channel} />
+              <LabelDetail path="/discogs/:id/:name" label={label} />
             </Router>
           </>
         ) : (
-          <p>Error fetching YouTube channel</p>
+          <p>Error fetching Discogs label</p>
         )}
       </Layout>
     )
   }
 
   // This data is fetched at run time on the client.
-  fetchChannel = id => {
+  fetchLabel = id => {
     axios
-      .get(process.env['GATSBY_API_URL'] + `channels/${id}`)
+      .get(process.env['GATSBY_API_URL'] + `discogs/${id}`)
       .then(({ data }) => {
         this.setState({
           loading: false,
-          channel: data.channel
+          label: data.label
         })
       })
       .catch(error => {
@@ -81,4 +81,4 @@ class YouTube extends Component {
   }
 }
 
-export default YouTube
+export default Discogs

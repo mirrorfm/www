@@ -10,7 +10,7 @@ import Grid from "../components/grid"
 import { Link } from "gatsby"
 import NumberFormat from 'react-number-format';
 
-class Home extends Component {
+class Channels extends Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
     isModal: PropTypes.bool,
@@ -127,4 +127,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default Channels

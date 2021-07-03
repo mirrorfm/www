@@ -15,4 +15,11 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+
+  if (page.path.match(/^\/discogs/)) {
+    page.matchPath = "/discogs/:id/:name"
+
+    // Update the page.
+    createPage(page)
+  }
 }

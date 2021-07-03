@@ -91,7 +91,7 @@ class Thumbnail extends React.Component {
         <div style={{height: `100%`, width: `100%`}}>
           <Link
             data-testid="label"
-            to={`/youtube/${label.label_id}/${slugify(labelName)}/`}
+            to={`/discogs/${label.label_id}/${slugify(labelName)}/`}
             state={{
               modal: true,
               labels: this.props.labels,
