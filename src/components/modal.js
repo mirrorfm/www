@@ -11,6 +11,7 @@ import { navigate } from "gatsby"
 import {useTheme, withStyles} from "@material-ui/core/styles";
 
 let channels
+let labels
 
 const styles = theme => ({
   caret: {
@@ -32,7 +33,8 @@ class Modal extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool,
     location: PropTypes.object.isRequired,
-    channels: PropTypes.array
+    channels: PropTypes.array,
+    labels: PropTypes.array
   }
 
   componentDidMount() {
@@ -48,23 +50,54 @@ class Modal extends React.Component {
   }
 
   findCurrentIndex() {
+    let type = this.props.location.pathname.split(`/`)[1];
     let id = this.props.location.pathname.split(`/`)[2];
-    return channels.findIndex(c => c.channel_id === id)
+
+    let currentIndex;
+    switch(type) {
+      case "youtube":
+        currentIndex = channels.findIndex(c => c.channel_id === id);
+        break;
+      case "discogs":
+        currentIndex = labels.findIndex(l => l.label_id === id);
+        break;
+      default:
+        break
+    }
+
+    return {
+      currentIndex,
+      type
+    }
   }
 
   next(e) {
     if (e) {
       e.stopPropagation()
     }
-    const currentIndex = this.findCurrentIndex()
+    const { currentIndex, type } = this.findCurrentIndex()
+
+    let entities;
+    switch(type) {
+      case "youtube":
+        entities = channels;
+        break;
+      case "discogs":
+        entities = labels;
+        break;
+      default:
+        break
+    }
+
     if (currentIndex || currentIndex === 0) {
-      let nextChannel
-      if (currentIndex + 1 === channels.length) {
-        nextChannel = channels[0]
+      let next
+      if (currentIndex + 1 === entities.length) {
+        next = entities[0]
       } else {
-        nextChannel = channels[currentIndex + 1]
+        next = entities[currentIndex + 1]
       }
-      navigate(`/youtube/${nextChannel.channel_id}/${slugify(nextChannel.channel_name)}/`, {state: {modal: true, channels, channel: nextChannel }})
+
+      this.navigateEntity(type, next, entities);
     }
   }
 
@@ -72,22 +105,56 @@ class Modal extends React.Component {
     if (e) {
       e.stopPropagation()
     }
-    const currentIndex = this.findCurrentIndex()
-    if (currentIndex || currentIndex === 0) {
-      let previousChannel
-      if (currentIndex === 0) {
-        previousChannel = channels.slice(-1)[0]
-      } else {
-        previousChannel = channels[currentIndex - 1]
-      }
-      navigate(`/youtube/${previousChannel.channel_id}/${slugify(previousChannel.channel_name)}/`, {state: {modal: true, channels, channel: previousChannel }})
+    const { currentIndex, type } = this.findCurrentIndex()
+
+    let entities;
+    switch(type) {
+      case "youtube":
+        entities = channels;
+        break;
+      case "discogs":
+        entities = labels;
+        break;
+      default:
+        break
     }
+
+    if (currentIndex || currentIndex === 0) {
+      let previous
+      if (currentIndex === 0) {
+        previous = entities.slice(-1)[0]
+      } else {
+        previous = entities[currentIndex - 1]
+      }
+      this.navigateEntity(type, previous, entities);
+    }
+  }
+
+  navigateEntity(type, following, entities) {
+    let id, name, state;
+    switch(type) {
+      case "youtube":
+        id = following.channel_id;
+        name = following.channel_name;
+        state = { modal: true, channels: entities, channel: following, label: following }
+        break;
+      case "discogs":
+        id = following.label_id;
+        name = following.label_name;
+        state = { modal: true, labels: entities, channel: following, label: following }
+        break;
+      default:
+        break
+    }
+
+    navigate(`/${type}/${id}/${slugify(name)}/`, { state })
   }
 
   render() {
     const { classes } = this.props;
-    if (!channels) {
+    if (!channels || !labels) {
       channels = this.props.location.state.channels
+      labels = this.props.location.state.labels
     }
     return (
       <div

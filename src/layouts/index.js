@@ -12,17 +12,19 @@ class Layout extends React.Component {
     location: PropTypes.object.isRequired,
     isModal: PropTypes.bool,
     channels: PropTypes.array,
+    labels: PropTypes.array,
   }
 
   render() {
     const { location } = this.props
     return (
         <ModalRoutingContext.Consumer>
-          {({ modal, channels }) => (
+          {({ modal, channels, labels }) => (
               modal ? (
                   <GatsbyGramModal
                       location={location}
                       channels={channels}
+                      labels={labels}
                   >
                     {this.props.children}
                   </GatsbyGramModal>
