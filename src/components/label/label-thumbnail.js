@@ -7,8 +7,8 @@ import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
 
-const whiteBg = require('../images/white-bg.png');
-const dgLogo = require('../images/dg-logo.png');
+const whiteBg = require('../../images/white-bg.png');
+const dgLogo = require('../../images/dg-logo.png');
 
 const styles = theme => ({
   root: {
@@ -36,7 +36,7 @@ class Thumbnail extends React.Component {
   static propTypes = {
     label: PropTypes.shape({
       label_id: PropTypes.string.isRequired,
-    }).isRequired,
+    }).isRequired
   }
 
   constructor() {
@@ -82,10 +82,12 @@ class Thumbnail extends React.Component {
         )
         break;
     }
+
     const labelName = label.label_name || label.label.label_name;
     const thumbnail = label.thumbnail_medium.Valid ? label.thumbnail_medium.String : undefined;
     let genres = label.genres || (label.label ? label.label.genres : []) || [];
     genres = genres.slice(0, 6);
+
     return (
       <div className="container">
         <div style={{height: `100%`, width: `100%`}}>

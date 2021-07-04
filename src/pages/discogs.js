@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { Router } from "@reach/router"
 
 import Layout from "../layouts/index"
-import LabelDetail from "../components/label-detail"
+import LabelDetail from "../components/label/label-detail"
 
 import axios from "axios";
 import Loader from 'react-loader-spinner'

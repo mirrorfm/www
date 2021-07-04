@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 import React from "react"
 import {useTheme, withStyles} from "@material-ui/core/styles";
-import Thumbnail from "../components/label-thumbnail"
+import Thumbnail from "./channel-thumbnail"
 
 const styles = theme => ({
   root: {
@@ -25,13 +25,13 @@ const styles = theme => ({
   },
 });
 
-function Grid(props) {
-  let { classes, labels, category, selectedGenres = [] } = props;
+function ChannelGrid(props) {
+  let { classes, channels, category, selectedGenres = [] } = props;
 
   let selectedGenresArr = selectedGenres.map(g => g.genre)
   return (
     <ul className={classes.root}>
-      {labels.map((c, index) => (
+      {channels.map((c, index) => (
         (selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))) ? (
           <li style={{
             marginBottom: `20px`,
@@ -39,8 +39,8 @@ function Grid(props) {
             pageBreakInside: `avoid`,
             breakInside: `avoid`
           }} key={index}>
-            <Thumbnail label={c}
-                       labels={labels}
+            <Thumbnail channel={c}
+                       channels={channels}
                        category={category}
                        selectedGenresArr={selectedGenresArr}/>
           </li>
@@ -52,13 +52,13 @@ function Grid(props) {
   )
 }
 
-Grid.propTypes = {
-  labels: PropTypes.array,
+ChannelGrid.propTypes = {
+  channels: PropTypes.array,
   classes: PropTypes.object.isRequired,
 }
 
-Grid.defaultProps = {
-  labels: []
+ChannelGrid.defaultProps = {
+  channels: []
 }
 
-export default withStyles(styles)(Grid);
+export default withStyles(styles)(ChannelGrid);

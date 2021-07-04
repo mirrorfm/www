@@ -5,7 +5,7 @@ import {useTheme, withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Loader from 'react-loader-spinner'
 
-const styles = theme => ({
+const styles = () => ({
   frame: {
     height: 380,
     width: `100%`

@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { Router } from "@reach/router"
 
 import Layout from "../layouts/index"
-import ChannelDetail from "../components/channel-detail"
+import ChannelDetail from "../components/channel/channel-detail"
 
 import axios from "axios";
 import Loader from 'react-loader-spinner'

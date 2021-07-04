@@ -7,9 +7,9 @@ import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
 
-const ytLogo = require('../images/yt-logo.png');
+const ytLogo = require('../../images/yt-logo.png');
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     columnGap: 20,
     marginLeft: 0,
@@ -31,7 +31,7 @@ const styles = theme => ({
 
 let touched = false
 
-class Thumbnail extends React.Component {
+class ChannelThumbnail extends React.Component {
   static propTypes = {
     channel: PropTypes.shape({
       channel_id: PropTypes.string.isRequired,
@@ -81,10 +81,12 @@ class Thumbnail extends React.Component {
         )
         break;
     }
+
     const channelName = channel.channel_name || channel.channel.channel_name;
     const thumbnail = channel.thumbnail_medium.Valid ? channel.thumbnail_medium.String : "";
     let genres = channel.genres || (channel.channel ? channel.channel.genres : []) || [];
     genres = genres.slice(0, 6);
+
     return (
       <div className="container">
         <div style={{height: `100%`, width: `100%`}}>
@@ -161,4 +163,4 @@ class Thumbnail extends React.Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Thumbnail);
+export default withStyles(styles, { withTheme: true })(ChannelThumbnail);

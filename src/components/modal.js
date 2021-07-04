@@ -12,8 +12,9 @@ import {useTheme, withStyles} from "@material-ui/core/styles";
 
 let channels
 let labels
+let previousSectionPathname
 
-const styles = theme => ({
+const styles = () => ({
   caret: {
     fontSize: `50px`,
     width: `20rem`,
@@ -38,6 +39,15 @@ class Modal extends React.Component {
   }
 
   componentDidMount() {
+    let acceptedPreviousPathnames = [
+      "/labels/",
+      "/channels/",
+      "/"
+    ]
+    if (acceptedPreviousPathnames.includes(this.props.location.state.referrer)) {
+      previousSectionPathname = this.props.location.state.referrer
+    }
+
     mousetrap.bind(`left`, () => this.previous())
     mousetrap.bind(`right`, () => this.next())
     mousetrap.bind(`spacebar`, () => this.next())
@@ -77,17 +87,7 @@ class Modal extends React.Component {
     }
     const { currentIndex, type } = this.findCurrentIndex()
 
-    let entities;
-    switch(type) {
-      case "youtube":
-        entities = channels;
-        break;
-      case "discogs":
-        entities = labels;
-        break;
-      default:
-        break
-    }
+    let entities = this.getEntities(type);
 
     if (currentIndex || currentIndex === 0) {
       let next
@@ -107,17 +107,7 @@ class Modal extends React.Component {
     }
     const { currentIndex, type } = this.findCurrentIndex()
 
-    let entities;
-    switch(type) {
-      case "youtube":
-        entities = channels;
-        break;
-      case "discogs":
-        entities = labels;
-        break;
-      default:
-        break
-    }
+    let entities = this.getEntities(type);
 
     if (currentIndex || currentIndex === 0) {
       let previous
@@ -127,6 +117,17 @@ class Modal extends React.Component {
         previous = entities[currentIndex - 1]
       }
       this.navigateEntity(type, previous, entities);
+    }
+  }
+
+  getEntities(type) {
+    switch(type) {
+      case "youtube":
+        return channels;
+      case "discogs":
+        return labels;
+      default:
+        break;
     }
   }
 
@@ -158,7 +159,7 @@ class Modal extends React.Component {
     }
     return (
       <div
-        onClick={() => navigate(`/`, {state: {noScroll: true}})}
+        onClick={() => navigate(previousSectionPathname, {state: {noScroll: true}})}
         style={{
           display: `flex`,
           position: `relative`,
@@ -201,7 +202,7 @@ class Modal extends React.Component {
         </div>
         <MdClose
           data-testid="modal-close"
-          onClick={() => navigate(`/`, {state: {noScroll: true}})}
+          onClick={() => navigate(previousSectionPathname, {state: {noScroll: true}})}
           style={{
             cursor: `pointer`,
             color: `rgba(255,255,255,0.8)`,

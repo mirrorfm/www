@@ -5,3 +5,8 @@
  */
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+
+export const onRouteUpdate = ({ location, prevLocation }) => {
+  if (location && location.state)
+    location.state.referrer = prevLocation ? prevLocation.pathname : null
+}

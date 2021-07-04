@@ -5,7 +5,7 @@ import Loader from 'react-loader-spinner'
 
 import Layout from "../layouts/index"
 import SEO from "../components/seo"
-import Grid from "../components/labels-grid"
+import Grid from "../components/label/labels-grid"
 
 import { Link } from "gatsby"
 import NumberFormat from 'react-number-format';
