@@ -28,14 +28,6 @@ const Footer = () => (
             <Link to="/logs/">Event logs</Link>
           </p>
           <div style={{ float: `right` }}>
-            <div style={{"display": `inline`, "marginBottom": "0"}}>
-              <iframe
-                src="https://open.spotify.com/follow/1/?uri=spotify:user:xlqeojt6n7on0j7coh9go8ifd&size=basic&theme=light"
-                title="Follow Mirror.FM on Spotify" width="200" height="27" scrolling="no"
-                frameBorder="0"
-                allowTransparency="true" />
-            </div>
-            <br />
             <hr />
             <SocialIcon url="https://twitter.com/mirror_fm" />
             <SocialIcon url="https://facebook.com/www.mirror.fm" />
