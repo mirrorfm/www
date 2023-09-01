@@ -7,7 +7,7 @@ import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
 
-const ytLogo = require('../../images/yt-logo.png');
+import { StaticImage } from "gatsby-plugin-image"
 
 const styles = () => ({
   root: {
@@ -138,10 +138,10 @@ class ChannelThumbnail extends React.Component {
               overflow: `hidden`,
               textOverflow: `ellipsis`
             }}>
-              <LazyLoadImage
+              <StaticImage
                 alt="Youtube logo"
                 height="20"
-                src={ytLogo}
+                src={'../../images/yt-logo.png'}
                 width="20"
               /> {channelName}
             </div>

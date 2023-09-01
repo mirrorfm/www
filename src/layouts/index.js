@@ -1,6 +1,6 @@
 import * as PropTypes from "prop-types"
 import React from "react"
-import { ModalRoutingContext } from "gatsby-plugin-modal-routing"
+import { ModalRoutingContext } from "gatsby-plugin-modal-routing-3"
 import GatsbyGramModal from "../components/modal"
 import Header from "../components/header";
 import Footer from "../components/footer";

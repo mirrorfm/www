@@ -2,7 +2,7 @@ import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 import CheckboxesTag from "./checkboxestag";
-const logo = require('../images/mirrorfm-icon.png');
+import { StaticImage } from "gatsby-plugin-image"
 
 const Header = ({ siteTitle, genres, selectedGenres, handleClick }) => (
   <header style={{
@@ -37,9 +37,9 @@ const Header = ({ siteTitle, genres, selectedGenres, handleClick }) => (
               float: `left`,
               position:`relative`
             }}>
-            <img style={{
+            <StaticImage style={{
               position:`absolute`
-            }} alt="Mirror.FM logo" src={logo} />
+            }} alt="Mirror.FM logo" src={'../images/mirrorfm-icon.png'} />
           </Link>
         </div>
         <div style={{
@@ -66,7 +66,7 @@ const Header = ({ siteTitle, genres, selectedGenres, handleClick }) => (
               textDecoration: `none`,
             }}
           >
-            <img width="80" src={logo} />
+            <StaticImage width="80" src={'../images/mirrorfm-icon.png'} />
           </Link>
         </h1>
       </div>
