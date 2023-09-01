@@ -68,7 +68,7 @@ class Discogs extends Component {
   // This data is fetched at run time on the client.
   fetchLabel = id => {
     axios
-      .get(process.env['GATSBY_API_URL'] + `discogs/${id}`)
+      .get(process.env['GATSBY_API_URL'] + `labels/${id}`)
       .then(({ data }) => {
         this.setState({
           loading: false,
