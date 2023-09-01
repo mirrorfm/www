@@ -7,8 +7,8 @@ import { Link } from 'gatsby'
 import slugify from 'react-slugify';
 import Moment from 'react-moment';
 
-const whiteBg = require('../../images/white-bg.png');
-const dgLogo = require('../../images/dg-logo.png');
+import { StaticImage } from "gatsby-plugin-image"
+import whiteBg from "../../images/white-bg.png";
 
 const styles = theme => ({
   root: {
@@ -125,12 +125,20 @@ class Thumbnail extends React.Component {
             }}
           >
             <div className="label">
-              <LazyLoadImage
-                alt={labelName}
-                height="240"
-                src={thumbnail ? thumbnail : whiteBg }
-                width="240"
-              />
+              { thumbnail ?
+                <LazyLoadImage
+                  alt={labelName}
+                  height="240"
+                  src={thumbnail}
+                  width="240"
+                /> :
+                <StaticImage
+                  alt={labelName}
+                  height="240"
+                  src={'../../images/white-bg.png'}
+                  width="240"
+                />
+              }
             </div>
             <div style={{
               paddingTop: `5px`,
@@ -141,12 +149,11 @@ class Thumbnail extends React.Component {
               overflow: `hidden`,
               textOverflow: `ellipsis`
             }}>
-              <LazyLoadImage
-                alt="Discogs logo"
-                height="20"
-                src={dgLogo}
+              <StaticImage
                 width="20"
-              /> {labelName}
+                height="20"
+                alt="Discogs logo"
+                src={'../../images/dg-logo.png'} /> {labelName}
             </div>
           </Link>
         </div>
