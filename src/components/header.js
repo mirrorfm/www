@@ -34,6 +34,7 @@ const Header = ({ siteTitle, genres, selectedGenres, handleClick }) => (
               color: `black`,
               textDecoration: `none`,
               width: `80px`,
+              top: `-36px`,
               float: `left`,
               position:`relative`
             }}>

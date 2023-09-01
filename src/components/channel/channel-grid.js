@@ -12,15 +12,13 @@ const styles = theme => ({
       columns: 6,
     },
     [useTheme().breakpoints.down('md')]: {
-      columns: 4,
+      columns: 6,
     },
     [useTheme().breakpoints.down('sm')]: {
-      columns: 2,
+      columns: 3,
     },
     [useTheme().breakpoints.down('xs')]: {
       columns: 2,
-      columnGap: 5,
-      columnWidth: 0,
     },
   },
 });
@@ -34,7 +32,6 @@ function ChannelGrid(props) {
       {channels.map((c, index) => (
         (selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))) ? (
           <li style={{
-            marginBottom: `20px`,
             WebkitColumnBreakInside: `avoid`,
             pageBreakInside: `avoid`,
             breakInside: `avoid`
