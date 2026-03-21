@@ -43,15 +43,17 @@ class Channels extends Component {
 
   componentDidMount() {
     const params = new URLSearchParams(this.props.location.search)
+    const genres = params.getAll('genres')
     this.setState({
       page: parseInt(params.get('page')) || 1,
       sort: params.get('sort') || 'followers',
-      search: params.get('search') || ''
+      search: params.get('search') || '',
+      selectedGenres: genres.map(g => ({ genre: g }))
     }, () => this.fetchChannels())
   }
 
   handleClick(e, selectedGenres) {
-    this.setState({ selectedGenres })
+    this.updateAndFetch({ selectedGenres, page: 1 })
   }
 
   handlePageChange = (page) => {
@@ -68,11 +70,12 @@ class Channels extends Component {
 
   updateAndFetch = (newState) => {
     this.setState(newState, () => {
-      const { page, sort, search } = this.state
+      const { page, sort, search, selectedGenres } = this.state
       const params = new URLSearchParams()
       if (page > 1) params.set('page', page)
       if (sort !== 'followers') params.set('sort', sort)
       if (search) params.set('search', search)
+      selectedGenres.forEach(g => params.append('genres', g.genre))
       const qs = params.toString()
       navigate('/channels/' + (qs ? '?' + qs : ''))
       this.fetchChannels()
@@ -84,7 +87,7 @@ class Channels extends Component {
     const { youtube } = this.state.data;
 
     return (
-      <Layout location={ location } genres={ this.state.genres } handleClick={this.handleClick}>
+      <Layout location={ location } genres={ this.state.genres } selectedGenres={this.state.selectedGenres} handleClick={this.handleClick}>
         <SEO title="All YouTube channels" />
         <div>
           {this.state.loading ? (
@@ -115,7 +118,7 @@ class Channels extends Component {
                   onPageChange={this.handlePageChange}
                   compact
                 />
-                <Grid channels={ youtube.channels } selectedGenres={this.state.selectedGenres} />
+                <Grid channels={ youtube.channels } />
                 <PaginationControls
                   page={this.state.page}
                   totalCount={youtube.total_count}
@@ -133,9 +136,10 @@ class Channels extends Component {
 
   fetchChannels = () => {
     this.setState({ loading: true })
-    const { page, perPage, sort, search } = this.state
+    const { page, perPage, sort, search, selectedGenres } = this.state
     const params = new URLSearchParams({ page, per_page: perPage, sort, order: 'desc' })
     if (search) params.set('search', search)
+    selectedGenres.forEach(g => params.append('genres', g.genre))
 
     axios
       .get(process.env['GATSBY_API_URL'] + 'channels?' + params.toString(), {

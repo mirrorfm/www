@@ -15,11 +15,13 @@ class CheckBoxesTag extends React.Component {
     return <Autocomplete
       multiple
       options={this.props.genres}
+      value={this.props.selectedGenres || []}
       limitTags={5}
       size="small"
       onChange={this.props.handleClick}
       disableCloseOnSelect
       getOptionLabel={option => option.genre}
+      getOptionSelected={(option, value) => option.genre === value.genre}
       renderOption={(option, {selected}) => (
         <React.Fragment>
           <Checkbox

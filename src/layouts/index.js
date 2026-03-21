@@ -30,7 +30,7 @@ class Layout extends React.Component {
                   </GatsbyGramModal>
               ) : (
                   <div className="site">
-                    <Header siteTitle="Mirror.FM" genres={this.props.genres} handleClick={this.props.handleClick} />
+                    <Header siteTitle="Mirror.FM" genres={this.props.genres} selectedGenres={this.props.selectedGenres} handleClick={this.props.handleClick} />
                     <div
                         className="site-content"
                         style={{

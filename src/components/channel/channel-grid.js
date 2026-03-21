@@ -24,18 +24,14 @@ const styles = theme => ({
 });
 
 function ChannelGrid(props) {
-  let { classes, channels, category, selectedGenres = [] } = props;
+  let { classes, channels, category } = props;
 
-  let selectedGenresArr = selectedGenres.map(g => g.genre)
-  let filtered = channels.filter(c =>
-    selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))
-  )
-  if (filtered.length === 0 && channels.length > 0) {
-    return <p style={{ textAlign: 'center', color: '#999', padding: '40px 0' }}>No channels match the selected genres on this page.</p>
+  if (channels.length === 0) {
+    return <p style={{ textAlign: 'center', color: '#999', padding: '40px 0' }}>No channels found.</p>
   }
   return (
     <ul className={classes.root}>
-      {filtered.map((c, index) => (
+      {channels.map((c, index) => (
         <li style={{
           WebkitColumnBreakInside: `avoid`,
           pageBreakInside: `avoid`,
@@ -43,8 +39,7 @@ function ChannelGrid(props) {
         }} key={index}>
           <Thumbnail channel={c}
                      channels={channels}
-                     category={category}
-                     selectedGenresArr={selectedGenresArr}/>
+                     category={category}/>
         </li>
       ))}
     </ul>
