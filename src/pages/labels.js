@@ -108,6 +108,13 @@ class Labels extends Component {
                   <SortDropdown sort={this.state.sort} onSortChange={this.handleSortChange} />
                 </div>
               </div>
+              <PaginationControls
+                page={this.state.page}
+                totalCount={discogs.total_count}
+                perPage={this.state.perPage}
+                onPageChange={this.handlePageChange}
+                compact
+              />
               <Grid labels={ discogs.labels } selectedGenres={this.state.selectedGenres} />
               <PaginationControls
                 page={this.state.page}

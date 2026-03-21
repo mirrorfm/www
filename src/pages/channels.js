@@ -108,6 +108,13 @@ class Channels extends Component {
                     <SortDropdown sort={this.state.sort} onSortChange={this.handleSortChange} />
                   </div>
                 </div>
+                <PaginationControls
+                  page={this.state.page}
+                  totalCount={youtube.total_count}
+                  perPage={this.state.perPage}
+                  onPageChange={this.handlePageChange}
+                  compact
+                />
                 <Grid channels={ youtube.channels } selectedGenres={this.state.selectedGenres} />
                 <PaginationControls
                   page={this.state.page}
