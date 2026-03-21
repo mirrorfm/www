@@ -35,7 +35,7 @@ class Labels extends Component {
       genres: [],
       selectedGenres: [],
       page: 1,
-      perPage: 30,
+      perPage: 100,
       sort: 'followers',
       search: ''
     }
