@@ -6,19 +6,17 @@ import Loader from 'react-loader-spinner'
 import Layout from "../layouts/index"
 import SEO from "../components/seo"
 import Grid from "../components/label/labels-grid"
+import PaginationControls from "../components/pagination"
+import SortDropdown from "../components/sort-dropdown"
+import SearchBar from "../components/search-bar"
 
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import NumberFormat from 'react-number-format';
 
 class Labels extends Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
     isModal: PropTypes.bool,
-    data: PropTypes.shape({
-      discogs: PropTypes.shape({
-        labels: PropTypes.array
-      })
-    })
   }
 
   constructor(props) {
@@ -31,22 +29,53 @@ class Labels extends Component {
       data: {
         discogs: {
           labels: [],
-          total_labels: 0
+          total_count: 0
         }
       },
       genres: [],
-      selectedGenres: []
+      selectedGenres: [],
+      page: 1,
+      perPage: 30,
+      sort: 'followers',
+      search: ''
     }
-
   }
 
   componentDidMount() {
-    this.fetchLabels()
+    const params = new URLSearchParams(this.props.location.search)
+    this.setState({
+      page: parseInt(params.get('page')) || 1,
+      sort: params.get('sort') || 'followers',
+      search: params.get('search') || ''
+    }, () => this.fetchLabels())
   }
 
   handleClick(e, selectedGenres) {
-    this.setState({
-      selectedGenres
+    this.setState({ selectedGenres })
+  }
+
+  handlePageChange = (page) => {
+    this.updateAndFetch({ page })
+  }
+
+  handleSortChange = (sort) => {
+    this.updateAndFetch({ sort, page: 1 })
+  }
+
+  handleSearchChange = (search) => {
+    this.updateAndFetch({ search, page: 1 })
+  }
+
+  updateAndFetch = (newState) => {
+    this.setState(newState, () => {
+      const { page, sort, search } = this.state
+      const params = new URLSearchParams()
+      if (page > 1) params.set('page', page)
+      if (sort !== 'followers') params.set('sort', sort)
+      if (search) params.set('search', search)
+      const qs = params.toString()
+      navigate('/labels/' + (qs ? '?' + qs : ''))
+      this.fetchLabels()
     })
   }
 
@@ -55,7 +84,7 @@ class Labels extends Component {
     const { discogs } = this.state.data;
 
     return (
-      <Layout location={ location } genres={ this.state.genres } labels={ this.state.labels } handleClick={this.handleClick}>
+      <Layout location={ location } genres={ this.state.genres } handleClick={this.handleClick}>
         <SEO title="All Discogs labels" />
         <div>
           {this.state.loading ? (
@@ -69,11 +98,23 @@ class Labels extends Component {
             />
           ) : this.state.data ? (
             <>
-              <p style={{ textAlign: `left` }}>
-                Found <span style={{ fontWeight: `bold`}}>{Math.round(discogs.found_tracks * 100 / discogs.total_tracks)}%</span> of <span style={{ fontWeight: `bold`}}><NumberFormat value={discogs.total_tracks} displayType={'text'} thousandSeparator={true} /></span> total tracks in <span style={{ fontWeight: `bold`}}>{discogs.total_labels}</span> Discogs labels.
-                <Link style={{ float: `right`, fontSize: `60px`, textDecoration: `none` }} to="/add/">+</Link>
-              </p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '10px' }}>
+                <p style={{ margin: 0 }}>
+                  Found <span style={{ fontWeight: `bold`}}>{Math.round(discogs.found_tracks * 100 / discogs.total_tracks)}%</span> of <span style={{ fontWeight: `bold`}}><NumberFormat value={discogs.total_tracks} displayType={'text'} thousandSeparator={true} /></span> total tracks in <span style={{ fontWeight: `bold`}}>{discogs.total_count}</span> Discogs labels.
+                  <Link style={{ marginLeft: '10px', fontSize: `30px`, textDecoration: `none` }} to="/add/">+</Link>
+                </p>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <SearchBar search={this.state.search} onSearchChange={this.handleSearchChange} />
+                  <SortDropdown sort={this.state.sort} onSortChange={this.handleSortChange} />
+                </div>
+              </div>
               <Grid labels={ discogs.labels } selectedGenres={this.state.selectedGenres} />
+              <PaginationControls
+                page={this.state.page}
+                totalCount={discogs.total_count}
+                perPage={this.state.perPage}
+                onPageChange={this.handlePageChange}
+              />
             </>
           ) : (
             <p>Error fetching labels</p>
@@ -83,37 +124,25 @@ class Labels extends Component {
     )
   }
 
-  // This data is fetched at run time on the client.
   fetchLabels = () => {
+    this.setState({ loading: true })
+    const { page, perPage, sort, search } = this.state
+    const params = new URLSearchParams({ page, per_page: perPage, sort, order: 'desc' })
+    if (search) params.set('search', search)
+
     axios
-      .get(process.env['GATSBY_API_URL'] + 'labels', {
+      .get(process.env['GATSBY_API_URL'] + 'labels?' + params.toString(), {
         responseType: 'json',
       })
       .then(({ data }) => {
-        let allGenres = []
-        let labels = data.discogs
-        for (let i=0; i < labels.length; i++) {
-          if (labels[i].genres) {
-            labels[i].genres.forEach(function (genre) {
-              if (!allGenres[genre.name]) {
-                allGenres[genre.name] = 0
-              }
-              allGenres[genre.name] += genre.count
-            });
-          }
-        }
-
-        let genres = [];
-        for (let genre in allGenres) {
-          genres.push({ genre, count: genres[genre]});
-        }
+        const genres = (data.all_genres || []).map(g => ({ genre: g }))
 
         this.setState({
           loading: false,
           data: {
             discogs: {
-              labels: data.discogs,
-              total_labels: data.total_labels,
+              labels: data.discogs || [],
+              total_count: data.total_count,
               found_tracks: data.found_tracks,
               total_tracks: data.total_tracks
             }

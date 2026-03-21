@@ -29,24 +29,26 @@ function Grid(props) {
   let { classes, labels, category, selectedGenres = [] } = props;
 
   let selectedGenresArr = selectedGenres.map(g => g.genre)
+  let filtered = labels.filter(c =>
+    selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))
+  )
+  if (filtered.length === 0 && labels.length > 0) {
+    return <p style={{ textAlign: 'center', color: '#999', padding: '40px 0' }}>No labels match the selected genres on this page.</p>
+  }
   return (
     <ul className={classes.root}>
-      {labels.map((c, index) => (
-        (selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))) ? (
-          <li style={{
-            marginBottom: `20px`,
-            WebkitColumnBreakInside: `avoid`,
-            pageBreakInside: `avoid`,
-            breakInside: `avoid`
-          }} key={index}>
-            <Thumbnail label={c}
-                       labels={labels}
-                       category={category}
-                       selectedGenresArr={selectedGenresArr}/>
-          </li>
-        ) : (
-          <></>
-        )
+      {filtered.map((c, index) => (
+        <li style={{
+          marginBottom: `20px`,
+          WebkitColumnBreakInside: `avoid`,
+          pageBreakInside: `avoid`,
+          breakInside: `avoid`
+        }} key={index}>
+          <Thumbnail label={c}
+                     labels={labels}
+                     category={category}
+                     selectedGenresArr={selectedGenresArr}/>
+        </li>
       ))}
     </ul>
   )

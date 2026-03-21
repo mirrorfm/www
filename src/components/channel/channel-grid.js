@@ -27,23 +27,25 @@ function ChannelGrid(props) {
   let { classes, channels, category, selectedGenres = [] } = props;
 
   let selectedGenresArr = selectedGenres.map(g => g.genre)
+  let filtered = channels.filter(c =>
+    selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))
+  )
+  if (filtered.length === 0 && channels.length > 0) {
+    return <p style={{ textAlign: 'center', color: '#999', padding: '40px 0' }}>No channels match the selected genres on this page.</p>
+  }
   return (
     <ul className={classes.root}>
-      {channels.map((c, index) => (
-        (selectedGenresArr.length === 0 || (c.genres ? c.genres : []).map(t => t.name).some(g => selectedGenresArr.includes(g))) ? (
-          <li style={{
-            WebkitColumnBreakInside: `avoid`,
-            pageBreakInside: `avoid`,
-            breakInside: `avoid`
-          }} key={index}>
-            <Thumbnail channel={c}
-                       channels={channels}
-                       category={category}
-                       selectedGenresArr={selectedGenresArr}/>
-          </li>
-        ) : (
-          <></>
-        )
+      {filtered.map((c, index) => (
+        <li style={{
+          WebkitColumnBreakInside: `avoid`,
+          pageBreakInside: `avoid`,
+          breakInside: `avoid`
+        }} key={index}>
+          <Thumbnail channel={c}
+                     channels={channels}
+                     category={category}
+                     selectedGenresArr={selectedGenresArr}/>
+        </li>
       ))}
     </ul>
   )
