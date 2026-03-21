@@ -164,7 +164,7 @@ class Thumbnail extends React.Component {
               key={g.name}
               size="small"
               label={g.name}
-              className={selectedGenresArr.includes(g.name) ? "chip-mui-selected" : "chip-mui"}
+              className={(selectedGenresArr || []).includes(g.name) ? "chip-mui-selected" : "chip-mui"}
             />
           )}
         </div>
