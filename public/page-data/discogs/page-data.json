@@ -1,6 +1,0 @@
-{
-    "componentChunkName": "component---src-pages-discogs-js",
-    "path": "/discogs/",
-    "result": {"pageContext":{"matchPath":"/discogs/:id/:name"}},
-    "staticQueryHashes": ["63159454"],
-    "matchPath": "/discogs/:id/:name"}

@@ -1,6 +1,0 @@
-{
-    "componentChunkName": "component---src-pages-youtube-js",
-    "path": "/youtube/",
-    "result": {"pageContext":{"matchPath":"/youtube/:id/:name"}},
-    "staticQueryHashes": ["63159454"],
-    "matchPath": "/youtube/:id/:name"}
