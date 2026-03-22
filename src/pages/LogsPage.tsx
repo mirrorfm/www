@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { Grid as GridLoader } from 'react-loader-spinner'
-import Moment from 'react-moment'
+import moment from 'moment'
 import slugify from 'react-slugify'
 
 import Layout from '../layouts/Layout'
@@ -46,7 +46,7 @@ export default function LogsPage() {
                   <a href={`/${e.host === 'yt' ? 'youtube' : 'discogs'}/${e.entity_id}/${slugify(e.entity_name)}/`}>
                     {e.host === 'yt' ? 'YouTube channel' : 'Discogs label'} {e.entity_name}
                   </a>{' '}
-                  <Moment fromNow unix>{e.timestamp}</Moment>
+                  {moment.unix(e.timestamp).fromNow()}
                 </li>
               ))}
             </ul>

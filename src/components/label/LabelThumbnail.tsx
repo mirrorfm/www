@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Chip from '@mui/material/Chip'
 import slugify from 'react-slugify'
-import Moment from 'react-moment'
+import moment from 'moment'
 import dgLogo from '../../assets/dg-logo.png'
 import whiteBg from '../../assets/white-bg.png'
 
@@ -22,7 +22,7 @@ export default function LabelThumbnail({ label, labels, category, selectedGenres
   let sortDiv: React.ReactNode = null
   switch (category) {
     case 'lastUpdated':
-      sortDiv = <div>Updated <Moment fromNow>{label.last_found_time}</Moment></div>
+      sortDiv = <div>Updated {moment(label.last_found_time).fromNow()}</div>
       break
     case 'mostFollowed':
       sortDiv = <div>{label.count_followers} followers</div>
@@ -34,10 +34,10 @@ export default function LabelThumbnail({ label, labels, category, selectedGenres
       sortDiv = <div>{(label.found_tracks * 100 / label.count_tracks).toFixed(2)}% found</div>
       break
     case 'lastTerminated':
-      sortDiv = <div>Terminated <Moment fromNow>{label.terminated_datetime.Time}</Moment></div>
+      sortDiv = <div>Terminated {moment(label.terminated_datetime.Time).fromNow()}</div>
       break
     case 'recentlyAdded':
-      sortDiv = <div>Submitted <Moment fromNow>{label.added_datetime.Time}</Moment></div>
+      sortDiv = <div>Submitted {moment(label.added_datetime.Time).fromNow()}</div>
       break
   }
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Chip from '@mui/material/Chip'
 import slugify from 'react-slugify'
-import Moment from 'react-moment'
+import moment from 'moment'
 import ytLogo from '../../assets/yt-logo.png'
 
 let touched = false
@@ -21,7 +21,7 @@ export default function ChannelThumbnail({ channel, channels, category, selected
   let sortDiv: React.ReactNode = null
   switch (category) {
     case 'lastUpdated':
-      sortDiv = <div>Updated <Moment fromNow>{channel.last_found_time}</Moment></div>
+      sortDiv = <div>Updated {moment(channel.last_found_time).fromNow()}</div>
       break
     case 'mostFollowed':
       sortDiv = <div>{channel.count_followers} followers</div>
@@ -33,10 +33,10 @@ export default function ChannelThumbnail({ channel, channels, category, selected
       sortDiv = <div>{(channel.found_tracks * 100 / channel.count_tracks).toFixed(2)}% found</div>
       break
     case 'lastTerminated':
-      sortDiv = <div>Terminated <Moment fromNow>{channel.terminated_datetime.Time}</Moment></div>
+      sortDiv = <div>Terminated {moment(channel.terminated_datetime.Time).fromNow()}</div>
       break
     case 'recentlyAdded':
-      sortDiv = <div>Submitted <Moment fromNow>{channel.added_datetime.Time}</Moment></div>
+      sortDiv = <div>Submitted {moment(channel.added_datetime.Time).fromNow()}</div>
       break
   }
 
