@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip'
 import slugify from 'react-slugify'
 import moment from 'moment'
 import ytLogo from '../../assets/yt-logo.png'
+import whiteBg from '../../assets/white-bg.png'
 
 let touched = false
 
@@ -41,7 +42,8 @@ export default function ChannelThumbnail({ channel, channels, category, selected
   }
 
   const channelName = channel.channel_name || channel.channel?.channel_name
-  const thumbnail = channel.thumbnail_medium?.Valid ? channel.thumbnail_medium.String : ''
+  const thumbnail = channel.thumbnail_medium?.Valid ? channel.thumbnail_medium.String : undefined
+  const [imgError, setImgError] = useState(false)
   let genres = channel.genres || channel.channel?.genres || []
   genres = genres.slice(0, 6)
 
@@ -64,7 +66,11 @@ export default function ChannelThumbnail({ channel, channels, category, selected
             textDecoration: 'none',
           }}
         >
-          <LazyLoadImage alt={channelName} src={thumbnail} height="240" width="240" />
+          {thumbnail && !imgError ? (
+            <LazyLoadImage alt={channelName} src={thumbnail} height="240" width="240" onError={() => setImgError(true)} />
+          ) : (
+            <img alt={channelName} height="240" src={whiteBg} width="240" />
+          )}
           <div style={{
             paddingTop: 5,
             fontWeight: 700,

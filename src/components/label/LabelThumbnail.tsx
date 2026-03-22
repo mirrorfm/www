@@ -43,6 +43,7 @@ export default function LabelThumbnail({ label, labels, category, selectedGenres
 
   const labelName = label.label_name || label.label?.label_name
   const thumbnail = label.thumbnail_medium?.Valid ? label.thumbnail_medium.String : undefined
+  const [imgError, setImgError] = useState(false)
   let genres = label.genres || label.label?.genres || []
   genres = genres.slice(0, 6)
 
@@ -66,8 +67,8 @@ export default function LabelThumbnail({ label, labels, category, selectedGenres
           }}
         >
           <div className="label">
-            {thumbnail ? (
-              <LazyLoadImage alt={labelName} height="240" src={thumbnail} width="240" />
+            {thumbnail && !imgError ? (
+              <LazyLoadImage alt={labelName} height="240" src={thumbnail} width="240" onError={() => setImgError(true)} />
             ) : (
               <img alt={labelName} height="240" src={whiteBg} width="240" />
             )}
