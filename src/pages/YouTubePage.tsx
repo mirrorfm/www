@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import axios from 'axios'
 import { Grid as GridLoader } from 'react-loader-spinner'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import ChannelDetail from '../components/channel/ChannelDetail'
-import { API_URL } from '../config'
+import { api } from '../config'
 
 export default function YouTubePage() {
   const { id } = useParams()
@@ -18,7 +17,7 @@ export default function YouTubePage() {
 
   useEffect(() => {
     if (!state?.channel && id) {
-      axios.get(API_URL + `channels/${id}`)
+      api.get(`channels/${id}`)
         .then(({ data }) => { setLoading(false); setChannel(data.channel) })
         .catch(() => setLoading(false))
     } else {

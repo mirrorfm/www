@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import axios from 'axios'
 import { Grid as GridLoader } from 'react-loader-spinner'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import LabelDetail from '../components/label/LabelDetail'
-import { API_URL } from '../config'
+import { api } from '../config'
 
 export default function DiscogsPage() {
   const { id } = useParams()
@@ -18,7 +17,7 @@ export default function DiscogsPage() {
 
   useEffect(() => {
     if (!state?.label && id) {
-      axios.get(API_URL + `labels/${id}`)
+      api.get(`labels/${id}`)
         .then(({ data }) => { setLoading(false); setLabel(data.label) })
         .catch(() => setLoading(false))
     } else {

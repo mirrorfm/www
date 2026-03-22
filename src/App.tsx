@@ -8,7 +8,7 @@ import LabelsPage from './pages/LabelsPage'
 import YouTubePage from './pages/YouTubePage'
 import DiscogsPage from './pages/DiscogsPage'
 import AboutPage from './pages/AboutPage'
-import AddPage from './pages/AddPage'
+import SubmitPage from './pages/SubmitPage'
 import LogsPage from './pages/LogsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import Modal from './components/Modal'
@@ -46,7 +46,7 @@ export default function App() {
         <Route path="/youtube/:id/:name/" element={<YouTubePage />} />
         <Route path="/discogs/:id/:name/" element={<DiscogsPage />} />
         <Route path="/about/" element={<AboutPage />} />
-        <Route path="/add/" element={<AddPage />} />
+        <Route path="/submit/" element={<SubmitPage />} />
         <Route path="/logs/" element={<LogsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

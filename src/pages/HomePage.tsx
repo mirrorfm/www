@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import { Grid as GridLoader } from 'react-loader-spinner'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import ChannelGrid from '../components/channel/ChannelGrid'
-import { API_URL } from '../config'
+import { api } from '../config'
 
 interface HomeData {
   lastUpdated: any[]
@@ -20,11 +19,12 @@ interface HomeData {
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<HomeData | null>(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    axios.get(API_URL + 'home')
+    api.get('home')
       .then(({ data }) => { setLoading(false); setData(data) })
-      .catch(() => { setLoading(false) })
+      .catch((err) => { setLoading(false); setError(err.rateLimited ? 'Too many requests. Please wait a moment and try again.' : 'Error fetching channels') })
   }, [])
 
   return (
@@ -36,7 +36,7 @@ export default function HomePage() {
         ) : data ? (
           <>
             <p style={{ textAlign: 'left' }}>
-              <Link style={{ float: 'right', fontSize: 60, textDecoration: 'none' }} to="/add/">+</Link>
+              <Link style={{ float: 'right', fontSize: 60, textDecoration: 'none' }} to="/submit/">+</Link>
             </p>
             <h4>New playlists</h4>
             <ChannelGrid channels={data.recentlyAdded} category="recentlyAdded" />
@@ -52,7 +52,7 @@ export default function HomePage() {
             <ChannelGrid channels={data.lastTerminated} category="lastTerminated" />
           </>
         ) : (
-          <p>Error fetching channels</p>
+          <p>{error}</p>
         )}
       </div>
     </Layout>

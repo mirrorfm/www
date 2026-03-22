@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import axios from 'axios'
 import { Grid as GridLoader } from 'react-loader-spinner'
 import { NumericFormat } from 'react-number-format'
 
@@ -10,7 +9,7 @@ import LabelsGrid from '../components/label/LabelsGrid'
 import PaginationControls from '../components/PaginationControls'
 import SortDropdown from '../components/SortDropdown'
 import SearchBar from '../components/SearchBar'
-import { API_URL } from '../config'
+import { api } from '../config'
 
 interface Genre {
   genre: string
@@ -38,7 +37,7 @@ export default function LabelsPage() {
     if (q) params.set('search', q)
     sg.forEach(g => params.append('genres', g.genre))
 
-    axios.get(API_URL + 'labels?' + params.toString())
+    api.get('labels?' + params.toString())
       .then(({ data }) => {
         setLabels(data.discogs || [])
         setTotalCount(data.total_count)
@@ -47,7 +46,7 @@ export default function LabelsPage() {
         setGenres((data.all_genres || []).map((g: string) => ({ genre: g })))
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch((err) => { setLoading(false); if (err.rateLimited) alert('Too many requests. Please wait a moment.') })
   }, [])
 
   useEffect(() => {
@@ -95,7 +94,7 @@ export default function LabelsPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
               <p style={{ margin: 0 }}>
                 Found <strong>{Math.round(foundTracks * 100 / totalTracks)}%</strong> of <strong><NumericFormat value={totalTracks} displayType="text" thousandSeparator /></strong> total tracks in <strong>{totalCount}</strong> Discogs labels.
-                <Link style={{ marginLeft: 10, fontSize: 30, textDecoration: 'none' }} to="/add/">+</Link>
+                <Link style={{ marginLeft: 10, fontSize: 30, textDecoration: 'none' }} to="/submit/">+</Link>
               </p>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <SearchBar search={search} onSearchChange={(q) => updateAndFetch({ search: q, page: 1 })} />

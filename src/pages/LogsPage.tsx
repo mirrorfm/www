@@ -1,19 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
-import axios from 'axios'
 import { Grid as GridLoader } from 'react-loader-spinner'
 import moment from 'moment'
 import slugify from 'react-slugify'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
-import { API_URL } from '../config'
+import { api } from '../config'
 
 export default function LogsPage() {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<any[]>([])
 
   useEffect(() => {
-    axios.get(API_URL + 'events')
+    api.get('events')
       .then(({ data }) => { setLoading(false); setData(data) })
       .catch(() => setLoading(false))
   }, [])
