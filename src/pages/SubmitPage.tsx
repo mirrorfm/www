@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
@@ -10,7 +9,7 @@ import { NumericFormat } from 'react-number-format'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
-import { API_URL } from '../config'
+import { api } from '../config'
 
 interface TrackInfo {
   name: string
@@ -65,7 +64,7 @@ export default function SubmitPage() {
     setInterestSubmitted(false)
 
     try {
-      const { data } = await axios.post(API_URL + 'submit/analyze', { url: url.trim() })
+      const { data } = await api.post('submit/analyze', { url: url.trim() })
       setResult(data)
     } catch (err: any) {
       const msg = err.response?.data?.error || 'Something went wrong. Please try again.'
@@ -93,7 +92,7 @@ export default function SubmitPage() {
 
     setInterestError(null)
     try {
-      await axios.post(API_URL + 'submit/interest', {
+      await api.post('submit/interest', {
         email: email.trim(),
         track_url: url.trim(),
         channel_ids: Array.from(selectedChannels),
