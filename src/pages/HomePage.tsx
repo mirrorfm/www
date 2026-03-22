@@ -48,7 +48,7 @@ export default function HomePage() {
             <ChannelGrid channels={data.mostUploads} category="mostUploads" />
             <h4>Channels with rare uploads</h4>
             <ChannelGrid channels={data.rarestUploads} category="rarestUploads" />
-            <h4>Terminated channels</h4>
+            <h4>Archived channels</h4>
             <ChannelGrid channels={data.lastTerminated} category="lastTerminated" />
           </>
         ) : (

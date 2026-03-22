@@ -34,7 +34,7 @@ export default function LabelThumbnail({ label, labels, category, selectedGenres
       sortDiv = <div>{(label.found_tracks * 100 / label.count_tracks).toFixed(2)}% found</div>
       break
     case 'lastTerminated':
-      sortDiv = <div>Terminated {moment(label.terminated_datetime.Time).fromNow()}</div>
+      sortDiv = <div>Archived {moment(label.terminated_datetime.Time).fromNow()}</div>
       break
     case 'recentlyAdded':
       sortDiv = <div>Submitted {moment(label.added_datetime.Time).fromNow()}</div>

@@ -34,7 +34,7 @@ export default function ChannelThumbnail({ channel, channels, category, selected
       sortDiv = <div>{(channel.found_tracks * 100 / channel.count_tracks).toFixed(2)}% found</div>
       break
     case 'lastTerminated':
-      sortDiv = <div>Terminated {moment(channel.terminated_datetime.Time).fromNow()}</div>
+      sortDiv = <div>Archived {moment(channel.terminated_datetime.Time).fromNow()}</div>
       break
     case 'recentlyAdded':
       sortDiv = <div>Submitted {moment(channel.added_datetime.Time).fromNow()}</div>
