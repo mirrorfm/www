@@ -28,20 +28,26 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get API URL
+        id: api
+        run: |
+          API_ID=$(aws apigateway get-rest-apis --query "items[?name=='mirrorfm-to-www'].id" --output text)
+          echo "url=https://${API_ID}.execute-api.${{ env.AWS_REGION }}.amazonaws.com/api/" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
         env:
-          VITE_API_URL: https://aidgvtluj3.execute-api.eu-west-1.amazonaws.com/api/
-
-      - name: Sync to S3
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          VITE_API_URL: ${{ steps.api.outputs.url }}
 
       - name: Deploy
         run: aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
