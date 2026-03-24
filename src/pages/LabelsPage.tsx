@@ -84,7 +84,7 @@ export default function LabelsPage() {
   }, [page, sort, search, selectedGenres, navigate, fetchLabels])
 
   return (
-    <Layout genres={genres} selectedGenres={selectedGenres} handleClick={(_, sg) => updateAndFetch({ selectedGenres: sg, page: 1 })}>
+    <Layout>
       <SEO title="All Discogs labels" />
       <div>
         {loading ? (

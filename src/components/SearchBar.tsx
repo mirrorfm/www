@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
-import { MdSearch } from 'react-icons/md'
+import SearchIcon from '@mui/icons-material/Search'
 
 interface SearchBarProps {
   search?: string
@@ -27,14 +27,15 @@ export default function SearchBar({ search = '', onSearchChange }: SearchBarProp
     <TextField
       variant="outlined"
       size="small"
-      placeholder="Search..."
+      placeholder="Channel/label name"
       value={value}
       onChange={handleChange}
       style={{ minWidth: 200 }}
+      sx={{ '& .MuiOutlinedInput-root': { height: 40, fontSize: 14, color: '#d4d4d4' }, '& .MuiOutlinedInput-input::placeholder': { color: '#d4d4d4', opacity: 1 } }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <MdSearch size={20} color="#999" />
+            <SearchIcon sx={{ fontSize: 20, color: '#999' }} />
           </InputAdornment>
         ),
       }}

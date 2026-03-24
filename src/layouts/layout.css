@@ -2,7 +2,7 @@ html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  background-color: white;
+  background-color: #1a1a1a;
 }
 body {
   margin: 0;
@@ -25,7 +25,7 @@ summary {
   display: block;
 }
 main {
-  margin-top: 120px;
+  margin-top: 80px;
 }
 audio,
 canvas,
@@ -46,7 +46,7 @@ template {
 }
 a {
   background-color: transparent;
-  color: black;
+  color: #d4d4d4;
   -webkit-text-decoration-skip: objects;
 }
 a:active,
@@ -95,15 +95,15 @@ img {
 }
 .container {
   position: relative;
-  max-width: 800px;
   margin: 0 auto;
   width: 100%;
+  overflow: hidden;
 }
 
 .container .content {
   position: absolute;
   width: 100%;
-  max-width: 240px;
+  max-width: 180px;
   height: 30px;
   padding: 5px;
 }
@@ -122,14 +122,14 @@ img {
 }
 
 .container .content-top a {
-  color: black;
-  background-color: white;
+  color: #d4d4d4;
+  background-color: #2a2a2a;
   font-size: 24px;
 }
 
 .container .content-bottom a {
-  background: rgba(255, 255, 255, 0.95);
-  color: black;
+  background: rgba(42, 42, 42, 0.95);
+  color: #d4d4d4;
   font-weight: 100;
   text-align: center;
 }
@@ -149,8 +149,9 @@ img {
 
 .container .label img {
   object-fit: scale-down;
-  height:240px;
-  width: 240px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
 }
 
 svg:not(:root) {
@@ -268,7 +269,7 @@ html {
   box-sizing: inherit;
 }
 body {
-  color: hsla(0, 0%, 0%, 0.8);
+  color: #d4d4d4;
   font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
   font-weight: normal;
   word-wrap: break-word;
@@ -279,10 +280,13 @@ body {
   font-feature-settings: "kern", "liga", "clig", "calt";
 }
 .chip-mui {
-  font-size: 11px !important;
+  font-size: 10px !important;
   margin: 0px !important;
-  border: 1px solid white !important;
-  border-radius: 14px !important;
+  border: none !important;
+  border-radius: 10px !important;
+  height: 20px !important;
+  background-color: #333 !important;
+  color: #999 !important;
 }
 .chip-mui:hover {
   background-color: #1DB954;
@@ -290,12 +294,13 @@ body {
 }
 
 .chip-mui-selected {
-  font-size: 11px !important;
+  font-size: 10px !important;
   margin: 0px !important;
-  border: 1px solid white !important;
-  border-radius: 14px !important;
+  border: none !important;
+  border-radius: 10px !important;
+  height: 20px !important;
   background-color: #1DB954 !important;
-  color: white !important;
+  color: #fff !important;
 }
 .chip-mui-selected:hover {
   background-color: #000;
@@ -303,7 +308,7 @@ body {
 }
 
 .MuiChip-labelSmall {
-  padding: 5px !important;
+  padding: 3px 5px !important;
 }
 
 img {
@@ -319,11 +324,11 @@ img {
   height: auto;
 }
 .container img {
-  filter: grayscale(70%);
+  filter: none;
+  border-radius: 6px;
 }
 .container img:hover {
-  filter: grayscale(0%) contrast(90%);
-
+  filter: brightness(1.1);
 }
 h1 {
   padding-bottom: 0;
@@ -331,7 +336,7 @@ h1 {
   padding-right: 0;
   padding-top: 0;
   margin: 0 0 1.45rem;
-  color: inherit;
+  color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
@@ -350,7 +355,7 @@ h2 {
   padding-right: 0;
   padding-top: 0;
   margin-bottom: 1.45rem;
-  color: inherit;
+  color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
@@ -367,7 +372,7 @@ h3 {
   padding-right: 0;
   padding-top: 0;
   margin-bottom: 1.45rem;
-  color: inherit;
+  color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
@@ -383,8 +388,8 @@ h4 {
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1.45rem;
-  color: inherit;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
@@ -403,7 +408,7 @@ h5 {
   padding-right: 0;
   padding-top: 0;
   margin-bottom: 1.45rem;
-  color: inherit;
+  color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
@@ -420,7 +425,7 @@ h6 {
   padding-right: 0;
   padding-top: 0;
   margin-bottom: 1.45rem;
-  color: inherit;
+  color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: bold;
@@ -509,7 +514,7 @@ pre {
   margin-bottom: 1.45rem;
   font-size: 0.85rem;
   line-height: 1.42;
-  background: hsla(0, 0%, 0%, 0.04);
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 3px;
   overflow: auto;
   word-wrap: normal;
@@ -588,7 +593,7 @@ hr {
   padding-right: 0;
   padding-top: 0;
   margin-bottom: calc(1.45rem - 1px);
-  background: hsla(0, 0%, 0%, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   border: none;
   height: 1px;
 }
@@ -658,15 +663,15 @@ samp {
   line-height: 1.45rem;
 }
 abbr {
-  border-bottom: 1px dotted hsla(0, 0%, 0%, 0.5);
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
   cursor: help;
 }
 acronym {
-  border-bottom: 1px dotted hsla(0, 0%, 0%, 0.5);
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
   cursor: help;
 }
 abbr[title] {
-  border-bottom: 1px dotted hsla(0, 0%, 0%, 0.5);
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
   cursor: help;
   text-decoration: none;
 }
@@ -676,7 +681,7 @@ thead {
 td,
 th {
   text-align: left;
-  border-bottom: 1px solid hsla(0, 0%, 0%, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-feature-settings: "tnum";
   -moz-font-feature-settings: "tnum";
   -ms-font-feature-settings: "tnum";
@@ -696,7 +701,7 @@ td:last-child {
 }
 tt,
 code {
-  background-color: hsla(0, 0%, 0%, 0.04);
+  background-color: rgba(255, 255, 255, 0.06);
   border-radius: 3px;
   font-family: "SFMono-Regular", Consolas, "Roboto Mono", "Droid Sans Mono",
     "Liberation Mono", Menlo, Courier, monospace;

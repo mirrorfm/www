@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Grid as GridLoader } from 'react-loader-spinner'
+import Loader from '../components/Loader'
 import moment from 'moment'
 import slugify from 'react-slugify'
 
@@ -34,7 +34,7 @@ export default function LogsPage() {
       <SEO title="Event logs" />
       <div>
         {loading ? (
-          <GridLoader color="lightgrey" height={50} width={50} wrapperStyle={{ textAlign: 'center' }} />
+          <Loader />
         ) : grouped.length > 0 ? (
           <>
             <h2>Event logs (last 24 hours)</h2>

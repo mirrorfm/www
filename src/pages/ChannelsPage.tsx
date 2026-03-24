@@ -84,7 +84,7 @@ export default function ChannelsPage() {
   }, [page, sort, search, selectedGenres, navigate, fetchChannels])
 
   return (
-    <Layout genres={genres} selectedGenres={selectedGenres} handleClick={(_, sg) => updateAndFetch({ selectedGenres: sg, page: 1 })}>
+    <Layout>
       <SEO title="All YouTube channels" />
       <div>
         {loading ? (

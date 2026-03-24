@@ -1,52 +1,55 @@
+import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import CheckboxesTag from './CheckboxesTag'
 import logo from '../assets/mirrorfm-icon.png'
 
 interface HeaderProps {
   siteTitle?: string
-  genres?: { genre: string }[]
-  selectedGenres?: { genre: string }[]
-  handleClick?: (e: any, value: { genre: string }[]) => void
+  toolbar?: ReactNode
 }
 
-export default function Header({ genres, selectedGenres, handleClick }: HeaderProps) {
+export default function Header({ toolbar }: HeaderProps) {
   return (
     <header style={{
-      background: 'rgba(245, 245, 245, 0.98)',
-      borderBottom: '1px solid #eee',
+      background: 'rgba(34, 34, 34, 0.98)',
+      borderBottom: '1px solid #333',
       position: 'fixed',
       overflow: 'hidden',
       top: 0,
       width: '100%',
       zIndex: 1,
     }}>
-      {genres ? (
-        <div style={{
-          margin: '0 auto',
-          maxWidth: 1280,
-          padding: '0px 1.0875rem',
-          display: 'table',
-          width: '100%',
-          minHeight: 80,
-        }}>
-          <div style={{ display: 'table-cell', width: 100, float: 'left' }}>
-            <Link to="/" style={{ color: 'black', textDecoration: 'none', width: 80, top: -36, float: 'left', position: 'relative' }}>
-              <img style={{ position: 'absolute' }} alt="Mirror.FM logo" src={logo} />
+      <div style={{
+        margin: '0 auto',
+        maxWidth: 1280,
+        padding: '0px 1.0875rem',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        minHeight: 60,
+        gap: 12,
+      }}>
+        {toolbar ? (
+          <>
+            <Link to="/" style={{ color: '#d4d4d4', textDecoration: 'none', flexShrink: 0 }}>
+              <img width="50" alt="Mirror.FM logo" src={logo} />
             </Link>
-          </div>
-          <div style={{ display: 'table-cell', width: '100%', paddingTop: 20 }}>
-            <CheckboxesTag genres={genres} selectedGenres={selectedGenres} handleClick={handleClick} />
-          </div>
-        </div>
-      ) : (
-        <div style={{ margin: '0 auto', maxWidth: 1280, padding: '0px 1.0875rem', width: '100%', minHeight: 80 }}>
-          <h1 style={{ margin: 0, textAlign: 'center' }}>
-            <Link to="/" style={{ color: 'black', textDecoration: 'none' }}>
-              <img width="80" src={logo} alt="Mirror.FM logo" />
-            </Link>
-          </h1>
-        </div>
-      )}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flex: 1, flexWrap: 'wrap' }}>
+              {toolbar}
+            </div>
+            <Link to="/submit/" style={{ color: '#d4d4d4', textDecoration: 'none', fontSize: 28, lineHeight: 1, flexShrink: 0 }} title="Submit a channel or label">+</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/browse/" style={{ color: '#999', textDecoration: 'none', fontSize: 14, flexShrink: 0 }}>Browse</Link>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              <Link to="/" style={{ color: '#d4d4d4', textDecoration: 'none' }}>
+                <img width="60" alt="Mirror.FM logo" src={logo} />
+              </Link>
+            </div>
+            <Link to="/submit/" style={{ color: '#999', textDecoration: 'none', fontSize: 14, flexShrink: 0 }}>Submit</Link>
+          </>
+        )}
+      </div>
     </header>
   )
 }

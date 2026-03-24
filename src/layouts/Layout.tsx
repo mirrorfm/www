@@ -5,12 +5,10 @@ import Footer from '../components/Footer'
 
 interface LayoutProps {
   children: ReactNode
-  genres?: { genre: string }[]
-  selectedGenres?: { genre: string }[]
-  handleClick?: (e: any, value: { genre: string }[]) => void
+  toolbar?: ReactNode
 }
 
-export default function Layout({ children, genres, selectedGenres, handleClick }: LayoutProps) {
+export default function Layout({ children, toolbar }: LayoutProps) {
   const location = useLocation()
   const state = location.state as { modal?: boolean } | null
 
@@ -20,12 +18,7 @@ export default function Layout({ children, genres, selectedGenres, handleClick }
 
   return (
     <div className="site">
-      <Header
-        siteTitle="Mirror.FM"
-        genres={genres}
-        selectedGenres={selectedGenres}
-        handleClick={handleClick}
-      />
+      <Header toolbar={toolbar} />
       <div
         className="site-content"
         style={{
@@ -33,6 +26,7 @@ export default function Layout({ children, genres, selectedGenres, handleClick }
           maxWidth: 1280,
           padding: '0px 1.0875rem 1.50rem',
           paddingTop: 0,
+          width: '100%',
         }}
       >
         <main>{children}</main>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import { Grid as GridLoader } from 'react-loader-spinner'
+import Loader from '../components/Loader'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
@@ -28,7 +28,7 @@ export default function YouTubePage() {
   return (
     <Layout>
       {loading && !channel ? (
-        <GridLoader color="lightgrey" height={50} width={50} wrapperStyle={{ textAlign: 'center' }} />
+        <Loader />
       ) : channel ? (
         <>
           <SEO title={`${channel.channel_name} YouTube channel on Spotify`} />

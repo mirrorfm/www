@@ -1,10 +1,8 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useRef, useEffect } from 'react'
 
-import Layout from './layouts/Layout'
 import HomePage from './pages/HomePage'
-import ChannelsPage from './pages/ChannelsPage'
-import LabelsPage from './pages/LabelsPage'
+import BrowsePage from './pages/BrowsePage'
 import YouTubePage from './pages/YouTubePage'
 import DiscogsPage from './pages/DiscogsPage'
 import AboutPage from './pages/AboutPage'
@@ -41,8 +39,10 @@ export default function App() {
     <>
       <Routes location={bgLocation}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/channels/" element={<ChannelsPage />} />
-        <Route path="/labels/" element={<LabelsPage />} />
+        <Route path="/browse/" element={<BrowsePage />} />
+        {/* Redirect old routes to /browse/ with source filter */}
+        <Route path="/channels/" element={<Navigate to="/browse/?source=youtube" replace />} />
+        <Route path="/labels/" element={<Navigate to="/browse/?source=discogs" replace />} />
         <Route path="/youtube/:id/:name/" element={<YouTubePage />} />
         <Route path="/discogs/:id/:name/" element={<DiscogsPage />} />
         <Route path="/about/" element={<AboutPage />} />

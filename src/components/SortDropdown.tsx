@@ -9,7 +9,7 @@ interface SortDropdownProps {
 
 export default function SortDropdown({ sort, onSortChange }: SortDropdownProps) {
   return (
-    <FormControl variant="outlined" size="small">
+    <FormControl variant="outlined" size="small" sx={{ '& .MuiOutlinedInput-root': { height: 40 } }}>
       <Select
         value={sort}
         onChange={(e: SelectChangeEvent) => onSortChange(e.target.value)}

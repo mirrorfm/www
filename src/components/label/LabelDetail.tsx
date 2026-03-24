@@ -1,7 +1,7 @@
 import Chip from '@mui/material/Chip'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
-import { Grid as GridLoader } from 'react-loader-spinner'
+import Loader from '../Loader'
 
 interface LabelDetailProps {
   label: any
@@ -20,7 +20,7 @@ export default function LabelDetail({ label }: LabelDetailProps) {
       onClick={(e) => e.stopPropagation()}
       sx={{
         textAlign: 'center',
-        backgroundColor: 'white',
+        backgroundColor: '#222',
         margin: '0 auto',
         padding: '30px',
         width: { xs: 310, sm: 500, md: 700 },
@@ -52,7 +52,7 @@ export default function LabelDetail({ label }: LabelDetailProps) {
           </p>
         </>
       ) : (
-        <GridLoader color="lightgrey" height={50} width={50} wrapperStyle={{ textAlign: 'center' }} />
+        <Loader />
       )}
     </Box>
   )

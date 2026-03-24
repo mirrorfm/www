@@ -12,6 +12,7 @@ interface ModalProps {
 
 let channels: any[] | undefined
 let labels: any[] | undefined
+let items: any[] | undefined
 let previousSectionPathname = '/'
 
 export default function Modal({ children }: ModalProps) {
@@ -21,8 +22,12 @@ export default function Modal({ children }: ModalProps) {
 
   if (state?.channels) channels = state.channels
   if (state?.labels) labels = state.labels
+  // Track the full mixed items list for unified browsing
+  if (state?.channels || state?.labels) {
+    items = state.channels || state.labels
+  }
 
-  const acceptedPrevious = ['/labels/', '/channels/', '/']
+  const acceptedPrevious = ['/browse/', '/labels/', '/channels/', '/']
   if (state?.referrer && acceptedPrevious.includes(state.referrer)) {
     previousSectionPathname = state.referrer
   }
@@ -33,45 +38,55 @@ export default function Modal({ children }: ModalProps) {
     const id = parts[2]
 
     let currentIndex = -1
-    if (type === 'youtube' && channels) {
+    if (items) {
+      // Search in the unified items list (supports mixed sources)
+      currentIndex = items.findIndex((item: any) => {
+        if (type === 'youtube') return item.channel_id === id
+        if (type === 'discogs') return String(item.label_id) === id
+        return false
+      })
+    } else if (type === 'youtube' && channels) {
       currentIndex = channels.findIndex((c: any) => c.channel_id === id)
     } else if (type === 'discogs' && labels) {
-      currentIndex = labels.findIndex((l: any) => l.label_id === id)
+      currentIndex = labels.findIndex((l: any) => String(l.label_id) === id)
     }
 
     return { currentIndex, type }
   }, [location.pathname])
 
-  const navigateEntity = useCallback((type: string, entity: any, entities: any[]) => {
+  const navigateEntity = useCallback((entity: any, allItems: any[]) => {
+    const entityType = entity.source === 'discogs' ? 'discogs'
+      : entity.label_id && !entity.channel_id ? 'discogs'
+      : 'youtube'
     let id: string, name: string, navState: any
-    if (type === 'youtube') {
+    if (entityType === 'youtube') {
       id = entity.channel_id
-      name = entity.channel_name
-      navState = { modal: true, channels: entities, channel: entity, label: entity }
+      name = entity.channel_name || entity.channel?.channel_name
+      navState = { modal: true, channels: allItems, channel: entity }
     } else {
       id = entity.label_id
-      name = entity.label_name
-      navState = { modal: true, labels: entities, channel: entity, label: entity }
+      name = entity.label_name || entity.label?.label_name
+      navState = { modal: true, labels: allItems, label: entity }
     }
-    navigate(`/${type}/${id}/${slugify(name)}/`, { state: navState })
+    navigate(`/${entityType}/${id}/${slugify(name)}/`, { state: navState })
   }, [navigate])
 
   const goNext = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
-    const { currentIndex, type } = findCurrentIndex()
-    const entities = type === 'youtube' ? channels : labels
-    if (!entities || currentIndex < 0) return
-    const next = currentIndex + 1 === entities.length ? entities[0] : entities[currentIndex + 1]
-    navigateEntity(type, next, entities)
+    const { currentIndex } = findCurrentIndex()
+    const allItems = items || channels || labels
+    if (!allItems || currentIndex < 0) return
+    const next = currentIndex + 1 === allItems.length ? allItems[0] : allItems[currentIndex + 1]
+    navigateEntity(next, allItems)
   }, [findCurrentIndex, navigateEntity])
 
   const goPrevious = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
-    const { currentIndex, type } = findCurrentIndex()
-    const entities = type === 'youtube' ? channels : labels
-    if (!entities || currentIndex < 0) return
-    const prev = currentIndex === 0 ? entities[entities.length - 1] : entities[currentIndex - 1]
-    navigateEntity(type, prev, entities)
+    const { currentIndex } = findCurrentIndex()
+    const allItems = items || channels || labels
+    if (!allItems || currentIndex < 0) return
+    const prev = currentIndex === 0 ? allItems[allItems.length - 1] : allItems[currentIndex - 1]
+    navigateEntity(prev, allItems)
   }, [findCurrentIndex, navigateEntity])
 
   const close = useCallback(() => {
