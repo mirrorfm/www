@@ -19,7 +19,7 @@ export default function SourceGrid({ items = [], category, selectedGenresArr }: 
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
         gap: '10px 10px',
-        rowGap: '30px',
+        rowGap: '16px',
         marginLeft: 0,
         paddingLeft: 0,
         listStyleType: 'none',

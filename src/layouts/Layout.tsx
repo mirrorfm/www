@@ -6,9 +6,10 @@ import Footer from '../components/Footer'
 interface LayoutProps {
   children: ReactNode
   toolbar?: ReactNode
+  footer?: ReactNode
 }
 
-export default function Layout({ children, toolbar }: LayoutProps) {
+export default function Layout({ children, toolbar, footer }: LayoutProps) {
   const location = useLocation()
   const state = location.state as { modal?: boolean } | null
 
@@ -31,7 +32,7 @@ export default function Layout({ children, toolbar }: LayoutProps) {
       >
         <main>{children}</main>
       </div>
-      <Footer />
+      <Footer>{footer}</Footer>
     </div>
   )
 }

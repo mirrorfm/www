@@ -169,18 +169,18 @@ export default function BrowsePage() {
     </>
   )
 
+  const footerPagination = totalCount > perPage ? (
+    <PaginationControls page={page} totalCount={totalCount} perPage={perPage} onPageChange={(p) => updateAndFetch({ page: p })} />
+  ) : undefined
+
   return (
-    <Layout toolbar={headerToolbar}>
+    <Layout toolbar={headerToolbar} footer={footerPagination}>
       <SEO title="Browse playlists" />
       <div>
         {loading ? (
           <Loader />
         ) : (
-          <>
-            <PaginationControls page={page} totalCount={totalCount} perPage={perPage} onPageChange={(p) => updateAndFetch({ page: p })} compact />
-            <SourceGrid items={items} selectedGenresArr={selectedGenres.map(g => g.genre)} />
-            <PaginationControls page={page} totalCount={totalCount} perPage={perPage} onPageChange={(p) => updateAndFetch({ page: p })} />
-          </>
+          <SourceGrid items={items} selectedGenresArr={selectedGenres.map(g => g.genre)} />
         )}
       </div>
     </Layout>
