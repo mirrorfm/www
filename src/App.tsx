@@ -43,6 +43,7 @@ export default function App() {
         {/* Redirect old routes to /browse/ with source filter */}
         <Route path="/channels/" element={<Navigate to="/browse/?source=youtube" replace />} />
         <Route path="/labels/" element={<Navigate to="/browse/?source=discogs" replace />} />
+        <Route path="/add/" element={<Navigate to="/submit/" replace />} />
         <Route path="/youtube/:id/:name/" element={<YouTubePage />} />
         <Route path="/discogs/:id/:name/" element={<DiscogsPage />} />
         <Route path="/about/" element={<AboutPage />} />
