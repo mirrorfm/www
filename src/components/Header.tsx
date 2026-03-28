@@ -1,6 +1,8 @@
 import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/mirrorfm-icon.png'
+import AuthStatus from './AuthStatus'
+import { isPrerelease } from '../lib/prerelease'
 
 interface HeaderProps {
   siteTitle?: string
@@ -37,6 +39,7 @@ export default function Header({ toolbar }: HeaderProps) {
               {toolbar}
             </div>
             <Link to="/submit/" style={{ color: '#d4d4d4', textDecoration: 'none', fontSize: 28, lineHeight: 1, flexShrink: 0 }} title="Submit a channel or label">+</Link>
+            {isPrerelease() && <AuthStatus />}
           </>
         ) : (
           <>
@@ -47,6 +50,7 @@ export default function Header({ toolbar }: HeaderProps) {
               </Link>
             </div>
             <Link to="/submit/" style={{ color: '#999', textDecoration: 'none', fontSize: 14, flexShrink: 0 }}>Submit</Link>
+            {isPrerelease() && <AuthStatus />}
           </>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
+import { checkPrerelease } from './lib/prerelease'
 
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
@@ -7,6 +8,11 @@ import YouTubePage from './pages/YouTubePage'
 import DiscogsPage from './pages/DiscogsPage'
 import AboutPage from './pages/AboutPage'
 import SubmitPage from './pages/SubmitPage'
+import LoginPage from './pages/LoginPage'
+import TakedownPage from './pages/TakedownPage'
+import CreditsPage from './pages/CreditsPage'
+import PitchPage from './pages/PitchPage'
+import CuratorInboxPage from './pages/CuratorInboxPage'
 import LogsPage from './pages/LogsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import Modal from './components/Modal'
@@ -25,6 +31,7 @@ export default function App() {
   const location = useLocation()
   const state = location.state as LocationState | null
   const previousLocation = useRef(location)
+  const [pre] = useState(() => checkPrerelease())
 
   useEffect(() => {
     if (!state?.modal) {
@@ -48,6 +55,13 @@ export default function App() {
         <Route path="/discogs/:id/:name/" element={<DiscogsPage />} />
         <Route path="/about/" element={<AboutPage />} />
         <Route path="/submit/" element={<SubmitPage />} />
+        {pre && <>
+          <Route path="/signin/" element={<LoginPage />} />
+          <Route path="/about2/" element={<TakedownPage />} />
+          <Route path="/wallet/" element={<CreditsPage />} />
+          <Route path="/pitch/" element={<PitchPage />} />
+          <Route path="/inbox/" element={<CuratorInboxPage />} />
+        </>}
         <Route path="/logs/" element={<LogsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
