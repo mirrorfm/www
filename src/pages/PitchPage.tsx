@@ -70,21 +70,30 @@ export default function PitchPage() {
     }
   }
 
+  const BETA_FREE = true // flip to false to enable Stripe payments
+
   const handleSubmit = async () => {
     if (!result || result.matches.length === 0) return
     setSubmitting(true)
     setError(null)
     try {
-      const { data } = await api.post('pitch/checkout', {
+      const payload = {
         track_url: url.trim(),
         track_name: result.track.name,
         track_artist: result.track.artist,
         track_image: result.track.image,
         channels: result.matches.map(m => ({ id: m.channel_id, name: m.channel_name })),
-      })
-      window.location.href = data.url
+      }
+
+      if (BETA_FREE) {
+        await api.post('pitch/submit', payload)
+        window.location.href = '/pitch/?success=true'
+      } else {
+        const { data } = await api.post('pitch/checkout', payload)
+        window.location.href = data.url
+      }
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to start checkout.')
+      setError(err.response?.data?.error || 'Failed to submit.')
       setSubmitting(false)
     }
   }
@@ -125,8 +134,11 @@ export default function PitchPage() {
 
       <h2 style={{ fontWeight: 400 }}>Pitch your music</h2>
       <p style={{ color: '#666', marginBottom: 30 }}>
-        Paste a Spotify track link to find matching YouTube channels. Submit for $5 and your track goes to all matching curators.
-        Auto-refund if no one features it within 3 months.
+        Paste a Spotify track link to find matching YouTube channels.
+        {BETA_FREE
+          ? ' Free during beta — your track goes to all matching curators.'
+          : ' Submit for $5 and your track goes to all matching curators. Auto-refund if no one features it within 3 months.'
+        }
       </p>
 
       <form onSubmit={handleAnalyze} style={{ display: 'flex', gap: 10, marginBottom: 30 }}>
@@ -213,13 +225,20 @@ export default function PitchPage() {
                 padding: 24, background: 'linear-gradient(135deg, #1a2a1a 0%, #1a1a2a 100%)',
                 border: '1px solid #2a3a2a', borderRadius: 10, marginBottom: 30,
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: BETA_FREE ? 0 : 16 }}>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 16, color: '#e0e0e0' }}>
-                      Submit to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''} — $5
+                      Submit to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''}
+                      {BETA_FREE
+                        ? <span style={{ color: '#1DB954', marginLeft: 8, fontSize: 13, fontWeight: 400 }}>Free during beta</span>
+                        : ' — $5'
+                      }
                     </div>
                     <div style={{ color: '#888', fontSize: 13, marginTop: 4 }}>
-                      One payment, all matching curators see your track
+                      {BETA_FREE
+                        ? 'All matching curators will see your track in their inbox'
+                        : 'One payment, all matching curators see your track'
+                      }
                     </div>
                   </div>
                   <Button
@@ -228,21 +247,23 @@ export default function PitchPage() {
                     onClick={handleSubmit}
                     sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none', px: 4, fontSize: 15 }}
                   >
-                    {submitting ? 'Loading...' : 'Submit — $5'}
+                    {submitting ? 'Submitting...' : BETA_FREE ? 'Submit' : 'Submit — $5'}
                   </Button>
                 </div>
 
-                <div style={{ borderTop: '1px solid #333', paddingTop: 14, color: '#888', fontSize: 13, lineHeight: 1.7 }}>
-                  <div style={{ marginBottom: 4 }}>
-                    <span style={{ color: '#1DB954' }}>Best case:</span> Curators feature your track on their YouTube channel — it automatically appears on their Spotify playlist too.
+                {!BETA_FREE && (
+                  <div style={{ borderTop: '1px solid #333', paddingTop: 14, color: '#888', fontSize: 13, lineHeight: 1.7 }}>
+                    <div style={{ marginBottom: 4 }}>
+                      <span style={{ color: '#1DB954' }}>Best case:</span> Curators feature your track on their YouTube channel — it automatically appears on their Spotify playlist too.
+                    </div>
+                    <div style={{ marginBottom: 4 }}>
+                      <span style={{ color: '#1DB954' }}>No response:</span> Full refund after 3 months. We verify automatically whether your track was added.
+                    </div>
+                    <div>
+                      <span style={{ color: '#1DB954' }}>Even after refund:</span> Curators can still discover and feature your track at any time — your submission stays visible.
+                    </div>
                   </div>
-                  <div style={{ marginBottom: 4 }}>
-                    <span style={{ color: '#1DB954' }}>No response:</span> Full refund after 3 months. We verify automatically whether your track was added.
-                  </div>
-                  <div>
-                    <span style={{ color: '#1DB954' }}>Even after refund:</span> Curators can still discover and feature your track at any time — your submission stays visible.
-                  </div>
-                </div>
+                )}
               </div>
             </>
           ) : (
