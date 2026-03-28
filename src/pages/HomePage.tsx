@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
+import MarketplaceBanner from '../components/MarketplaceBanner'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
@@ -122,6 +123,7 @@ export default function HomePage() {
   return (
     <Layout>
       <SEO title="Home" />
+      <MarketplaceBanner />
       <div>
         {loading ? (
           <Loader />

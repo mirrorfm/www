@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { auth, onAuthStateChanged, User } from './firebase'
+import { api } from '../config'
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
@@ -9,6 +10,9 @@ export function useAuth() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setLoading(false)
+      if (user) {
+        api.get('auth/me').catch(() => {})
+      }
     })
     return unsubscribe
   }, [])
