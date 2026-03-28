@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import Checkbox from '@mui/material/Checkbox'
 import { Grid as GridLoader } from 'react-loader-spinner'
 import { NumericFormat } from 'react-number-format'
 
@@ -43,27 +42,17 @@ interface AnalyzeResponse {
   matches: ChannelMatch[]
 }
 
-interface SubmissionResult {
-  submission_id: string
-  channel_name: string
-  status: string
-}
-
 export default function PitchPage() {
   const { user, loading: authLoading } = useAuth()
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<AnalyzeResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [selectedChannels, setSelectedChannels] = useState<Set<string>>(new Set())
-  const [balance, setBalance] = useState<number | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState<SubmissionResult[] | null>(null)
 
-  useEffect(() => {
-    if (!user) return
-    api.get('credits').then(({ data }) => setBalance(data.balance)).catch(() => {})
-  }, [user])
+  const params = new URLSearchParams(window.location.search)
+  const success = params.get('success') === 'true'
+  const canceled = params.get('canceled') === 'true'
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,8 +60,6 @@ export default function PitchPage() {
     setLoading(true)
     setError(null)
     setResult(null)
-    setSelectedChannels(new Set())
-    setSubmitted(null)
     try {
       const { data } = await api.post('submit/analyze', { url: url.trim() })
       setResult(data)
@@ -83,36 +70,21 @@ export default function PitchPage() {
     }
   }
 
-  const toggleChannel = (channelId: string) => {
-    setSelectedChannels(prev => {
-      const next = new Set(prev)
-      next.has(channelId) ? next.delete(channelId) : next.add(channelId)
-      return next
-    })
-  }
-
   const handleSubmit = async () => {
-    if (!result || selectedChannels.size === 0) return
+    if (!result || result.matches.length === 0) return
     setSubmitting(true)
     setError(null)
     try {
-      const channels = result.matches
-        .filter(m => selectedChannels.has(m.channel_id))
-        .map(m => ({ id: m.channel_id, name: m.channel_name }))
-
-      const { data } = await api.post('submissions', {
+      const { data } = await api.post('pitch/checkout', {
         track_url: url.trim(),
         track_name: result.track.name,
         track_artist: result.track.artist,
         track_image: result.track.image,
-        channels,
+        channels: result.matches.map(m => ({ id: m.channel_id, name: m.channel_name })),
       })
-      setSubmitted(data.submissions)
-      if (balance !== null) setBalance(balance - channels.length)
+      window.location.href = data.url
     } catch (err: any) {
-      const msg = err.response?.data?.error || 'Failed to submit.'
-      setError(msg)
-    } finally {
+      setError(err.response?.data?.error || 'Failed to start checkout.')
       setSubmitting(false)
     }
   }
@@ -136,18 +108,25 @@ export default function PitchPage() {
     <Layout>
       <SEO title="Pitch your music" />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h2 style={{ fontWeight: 400, margin: 0 }}>Pitch your music</h2>
-        <div style={{ color: '#999', fontSize: 14 }}>
-          Balance: <strong style={{ color: '#1DB954' }}>{balance ?? '...'}</strong> credits
-          {' · '}
-          <Link to="/wallet/" style={{ color: '#1DB954', fontSize: 13 }}>Buy more</Link>
+      {success && (
+        <div style={{ padding: 20, background: '#f0faf4', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
+          <p style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Your track has been submitted!</p>
+          <p style={{ color: '#666', fontSize: 14, marginBottom: 0 }}>
+            All matching curators will see it in their inbox. You'll be auto-refunded if no one features it within 3 months.
+          </p>
         </div>
-      </div>
+      )}
 
+      {canceled && (
+        <div style={{ padding: 16, background: '#fff8e1', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
+          <p style={{ fontSize: 15, marginBottom: 0, color: '#666' }}>Checkout canceled. No charges were made.</p>
+        </div>
+      )}
+
+      <h2 style={{ fontWeight: 400 }}>Pitch your music</h2>
       <p style={{ color: '#666', marginBottom: 30 }}>
-        Paste a Spotify track link, select channels, and submit. Curators have 7 days to respond.
-        No response = credits refunded.
+        Paste a Spotify track link to find matching YouTube channels. Submit for $5 and your track goes to all matching curators.
+        Auto-refund if no one features it within 3 months.
       </p>
 
       <form onSubmit={handleAnalyze} style={{ display: 'flex', gap: 10, marginBottom: 30 }}>
@@ -171,18 +150,7 @@ export default function PitchPage() {
 
       {error && <p style={{ color: '#d32f2f', marginBottom: 20 }}>{error}</p>}
 
-      {submitted && (
-        <div style={{ padding: 25, background: '#f0faf4', borderRadius: 8, marginBottom: 30, textAlign: 'center' }}>
-          <p style={{ fontSize: 18, fontWeight: 700, marginBottom: 5 }}>
-            Submitted to {submitted.length} channel{submitted.length !== 1 ? 's' : ''}!
-          </p>
-          <p style={{ color: '#666', marginBottom: 0 }}>
-            Curators have 7 days to respond. You'll get a refund for any that don't.
-          </p>
-        </div>
-      )}
-
-      {result && !submitted && (
+      {result && !success && (
         <>
           {/* Track card */}
           <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: 20, background: '#f9f9f9', borderRadius: 8, marginBottom: 30 }}>
@@ -202,20 +170,18 @@ export default function PitchPage() {
 
           {result.matches.length > 0 ? (
             <>
-              <h4>{result.matches.length} matching channel{result.matches.length !== 1 ? 's' : ''}</h4>
+              <h4>Your top {result.matches.length} channel match{result.matches.length !== 1 ? 'es' : ''}</h4>
+              <p style={{ color: '#888', fontSize: 13, marginTop: -8, marginBottom: 16 }}>
+                Based on genre overlap between your track and each channel's catalog.
+                Your track will be prioritized to these curators.
+              </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 30 }}>
                 {result.matches.map(match => (
                   <div key={match.channel_id} style={{
                     display: 'flex', alignItems: 'center', gap: 15, padding: 15,
-                    border: '1px solid #eee', borderRadius: 8,
-                    background: selectedChannels.has(match.channel_id) ? '#f0faf4' : 'white',
+                    border: '1px solid #eee', borderRadius: 8, background: 'white',
                   }}>
-                    <Checkbox
-                      checked={selectedChannels.has(match.channel_id)}
-                      onChange={() => toggleChannel(match.channel_id)}
-                      sx={{ '&.Mui-checked': { color: '#1DB954' } }}
-                    />
                     {match.thumbnail && (
                       <img src={match.thumbnail} alt={match.channel_name} style={{ width: 60, height: 60, borderRadius: 4, filter: 'none' }} />
                     )}
@@ -242,29 +208,41 @@ export default function PitchPage() {
                 ))}
               </div>
 
-              {/* Submit button */}
-              <div style={{ padding: 20, background: '#f9f9f9', borderRadius: 8, marginBottom: 30, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontWeight: 700 }}>
-                    {selectedChannels.size} channel{selectedChannels.size !== 1 ? 's' : ''} selected
+              {/* Submit section */}
+              <div style={{
+                padding: 24, background: 'linear-gradient(135deg, #1a2a1a 0%, #1a1a2a 100%)',
+                border: '1px solid #2a3a2a', borderRadius: 10, marginBottom: 30,
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 16, color: '#e0e0e0' }}>
+                      Submit to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''} — $5
+                    </div>
+                    <div style={{ color: '#888', fontSize: 13, marginTop: 4 }}>
+                      One payment, all matching curators see your track
+                    </div>
                   </div>
-                  <div style={{ color: '#666', fontSize: 13 }}>
-                    Cost: {selectedChannels.size} credit{selectedChannels.size !== 1 ? 's' : ''}
-                    {balance !== null && selectedChannels.size > balance && (
-                      <span style={{ color: '#d32f2f' }}>
-                        {' '}(need {selectedChannels.size - balance} more — <Link to="/wallet/" style={{ color: '#1DB954' }}>buy credits</Link>)
-                      </span>
-                    )}
+                  <Button
+                    variant="contained"
+                    disabled={submitting}
+                    onClick={handleSubmit}
+                    sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none', px: 4, fontSize: 15 }}
+                  >
+                    {submitting ? 'Loading...' : 'Submit — $5'}
+                  </Button>
+                </div>
+
+                <div style={{ borderTop: '1px solid #333', paddingTop: 14, color: '#888', fontSize: 13, lineHeight: 1.7 }}>
+                  <div style={{ marginBottom: 4 }}>
+                    <span style={{ color: '#1DB954' }}>Best case:</span> Curators feature your track on their YouTube channel — it automatically appears on their Spotify playlist too.
+                  </div>
+                  <div style={{ marginBottom: 4 }}>
+                    <span style={{ color: '#1DB954' }}>No response:</span> Full refund after 3 months. We verify automatically whether your track was added.
+                  </div>
+                  <div>
+                    <span style={{ color: '#1DB954' }}>Even after refund:</span> Curators can still discover and feature your track at any time — your submission stays visible.
                   </div>
                 </div>
-                <Button
-                  variant="contained"
-                  disabled={selectedChannels.size === 0 || submitting || (balance !== null && selectedChannels.size > balance)}
-                  onClick={handleSubmit}
-                  sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none', px: 4 }}
-                >
-                  {submitting ? 'Submitting...' : 'Submit'}
-                </Button>
               </div>
             </>
           ) : (

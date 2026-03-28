@@ -10,7 +10,6 @@ import AboutPage from './pages/AboutPage'
 import SubmitPage from './pages/SubmitPage'
 import LoginPage from './pages/LoginPage'
 import TakedownPage from './pages/TakedownPage'
-import CreditsPage from './pages/CreditsPage'
 import PitchPage from './pages/PitchPage'
 import CuratorInboxPage from './pages/CuratorInboxPage'
 import LogsPage from './pages/LogsPage'
@@ -58,7 +57,6 @@ export default function App() {
         {pre && <>
           <Route path="/signin/" element={<LoginPage />} />
           <Route path="/about2/" element={<TakedownPage />} />
-          <Route path="/wallet/" element={<CreditsPage />} />
           <Route path="/pitch/" element={<PitchPage />} />
           <Route path="/inbox/" element={<CuratorInboxPage />} />
         </>}
