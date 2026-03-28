@@ -5,6 +5,11 @@
 #   AWS_SECRET_ACCESS_KEY
 #   CLOUDFRONT_DISTRIBUTION_ID
 #   S3_BUCKET_NAME
+#
+# Requires GitHub variables (Settings → Secrets and variables → Actions → Variables):
+#   FIREBASE_API_KEY
+#   FIREBASE_AUTH_DOMAIN
+#   FIREBASE_PROJECT_ID
 
 name: Deploy
 
@@ -31,27 +36,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build
+        run: npm run build
+        env:
+          VITE_API_URL: https://api.mirror.fm/
+          VITE_FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: Read Firebase config from SSM
-        id: firebase
-        run: |
-          echo "api_key=$(aws ssm get-parameter --name /mirrorfm/firebase/api-key --query 'Parameter.Value' --output text)" >> "$GITHUB_OUTPUT"
-          echo "auth_domain=$(aws ssm get-parameter --name /mirrorfm/firebase/auth-domain --query 'Parameter.Value' --output text)" >> "$GITHUB_OUTPUT"
-          echo "project_id=$(aws ssm get-parameter --name /mirrorfm/firebase/project-id --query 'Parameter.Value' --output text)" >> "$GITHUB_OUTPUT"
-
-      - name: Build
-        run: npm run build
-        env:
-          VITE_API_URL: https://api.mirror.fm/
-          VITE_FIREBASE_API_KEY: ${{ steps.firebase.outputs.api_key }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ steps.firebase.outputs.auth_domain }}
-          VITE_FIREBASE_PROJECT_ID: ${{ steps.firebase.outputs.project_id }}
 
       - name: Deploy
         run: aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
