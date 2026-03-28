@@ -18,7 +18,7 @@ export default function MarketplaceBanner() {
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #2a2a2a 0%, #1a3a1a 50%, #1DB954 100%)',
+      background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
       border: '1px solid #333',
       borderRadius: 8,
       padding: '14px 20px',
