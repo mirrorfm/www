@@ -18,8 +18,8 @@ export default function MarketplaceBanner() {
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #1a2a1a 0%, #1a1a2a 100%)',
-      border: '1px solid #2a3a2a',
+      background: 'linear-gradient(135deg, #2a2a2a 0%, #1a3a1a 50%, #1DB954 100%)',
+      border: '1px solid #333',
       borderRadius: 8,
       padding: '14px 20px',
       marginBottom: 24,
@@ -43,7 +43,7 @@ export default function MarketplaceBanner() {
             Mirror.FM Marketplace
           </h3>
           <p style={{ color: '#888', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
-            Submit your tracks to YouTube channel curators. $2/credit, 7-day response window, refund on silence.
+            Submit your tracks to matching YouTube channel curators. Free during beta.
           </p>
         </div>
 
