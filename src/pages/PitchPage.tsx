@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -51,8 +51,17 @@ export default function PitchPage() {
   const [submitting, setSubmitting] = useState(false)
 
   const params = new URLSearchParams(window.location.search)
-  const success = params.get('success') === 'true'
+  const sessionId = params.get('session_id')
+  const [success, setSuccess] = useState(params.get('success') === 'true')
   const canceled = params.get('canceled') === 'true'
+
+  // Confirm Stripe payment on redirect
+  useEffect(() => {
+    if (!sessionId || !user || success) return
+    api.post('pitch/confirm', { session_id: sessionId })
+      .then(() => setSuccess(true))
+      .catch(() => setError('Payment verification failed. Please contact support.'))
+  }, [sessionId, user])
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault()
