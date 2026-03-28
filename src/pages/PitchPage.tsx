@@ -109,7 +109,7 @@ export default function PitchPage() {
       <SEO title="Pitch your music" />
 
       {success && (
-        <div style={{ padding: 20, background: '#f0faf4', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
+        <div style={{ padding: 20, background: '#1a2e1a', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
           <p style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Your track has been submitted!</p>
           <p style={{ color: '#666', fontSize: 14, marginBottom: 0 }}>
             All matching curators will see it in their inbox. You'll be auto-refunded if no one features it within 3 months.
@@ -118,7 +118,7 @@ export default function PitchPage() {
       )}
 
       {canceled && (
-        <div style={{ padding: 16, background: '#fff8e1', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
+        <div style={{ padding: 16, background: '#2e2a1a', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
           <p style={{ fontSize: 15, marginBottom: 0, color: '#666' }}>Checkout canceled. No charges were made.</p>
         </div>
       )}
@@ -153,7 +153,7 @@ export default function PitchPage() {
       {result && !success && (
         <>
           {/* Track card */}
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: 20, background: '#f9f9f9', borderRadius: 8, marginBottom: 30 }}>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: 20, background: '#262626', borderRadius: 8, marginBottom: 30 }}>
             {result.track.image && (
               <img src={result.track.image} alt={result.track.name} style={{ width: 80, height: 80, borderRadius: 4, filter: 'none' }} />
             )}
@@ -180,7 +180,7 @@ export default function PitchPage() {
                 {result.matches.map(match => (
                   <div key={match.channel_id} style={{
                     display: 'flex', alignItems: 'center', gap: 15, padding: 15,
-                    border: '1px solid #eee', borderRadius: 8, background: 'white',
+                    border: '1px solid #333', borderRadius: 8, background: '#222',
                   }}>
                     {match.thumbnail && (
                       <img src={match.thumbnail} alt={match.channel_name} style={{ width: 60, height: 60, borderRadius: 4, filter: 'none' }} />

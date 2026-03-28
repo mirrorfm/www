@@ -84,7 +84,7 @@ export default function CuratorInboxPage() {
           {submissions.map(sub => (
             <div key={sub.submission_id} style={{
               display: 'flex', alignItems: 'center', gap: 15, padding: 15,
-              border: '1px solid #eee', borderRadius: 8, background: 'white',
+              border: '1px solid #333', borderRadius: 8, background: '#222',
             }}>
               {sub.track_image && (
                 <img src={sub.track_image} alt={sub.track_name}

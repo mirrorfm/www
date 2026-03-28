@@ -159,7 +159,7 @@ export default function SubmitPage() {
             gap: 20,
             alignItems: 'center',
             padding: 20,
-            background: '#f9f9f9',
+            background: '#262626',
             borderRadius: 8,
             marginBottom: 30,
           }}>
@@ -198,9 +198,9 @@ export default function SubmitPage() {
                       alignItems: 'center',
                       gap: 15,
                       padding: 15,
-                      border: '1px solid #eee',
+                      border: '1px solid #333',
                       borderRadius: 8,
-                      background: selectedChannels.has(match.channel_id) ? '#f0faf4' : 'white',
+                      background: selectedChannels.has(match.channel_id) ? '#1a2e1a' : '#222',
                     }}
                   >
                     <Checkbox
@@ -267,7 +267,7 @@ export default function SubmitPage() {
               {!interestSubmitted ? (
                 <div style={{
                   padding: 25,
-                  background: '#f9f9f9',
+                  background: '#262626',
                   borderRadius: 8,
                   marginBottom: 30,
                 }}>
@@ -313,7 +313,7 @@ export default function SubmitPage() {
               ) : (
                 <div style={{
                   padding: 25,
-                  background: '#f0faf4',
+                  background: '#1a2e1a',
                   borderRadius: 8,
                   marginBottom: 30,
                   textAlign: 'center',
