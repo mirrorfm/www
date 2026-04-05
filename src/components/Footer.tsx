@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
+import { isPrerelease } from '../lib/prerelease'
 
 interface FooterProps {
   children?: ReactNode
@@ -28,6 +29,11 @@ export default function Footer({ children }: FooterProps) {
         <div style={{ display: 'flex', gap: 16, fontSize: 13 }}>
           <Link to="/about/">About</Link>
           <Link to="/logs/">Event logs</Link>
+          {isPrerelease() && (
+            <a href="#" onClick={(e) => { e.preventDefault(); localStorage.removeItem('marketplace_banner_dismissed'); window.location.reload() }} style={{ color: '#1DB954' }}>
+              Marketplace
+            </a>
+          )}
         </div>
         {children && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
