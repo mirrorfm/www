@@ -18,61 +18,82 @@ export default function MarketplaceBanner() {
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
-      border: '1px solid #333',
-      borderRadius: 8,
-      padding: '14px 20px',
-      marginBottom: 24,
+      borderBottom: '1px solid #2a2a2a',
+      paddingBottom: 40,
+      marginBottom: 32,
       position: 'relative',
     }}>
       <button
         onClick={dismiss}
         style={{
-          position: 'absolute', top: 8, right: 12,
-          background: 'none', border: 'none', color: '#555',
-          fontSize: 16, cursor: 'pointer', padding: 4,
+          position: 'absolute', top: 0, right: 0,
+          background: 'none', border: 'none', color: '#444',
+          fontSize: 14, cursor: 'pointer', padding: 4,
         }}
-        title="Dismiss permanently"
+        title="Dismiss"
       >
         &times;
       </button>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 200 }}>
-          <h3 style={{ margin: '0 0 6px', fontWeight: 500, color: '#e0e0e0', fontSize: 16 }}>
-            Mirror.FM Marketplace
-          </h3>
-          <p style={{ color: '#888', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
-            Submit your tracks to matching YouTube channel curators. Free during beta.
+      <p style={{ color: '#555', fontSize: 12, textTransform: 'uppercase', letterSpacing: 2, margin: '0 0 12px' }}>
+        Beta
+      </p>
+
+      <h2 style={{ margin: '0 0 12px', fontWeight: 400, color: '#d4d4d4', fontSize: 22, lineHeight: 1.3 }}>
+        Get your music heard by the right channels.
+      </h2>
+
+      <p style={{ color: '#777', fontSize: 15, lineHeight: 1.6, margin: '0 0 24px', maxWidth: 540 }}>
+        Mirror.FM already syncs {'>'}1,300 YouTube music channels to Spotify playlists.
+        Now we match artists to channels based on genre.
+        Submit a track, we show it to curators who fit your sound.
+      </p>
+
+      <div style={{
+        display: 'flex', gap: 32, marginBottom: 28,
+        flexWrap: 'wrap',
+      }}>
+        <div>
+          <div style={{ color: '#d4d4d4', fontSize: 14, marginBottom: 4 }}>For artists</div>
+          <p style={{ color: '#666', fontSize: 13, lineHeight: 1.5, margin: 0, maxWidth: 240 }}>
+            Paste a Spotify link, see which channels match your genre,
+            and submit. Free while we're in beta.
           </p>
         </div>
+        <div>
+          <div style={{ color: '#d4d4d4', fontSize: 14, marginBottom: 4 }}>For channel owners</div>
+          <p style={{ color: '#666', fontSize: 13, lineHeight: 1.5, margin: 0, maxWidth: 240 }}>
+            Claim your channel, receive track submissions
+            from artists that fit your catalog.
+          </p>
+        </div>
+      </div>
 
-        <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         {user ? (
           <>
             <Link to="/pitch/" style={{
-              background: '#1DB954', color: 'white', padding: '6px 16px',
-              borderRadius: 16, textDecoration: 'none', fontSize: 13, fontWeight: 600,
+              background: '#1DB954', color: 'white', padding: '8px 20px',
+              borderRadius: 4, textDecoration: 'none', fontSize: 14,
             }}>
-              Submit your music
+              Submit a track
             </Link>
-            <Link to="/about2/" style={{
-              background: 'transparent', color: '#ddd', padding: '6px 16px',
-              borderRadius: 16, textDecoration: 'none', fontSize: 13,
-              border: '1px solid #999',
+            <Link to="/inbox/" style={{
+              background: 'none', color: '#ccc', padding: '8px 20px',
+              borderRadius: 4, textDecoration: 'none', fontSize: 14,
+              border: '1px solid #555',
             }}>
-              Channel owners
+              Claim your channel
             </Link>
           </>
         ) : (
           <Link to="/signin/" style={{
-            background: '#1DB954', color: 'white', padding: '6px 16px',
-            borderRadius: 16, textDecoration: 'none', fontSize: 13, fontWeight: 600,
+            background: '#1DB954', color: 'white', padding: '8px 20px',
+            borderRadius: 4, textDecoration: 'none', fontSize: 14,
           }}>
             Sign in to get started
           </Link>
         )}
-        </div>
       </div>
     </div>
   )
