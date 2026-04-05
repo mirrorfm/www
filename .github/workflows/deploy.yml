@@ -15,7 +15,7 @@ name: Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [master, marketplace]
   workflow_dispatch:
 
 env:
