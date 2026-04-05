@@ -57,9 +57,9 @@ export default function MarketplaceBanner() {
               Submit your music
             </Link>
             <Link to="/about2/" style={{
-              background: 'transparent', color: '#888', padding: '6px 16px',
+              background: 'transparent', color: '#ddd', padding: '6px 16px',
               borderRadius: 16, textDecoration: 'none', fontSize: 13,
-              border: '1px solid #444',
+              border: '1px solid #999',
             }}>
               Channel owners
             </Link>
