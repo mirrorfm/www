@@ -6,6 +6,14 @@ import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import { api } from '../config'
 import { useAuth } from '../lib/auth'
+import { signInWithYouTubeScope } from '../lib/firebase'
+
+interface CuratorChannel {
+  channel_id: string
+  channel_name: string
+  thumbnail: string
+  tracked: boolean
+}
 
 interface Submission {
   submission_id: string
@@ -22,17 +30,59 @@ interface Submission {
 
 export default function CuratorInboxPage() {
   const { user, loading: authLoading } = useAuth()
+  const [channels, setChannels] = useState<CuratorChannel[]>([])
   const [submissions, setSubmissions] = useState<Submission[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loadingChannels, setLoadingChannels] = useState(true)
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false)
+  const [claiming, setClaiming] = useState(false)
+  const [claimResult, setClaimResult] = useState<{ channels: CuratorChannel[], linked: number } | null>(null)
   const [responding, setResponding] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
+  // Load curator's channels
   useEffect(() => {
     if (!user) return
-    api.get('curator/submissions')
-      .then(({ data }) => setSubmissions(data.submissions || []))
+    api.get('curator/channels')
+      .then(({ data }) => {
+        setChannels(data.channels || [])
+        if (data.channels?.length > 0) {
+          setLoadingSubmissions(true)
+          api.get('curator/submissions')
+            .then(({ data }) => setSubmissions(data.submissions || []))
+            .catch(() => {})
+            .finally(() => setLoadingSubmissions(false))
+        }
+      })
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => setLoadingChannels(false))
   }, [user])
+
+  const handleClaim = async () => {
+    setClaiming(true)
+    setError(null)
+    setClaimResult(null)
+    try {
+      const accessToken = await signInWithYouTubeScope()
+      if (!accessToken) {
+        setError('Failed to get YouTube access. Please try again.')
+        setClaiming(false)
+        return
+      }
+      const { data } = await api.post('curator/claim', { youtube_access_token: accessToken })
+      setClaimResult(data)
+      if (data.linked > 0) {
+        // Refresh channels and submissions
+        const chRes = await api.get('curator/channels')
+        setChannels(chRes.data.channels || [])
+        const subRes = await api.get('curator/submissions')
+        setSubmissions(subRes.data.submissions || [])
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to verify YouTube account.')
+    } finally {
+      setClaiming(false)
+    }
+  }
 
   const handleRespond = async (id: string, action: 'accept' | 'reject') => {
     setResponding(id)
@@ -72,14 +122,94 @@ export default function CuratorInboxPage() {
       <SEO title="Curator Inbox" />
       <h2 style={{ fontWeight: 400 }}>Curator Inbox</h2>
 
-      {loading ? (
-        <p style={{ color: '#999' }}>Loading submissions...</p>
-      ) : submissions.length === 0 ? (
+      {/* Channel claim section */}
+      {!loadingChannels && channels.length === 0 && !claimResult && (
+        <div style={{
+          padding: 24, background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
+          border: '1px solid #333', borderRadius: 10, marginBottom: 30,
+        }}>
+          <h3 style={{ margin: '0 0 8px', fontWeight: 500, color: '#e0e0e0', fontSize: 16 }}>
+            Claim your YouTube channel
+          </h3>
+          <p style={{ color: '#888', fontSize: 14, lineHeight: 1.5, margin: '0 0 16px' }}>
+            Connect your YouTube account to verify channel ownership.
+            Once linked, you'll receive track submissions from artists matched to your channel's genres.
+          </p>
+          <Button
+            variant="contained"
+            disabled={claiming}
+            onClick={handleClaim}
+            sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
+          >
+            {claiming ? 'Connecting...' : 'Connect YouTube account'}
+          </Button>
+          {error && <p style={{ color: '#d32f2f', fontSize: 13, marginTop: 12, marginBottom: 0 }}>{error}</p>}
+        </div>
+      )}
+
+      {/* Claim result */}
+      {claimResult && (
+        <div style={{
+          padding: 20, background: claimResult.linked > 0 ? '#1a2e1a' : '#2e2a1a',
+          borderRadius: 8, marginBottom: 24,
+        }}>
+          {claimResult.linked > 0 ? (
+            <p style={{ margin: 0, fontSize: 15 }}>
+              {claimResult.linked} channel{claimResult.linked !== 1 ? 's' : ''} linked! Track submissions will appear below.
+            </p>
+          ) : (
+            <div>
+              <p style={{ margin: '0 0 8px', fontSize: 15 }}>
+                We found your channel{claimResult.channels.length !== 1 ? 's' : ''} but {claimResult.channels.length === 1 ? "it's" : "they're"} not tracked by Mirror.FM yet.
+              </p>
+              {claimResult.channels.map(ch => (
+                <div key={ch.channel_id} style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
+                  {ch.thumbnail && <img src={ch.thumbnail} alt="" style={{ width: 32, height: 32, borderRadius: 4 }} />}
+                  <span style={{ color: '#ccc' }}>{ch.channel_name}</span>
+                </div>
+              ))}
+              <p style={{ margin: '12px 0 0', color: '#888', fontSize: 13 }}>
+                We'll add your channel to our index soon. You'll be notified when it's ready.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Managed channels */}
+      {channels.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
+            {channels.map(ch => (
+              <div key={ch.channel_id} style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '6px 12px', background: '#262626', borderRadius: 20, fontSize: 13,
+              }}>
+                {ch.thumbnail && <img src={ch.thumbnail} alt="" style={{ width: 20, height: 20, borderRadius: '50%' }} />}
+                <span>{ch.channel_name}</span>
+              </div>
+            ))}
+          </div>
+          <Button
+            size="small"
+            onClick={handleClaim}
+            disabled={claiming}
+            sx={{ color: '#888', textTransform: 'none', fontSize: 12 }}
+          >
+            + Claim another channel
+          </Button>
+        </div>
+      )}
+
+      {/* Submissions */}
+      {loadingChannels || loadingSubmissions ? (
+        <p style={{ color: '#999' }}>Loading...</p>
+      ) : channels.length > 0 && submissions.length === 0 ? (
         <div style={{ textAlign: 'center', padding: 40, color: '#666' }}>
           <p>No pending submissions.</p>
-          <p style={{ fontSize: 14 }}>When artists submit tracks to your channels, they'll appear here.</p>
+          <p style={{ fontSize: 14 }}>When artists submit tracks matching your channel, they'll appear here.</p>
         </div>
-      ) : (
+      ) : channels.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {submissions.map(sub => (
             <div key={sub.submission_id} style={{
@@ -110,7 +240,7 @@ export default function CuratorInboxPage() {
                 <Button size="small" variant="outlined"
                   disabled={responding === sub.submission_id}
                   onClick={() => handleRespond(sub.submission_id, 'reject')}
-                  sx={{ textTransform: 'none', borderColor: '#ccc', color: '#666' }}>
+                  sx={{ textTransform: 'none', borderColor: '#555', color: '#999' }}>
                   Pass
                 </Button>
                 <Button size="small" variant="contained"

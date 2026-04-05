@@ -129,8 +129,9 @@ export default function PitchPage() {
       {success && (
         <div style={{ padding: 20, background: '#1a2e1a', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
           <p style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Your track has been submitted!</p>
-          <p style={{ color: '#666', fontSize: 14, marginBottom: 0 }}>
-            All matching curators will see it in their inbox. You'll be auto-refunded if no one features it within 3 months.
+          <p style={{ color: '#888', fontSize: 14, marginBottom: 0 }}>
+            All matching curators will see it in their inbox.{' '}
+            <Link to="/history/" style={{ color: '#1DB954' }}>View your submissions</Link>
           </p>
         </div>
       )}

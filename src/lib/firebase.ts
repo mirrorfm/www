@@ -23,6 +23,14 @@ export async function signInWithGoogle() {
   return signInWithPopup(auth, googleProvider)
 }
 
+export async function signInWithYouTubeScope(): Promise<string | null> {
+  const provider = new GoogleAuthProvider()
+  provider.addScope('https://www.googleapis.com/auth/youtube.readonly')
+  const result = await signInWithPopup(auth, provider)
+  const credential = GoogleAuthProvider.credentialFromResult(result)
+  return credential?.accessToken ?? null
+}
+
 export async function signOut() {
   return firebaseSignOut(auth)
 }
