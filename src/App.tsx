@@ -10,6 +10,8 @@ import AboutPage from './pages/AboutPage'
 import SubmitPage from './pages/SubmitPage'
 import LoginPage from './pages/LoginPage'
 import TakedownPage from './pages/TakedownPage'
+import ChannelOwnersPage from './pages/ChannelOwnersPage'
+import ReportPage from './pages/ReportPage'
 import PitchPage from './pages/PitchPage'
 import HistoryPage from './pages/HistoryPage'
 import CuratorInboxPage from './pages/CuratorInboxPage'
@@ -58,6 +60,8 @@ export default function App() {
         {pre && <>
           <Route path="/signin/" element={<LoginPage />} />
           <Route path="/about2/" element={<TakedownPage />} />
+          <Route path="/owners/" element={<ChannelOwnersPage />} />
+          <Route path="/report/" element={<ReportPage />} />
           <Route path="/pitch/" element={<PitchPage />} />
           <Route path="/history/" element={<HistoryPage />} />
           <Route path="/inbox/" element={<CuratorInboxPage />} />

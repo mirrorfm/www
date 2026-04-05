@@ -78,7 +78,7 @@ export default function MarketplaceBanner() {
             }}>
               Submit a track
             </Link>
-            <Link to="/inbox/" style={{
+            <Link to="/owners/" style={{
               background: 'none', color: '#ccc', padding: '8px 20px',
               borderRadius: 4, textDecoration: 'none', fontSize: 14,
               border: '1px solid #555',

@@ -29,11 +29,13 @@ export default function Footer({ children }: FooterProps) {
         <div style={{ display: 'flex', gap: 16, fontSize: 13 }}>
           <Link to="/about/">About</Link>
           <Link to="/logs/">Event logs</Link>
-          {isPrerelease() && (
-            <a href="#" onClick={(e) => { e.preventDefault(); localStorage.removeItem('marketplace_banner_dismissed'); window.location.reload() }} style={{ color: '#1DB954' }}>
-              Marketplace
-            </a>
-          )}
+          {isPrerelease() && <>
+            <Link to="/pitch/" style={{ color: '#1DB954' }}>Pitch</Link>
+            <Link to="/history/" style={{ color: '#1DB954' }}>History</Link>
+            <Link to="/inbox/" style={{ color: '#1DB954' }}>Inbox</Link>
+            <Link to="/owners/" style={{ color: '#1DB954' }}>Owners</Link>
+            <Link to="/report/" style={{ color: '#1DB954' }}>Report</Link>
+          </>}
         </div>
         {children && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
