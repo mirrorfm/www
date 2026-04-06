@@ -214,11 +214,12 @@ export default function ChannelOwnersPage() {
             />
             <TextField
               fullWidth variant="outlined" size="small"
-              label="Your email (optional, for us to reply)"
+              label={checks.own_account ? "Your email (required)" : "Your email (optional, for us to reply)"}
               type="email"
               placeholder="you@example.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              required={checks.own_account}
             />
             <TextField
               fullWidth variant="outlined" size="small"
@@ -233,7 +234,7 @@ export default function ChannelOwnersPage() {
 
             <Button
               type="submit" variant="contained"
-              disabled={loading || !channelUrl.trim()}
+              disabled={loading || !channelUrl.trim() || (checks.own_account && !email.trim())}
               sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none', alignSelf: 'flex-start', px: 4 }}
             >
               {loading ? 'Sending...' : 'Submit request'}
