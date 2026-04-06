@@ -31,7 +31,6 @@ export default function Footer({ children }: FooterProps) {
           <Link to="/logs/">Event logs</Link>
           {isPrerelease() && <>
             <Link to="/pitch/" style={{ color: '#1DB954' }}>Pitch</Link>
-            <Link to="/history/" style={{ color: '#1DB954' }}>History</Link>
             <Link to="/inbox/" style={{ color: '#1DB954' }}>Inbox</Link>
             <Link to="/owners/" style={{ color: '#1DB954' }}>Owners</Link>
             <Link to="/report/" style={{ color: '#1DB954' }}>Report</Link>

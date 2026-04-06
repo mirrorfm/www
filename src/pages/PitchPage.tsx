@@ -42,6 +42,31 @@ interface AnalyzeResponse {
   matches: ChannelMatch[]
 }
 
+interface Submission {
+  submission_id: string
+  channel_name: string
+  track_url: string
+  track_name: string
+  track_artist: string
+  track_image: string
+  status: string
+  created_at: string
+}
+
+const statusColors: Record<string, string> = {
+  pending: '#888',
+  accepted: '#1DB954',
+  rejected: '#d32f2f',
+  archived: '#666',
+}
+
+const statusLabels: Record<string, string> = {
+  pending: 'Pending',
+  accepted: 'Featured',
+  rejected: 'Passed',
+  archived: 'Archived',
+}
+
 export default function PitchPage() {
   const { user, loading: authLoading } = useAuth()
   const [url, setUrl] = useState('')
@@ -49,11 +74,22 @@ export default function PitchPage() {
   const [result, setResult] = useState<AnalyzeResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [submissions, setSubmissions] = useState<Submission[]>([])
+  const [loadingHistory, setLoadingHistory] = useState(true)
 
   const params = new URLSearchParams(window.location.search)
   const sessionId = params.get('session_id')
   const [success, setSuccess] = useState(params.get('success') === 'true')
   const canceled = params.get('canceled') === 'true'
+
+  // Load submission history
+  useEffect(() => {
+    if (!user) return
+    api.get('submissions')
+      .then(({ data }) => setSubmissions(data.submissions || []))
+      .catch(() => {})
+      .finally(() => setLoadingHistory(false))
+  }, [user])
 
   // Confirm Stripe payment on redirect
   useEffect(() => {
@@ -130,8 +166,7 @@ export default function PitchPage() {
         <div style={{ padding: 20, background: '#1a2e1a', borderRadius: 8, marginBottom: 24, textAlign: 'center' }}>
           <p style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Your track has been submitted!</p>
           <p style={{ color: '#888', fontSize: 14, marginBottom: 0 }}>
-            All matching curators will see it in their inbox.{' '}
-            <Link to="/history/" style={{ color: '#1DB954' }}>View your submissions</Link>
+            All matching curators will see it in their inbox.
           </p>
         </div>
       )}
@@ -282,6 +317,57 @@ export default function PitchPage() {
             </div>
           )}
         </>
+      )}
+      {/* Submission history */}
+      {!loadingHistory && submissions.length > 0 && (
+        <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: 24, marginTop: 40 }}>
+          <h3 style={{ fontWeight: 400, fontSize: 17, marginBottom: 16 }}>Your submissions</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {Object.entries(
+              submissions.reduce<Record<string, Submission[]>>((acc, sub) => {
+                if (!acc[sub.track_url]) acc[sub.track_url] = []
+                acc[sub.track_url].push(sub)
+                return acc
+              }, {})
+            ).map(([trackUrl, subs]) => {
+              const first = subs[0]
+              const accepted = subs.filter(s => s.status === 'accepted').length
+              const pending = subs.filter(s => s.status === 'pending').length
+
+              return (
+                <div key={trackUrl} style={{ border: '1px solid #333', borderRadius: 8, overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', gap: 12, alignItems: 'center', padding: 12, background: '#262626' }}>
+                    {first.track_image && (
+                      <img src={first.track_image} alt={first.track_name} style={{ width: 40, height: 40, borderRadius: 4, filter: 'none' }} />
+                    )}
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: 14 }}>{first.track_name}</div>
+                      <div style={{ color: '#888', fontSize: 12 }}>{first.track_artist}</div>
+                    </div>
+                    <div style={{ fontSize: 12, color: '#888', textAlign: 'right' }}>
+                      {subs.length} channel{subs.length !== 1 ? 's' : ''}
+                      {accepted > 0 && <span style={{ color: '#1DB954' }}> · {accepted} featured</span>}
+                      {pending > 0 && <span> · {pending} pending</span>}
+                    </div>
+                  </div>
+                  <div style={{ padding: '0 12px 8px' }}>
+                    {subs.map(sub => (
+                      <div key={sub.submission_id} style={{
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        padding: '6px 0', borderTop: '1px solid #2a2a2a', fontSize: 13,
+                      }}>
+                        <span>{sub.channel_name}</span>
+                        <span style={{ color: statusColors[sub.status] || '#666', fontSize: 12 }}>
+                          {statusLabels[sub.status] || sub.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
       )}
     </Layout>
   )

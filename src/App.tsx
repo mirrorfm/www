@@ -13,7 +13,6 @@ import TakedownPage from './pages/TakedownPage'
 import ChannelOwnersPage from './pages/ChannelOwnersPage'
 import ReportPage from './pages/ReportPage'
 import PitchPage from './pages/PitchPage'
-import HistoryPage from './pages/HistoryPage'
 import CuratorInboxPage from './pages/CuratorInboxPage'
 import LogsPage from './pages/LogsPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -63,7 +62,6 @@ export default function App() {
           <Route path="/owners/" element={<ChannelOwnersPage />} />
           <Route path="/report/" element={<ReportPage />} />
           <Route path="/pitch/" element={<PitchPage />} />
-          <Route path="/history/" element={<HistoryPage />} />
           <Route path="/inbox/" element={<CuratorInboxPage />} />
         </>}
         <Route path="/logs/" element={<LogsPage />} />
