@@ -30,6 +30,7 @@ export default function GenresPage() {
   const [graphData, setGraphData] = useState<GraphData | null>(null)
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<'chart' | 'graph'>('graph')
+  const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const graphRef = useRef<any>(null)
 
   useEffect(() => {
@@ -48,24 +49,48 @@ export default function GenresPage() {
   const maxNodeCount = graphData ? Math.max(...graphData.nodes.map(n => n.count), 1) : 1
   const maxWeight = graphData ? Math.max(...graphData.links.map(l => l.weight), 1) : 1
 
+  // Build set of connected nodes for highlighting
+  const connectedNodes = new Set<string>()
+  if (selectedNode && graphData) {
+    connectedNodes.add(selectedNode)
+    for (const link of graphData.links) {
+      const src = typeof link.source === 'object' ? (link.source as any).id : link.source
+      const tgt = typeof link.target === 'object' ? (link.target as any).id : link.target
+      if (src === selectedNode) connectedNodes.add(tgt)
+      if (tgt === selectedNode) connectedNodes.add(src)
+    }
+  }
+
   const paintNode = useCallback((node: any, ctx: CanvasRenderingContext2D) => {
-    const size = 5
+    const isHighlighted = !selectedNode || connectedNodes.has(node.id)
+    const isSelected = node.id === selectedNode
+    const dimmed = selectedNode && !isHighlighted
+
+    const size = isSelected ? 7 : 5
     const intensity = 0.3 + (node.count / maxNodeCount) * 0.7
+    const alpha = dimmed ? 0.1 : 1
     const r = Math.round(29 * intensity)
     const g = Math.round(185 * intensity)
     const b = Math.round(84 * intensity)
 
     ctx.beginPath()
     ctx.arc(node.x, node.y, size, 0, 2 * Math.PI)
-    ctx.fillStyle = `rgb(${r},${g},${b})`
+    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`
     ctx.fill()
 
-    ctx.font = '4px sans-serif'
+    if (isSelected) {
+      ctx.strokeStyle = '#1DB954'
+      ctx.lineWidth = 1.5
+      ctx.stroke()
+    }
+
+    const labelAlpha = dimmed ? 0.05 : (0.5 + intensity * 0.5)
+    ctx.font = `${isSelected ? '6' : '4'}px sans-serif`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillStyle = `rgba(200,200,200,${0.5 + intensity * 0.5})`
-    ctx.fillText(node.id, node.x, node.y + 10)
-  }, [maxNodeCount])
+    ctx.fillStyle = `rgba(200,200,200,${labelAlpha})`
+    ctx.fillText(node.id, node.x, node.y + (isSelected ? 14 : 10))
+  }, [maxNodeCount, selectedNode, connectedNodes])
 
   return (
     <Layout>
@@ -106,18 +131,22 @@ export default function GenresPage() {
               ctx.fillStyle = color
               ctx.fill()
             }}
-            linkColor={() => 'rgba(29, 185, 84, 0.15)'}
+            linkColor={(link: any) => {
+              if (!selectedNode) return 'rgba(29, 185, 84, 0.15)'
+              const src = typeof link.source === 'object' ? link.source.id : link.source
+              const tgt = typeof link.target === 'object' ? link.target.id : link.target
+              if (src === selectedNode || tgt === selectedNode) return 'rgba(29, 185, 84, 0.6)'
+              return 'rgba(29, 185, 84, 0.03)'
+            }}
             linkWidth={(link: any) => 0.5 + (link.weight / maxWeight) * 2}
             d3VelocityDecay={0.4}
             d3AlphaDecay={0.02}
             cooldownTicks={200}
             onEngineStop={() => graphRef.current?.zoomToFit(400, 40)}
             onNodeClick={(node: any) => {
-              if (graphRef.current) {
-                graphRef.current.centerAt(node.x, node.y, 500)
-                graphRef.current.zoom(3, 500)
-              }
+              setSelectedNode(prev => prev === node.id ? null : node.id)
             }}
+            onBackgroundClick={() => setSelectedNode(null)}
           />
         </div>
       ) : tab === 'chart' ? (
