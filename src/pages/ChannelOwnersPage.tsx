@@ -77,45 +77,48 @@ export default function ChannelOwnersPage() {
     <Layout>
       <SEO title="Channel Owners" />
 
-      <h2 style={{ fontWeight: 400, marginBottom: 8 }}>For channel owners</h2>
+      <h2 style={{ fontWeight: 400, marginBottom: 24 }}>For channel owners</h2>
 
-      <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7, marginBottom: 24, maxWidth: 600 }}>
-        Mirror.FM automatically creates Spotify playlists that stay in sync
-        with YouTube music channels. We do this so listeners can enjoy
-        a channel's catalog on Spotify without anyone having to maintain it manually.
-      </p>
+      <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', marginBottom: 32 }}>
+        {/* Left column */}
+        <div style={{ flex: 1, minWidth: 280 }}>
+          <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7, margin: '0 0 24px' }}>
+            Mirror.FM automatically creates Spotify playlists that stay in sync
+            with YouTube music channels. We do this so listeners can enjoy
+            a channel's catalog on Spotify without anyone having to maintain it manually.
+          </p>
 
-      <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: 24, marginBottom: 32 }}>
-        <h3 style={{ fontWeight: 400, fontSize: 17, color: '#d4d4d4', marginBottom: 16 }}>
-          How it works
-        </h3>
-        <div style={{ color: '#777', fontSize: 14, lineHeight: 1.8, maxWidth: 560 }}>
-          <p style={{ margin: '0 0 12px' }}>
-            When a channel is added to our index, we scan its uploads,
-            match each video title to a Spotify track, and add matches
-            to a playlist. The playlist updates automatically as new
-            videos are uploaded.
-          </p>
-          <p style={{ margin: '0 0 12px' }}>
-            All playlists are clearly marked as <strong style={{ color: '#ccc' }}>"Unofficial"</strong> and
-            we don't use channel branding or thumbnails without permission.
-            We're not trying to compete with your channel — we're extending
-            its reach to Spotify listeners.
-          </p>
-          <p style={{ margin: 0 }}>
-            From experience, manually maintained playlists tend to fall behind
-            when channels go inactive. Our automated sync keeps the Spotify
-            presence alive regardless — which benefits your listeners and
-            discoverability.
-          </p>
+          <h3 style={{ fontWeight: 400, fontSize: 17, color: '#d4d4d4', marginBottom: 12 }}>
+            How it works
+          </h3>
+          <div style={{ color: '#777', fontSize: 14, lineHeight: 1.8 }}>
+            <p style={{ margin: '0 0 12px' }}>
+              When a channel is added to our index, we scan its uploads,
+              match each video title to a Spotify track, and add matches
+              to a playlist. The playlist updates automatically as new
+              videos are uploaded.
+            </p>
+            <p style={{ margin: '0 0 12px' }}>
+              All playlists are clearly marked as <strong style={{ color: '#ccc' }}>"Unofficial"</strong> and
+              we don't use channel branding or thumbnails without permission.
+              We're not trying to compete with your channel — we're extending
+              its reach to Spotify listeners.
+            </p>
+            <p style={{ margin: 0 }}>
+              From experience, manually maintained playlists tend to fall behind
+              when channels go inactive. Our automated sync keeps the Spotify
+              presence alive regardless — which benefits your listeners and
+              discoverability.
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: 24, marginBottom: 32 }}>
-        <h3 style={{ fontWeight: 400, fontSize: 17, color: '#d4d4d4', marginBottom: 16 }}>
-          Your options
-        </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 560 }}>
+        {/* Right column */}
+        <div style={{ flex: 1, minWidth: 280 }}>
+          <h3 style={{ fontWeight: 400, fontSize: 17, color: '#d4d4d4', marginBottom: 16 }}>
+            Your options
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
             <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Mark as "Unofficial"</div>
             <div style={{ color: '#777', fontSize: 13 }}>
@@ -155,6 +158,7 @@ export default function ChannelOwnersPage() {
               name, image, and followers. If this is something you'd use,
               let us know in the form below and we'll prioritize building it.
             </div>
+          </div>
           </div>
         </div>
       </div>
