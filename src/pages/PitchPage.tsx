@@ -186,7 +186,7 @@ export default function PitchPage() {
         }
       </p>
 
-      <form onSubmit={handleAnalyze} style={{ display: 'flex', gap: 10, marginBottom: 30 }}>
+      <form onSubmit={handleAnalyze} style={{ display: 'flex', gap: 10, marginBottom: 30, flexWrap: 'wrap' }}>
         <TextField
           fullWidth variant="outlined" size="small"
           placeholder="https://open.spotify.com/track/..."
@@ -210,7 +210,7 @@ export default function PitchPage() {
       {result && !success && (
         <>
           {/* Track card */}
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: 20, background: '#262626', borderRadius: 8, marginBottom: 30 }}>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: 20, background: '#262626', borderRadius: 8, marginBottom: 30, flexWrap: 'wrap' }}>
             {result.track.image && (
               <img src={result.track.image} alt={result.track.name} style={{ width: 80, height: 80, borderRadius: 4, filter: 'none' }} />
             )}
@@ -236,7 +236,7 @@ export default function PitchPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 30 }}>
                 {result.matches.map(match => (
                   <div key={match.channel_id} style={{
-                    display: 'flex', alignItems: 'center', gap: 15, padding: 15,
+                    display: 'flex', alignItems: 'center', gap: 15, padding: 15, flexWrap: 'wrap',
                     border: '1px solid #333', borderRadius: 8, background: '#222',
                   }}>
                     {match.thumbnail && (
@@ -270,7 +270,7 @@ export default function PitchPage() {
                 padding: 24, background: 'linear-gradient(135deg, #1a2a1a 0%, #1a1a2a 100%)',
                 border: '1px solid #2a3a2a', borderRadius: 10, marginBottom: 30,
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: BETA_FREE ? 0 : 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: BETA_FREE ? 0 : 16, flexWrap: 'wrap', gap: 12 }}>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 16, color: '#e0e0e0' }}>
                       Submit to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''}

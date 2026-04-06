@@ -213,7 +213,7 @@ export default function CuratorInboxPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {submissions.map(sub => (
             <div key={sub.submission_id} style={{
-              display: 'flex', alignItems: 'center', gap: 15, padding: 15,
+              display: 'flex', alignItems: 'center', gap: 15, padding: 15, flexWrap: 'wrap',
               border: '1px solid #333', borderRadius: 8, background: '#222',
             }}>
               {sub.track_image && (

@@ -79,9 +79,9 @@ export default function ChannelOwnersPage() {
 
       <h2 style={{ fontWeight: 400, marginBottom: 24 }}>For channel owners</h2>
 
-      <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', marginBottom: 32 }}>
+      <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', marginBottom: 32 }}>
         {/* Left column */}
-        <div style={{ flex: 1, minWidth: 280 }}>
+        <div style={{ flex: '1 1 300px' }}>
           <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7, margin: '0 0 24px' }}>
             Mirror.FM automatically creates Spotify playlists that stay in sync
             with YouTube music channels. We do this so listeners can enjoy
@@ -114,49 +114,38 @@ export default function ChannelOwnersPage() {
         </div>
 
         {/* Right column */}
-        <div style={{ flex: 1, minWidth: 280 }}>
+        <div style={{ flex: '1 1 280px' }}>
           <h3 style={{ fontWeight: 400, fontSize: 17, color: '#d4d4d4', marginBottom: 16 }}>
             Your options
           </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
-            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Mark as "Unofficial"</div>
-            <div style={{ color: '#777', fontSize: 13 }}>
-              We add "(Unofficial)" to the playlist title so it's clear
-              this is an automated mirror, not your official playlist.
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ padding: '10px 12px', border: '1px solid #333', borderRadius: 6 }}>
+            <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 13 }}>Mark as "Unofficial"</div>
+            <div style={{ color: '#777', fontSize: 12 }}>Add "(Unofficial)" to the playlist title.</div>
+          </div>
+          <div style={{ padding: '10px 12px', border: '1px solid #333', borderRadius: 6 }}>
+            <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 13 }}>Remove thumbnail</div>
+            <div style={{ color: '#777', fontSize: 12 }}>Replace your thumbnail with a generic one.</div>
+          </div>
+          <div style={{ padding: '10px 12px', border: '1px solid #333', borderRadius: 6 }}>
+            <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 13 }}>Make private</div>
+            <div style={{ color: '#777', fontSize: 12 }}>Hidden from search. Existing followers keep access.</div>
+          </div>
+          <div style={{ padding: '10px 12px', border: '1px solid #2a3a2a', borderRadius: 6, background: '#1a2a1a' }}>
+            <div style={{ color: '#1DB954', fontWeight: 500, fontSize: 13 }}>Take ownership (recommended)</div>
+            <div style={{ color: '#777', fontSize: 12 }}>
+              Claim your channel, receive artist submissions, free sync.{' '}
+              <Link to="/inbox/" style={{ color: '#1DB954' }}>Curator dashboard</Link>
             </div>
           </div>
-          <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
-            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Remove thumbnail</div>
-            <div style={{ color: '#777', fontSize: 13 }}>
-              We replace your channel's thumbnail with a generic one.
+          <div style={{ padding: '10px 12px', border: '1px dashed #444', borderRadius: 6 }}>
+            <div style={{ color: '#999', fontWeight: 500, fontSize: 13 }}>
+              Playlist on your own account
+              <span style={{ fontSize: 10, color: '#666', marginLeft: 6, fontWeight: 400 }}>Gauging interest</span>
             </div>
-          </div>
-          <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
-            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Make private</div>
-            <div style={{ color: '#777', fontSize: 13 }}>
-              The playlist is hidden from search. Existing followers keep access
-              but new listeners won't find it.
-            </div>
-          </div>
-          <div style={{ padding: 16, border: '1px solid #2a3a2a', borderRadius: 8, background: '#1a2a1a' }}>
-            <div style={{ color: '#1DB954', fontWeight: 500, marginBottom: 4 }}>Take ownership (recommended)</div>
-            <div style={{ color: '#777', fontSize: 13 }}>
-              Claim your channel on Mirror.FM, receive artist submissions,
-              and let us keep the playlist synced for you — for free.{' '}
-              <Link to="/inbox/" style={{ color: '#1DB954' }}>Go to curator dashboard</Link>
-            </div>
-          </div>
-          <div style={{ padding: 16, border: '1px dashed #444', borderRadius: 8 }}>
-            <div style={{ color: '#999', fontWeight: 500, marginBottom: 4 }}>
-              Playlist on your own Spotify account
-              <span style={{ fontSize: 11, color: '#666', marginLeft: 8, fontWeight: 400 }}>Gauging interest</span>
-            </div>
-            <div style={{ color: '#666', fontSize: 13, lineHeight: 1.5 }}>
-              We're exploring a feature where you connect your Spotify account
-              and we sync directly to a playlist you own — full control over
-              name, image, and followers. If this is something you'd use,
-              let us know in the form below and we'll prioritize building it.
+            <div style={{ color: '#666', fontSize: 12 }}>
+              Connect your Spotify, we sync to a playlist you own.
+              Let us know below if you'd use this.
             </div>
           </div>
           </div>
