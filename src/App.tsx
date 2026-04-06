@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage'
 import SubmitPage from './pages/SubmitPage'
 import LoginPage from './pages/LoginPage'
 import TakedownPage from './pages/TakedownPage'
+import GenresPage from './pages/GenresPage'
 import ChannelOwnersPage from './pages/ChannelOwnersPage'
 import ReportPage from './pages/ReportPage'
 import PitchPage from './pages/PitchPage'
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="/about2/" element={<TakedownPage />} />
           <Route path="/owners/" element={<ChannelOwnersPage />} />
           <Route path="/report/" element={<ReportPage />} />
+          <Route path="/genres/" element={<GenresPage />} />
           <Route path="/pitch/" element={<PitchPage />} />
           <Route path="/inbox/" element={<CuratorInboxPage />} />
         </>}

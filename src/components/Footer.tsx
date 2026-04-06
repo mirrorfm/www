@@ -34,6 +34,7 @@ export default function Footer({ children }: FooterProps) {
             <Link to="/inbox/" style={{ color: '#1DB954' }}>Inbox</Link>
             <Link to="/owners/" style={{ color: '#1DB954' }}>Owners</Link>
             <Link to="/report/" style={{ color: '#1DB954' }}>Report</Link>
+            <Link to="/genres/" style={{ color: '#1DB954' }}>Genres</Link>
           </>}
         </div>
         {children && (
