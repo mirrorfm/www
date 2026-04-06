@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
+import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
@@ -11,13 +10,12 @@ import { api } from '../config'
 import { useAuth } from '../lib/auth'
 import { signInWithYouTubeScope } from '../lib/firebase'
 
-type RequestType = 'unofficial' | 'remove_thumbnail' | 'takedown' | 'other'
-
 export default function ChannelOwnersPage() {
   const { user } = useAuth()
   const [step, setStep] = useState<'info' | 'form' | 'verify' | 'done'>('info')
-  const [requestType, setRequestType] = useState<RequestType>('unofficial')
+  const [checks, setChecks] = useState({ unofficial: false, remove_thumbnail: false, make_private: false, own_account: false })
   const [channelUrl, setChannelUrl] = useState('')
+  const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [verifiedChannel, setVerifiedChannel] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -45,10 +43,11 @@ export default function ChannelOwnersPage() {
     setLoading(true)
     setError(null)
     try {
+      const selected = Object.entries(checks).filter(([, v]) => v).map(([k]) => k).join(', ')
       await api.post('takedown', {
         channel_url: channelUrl.trim(),
-        email: user?.email || '',
-        message: `[${requestType}] ${message}`.trim(),
+        email: email.trim() || user?.email || '',
+        message: `[${selected || 'other'}] ${message}`.trim(),
       })
       setStep('done')
     } catch {
@@ -118,24 +117,23 @@ export default function ChannelOwnersPage() {
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 560 }}>
           <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
-            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Keep the playlist, add "Unofficial"</div>
+            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Mark as "Unofficial"</div>
             <div style={{ color: '#777', fontSize: 13 }}>
-              We add "(Unofficial)" to the playlist title and remove any channel
-              branding. Your listeners keep access to the Spotify mirror.
+              We add "(Unofficial)" to the playlist title so it's clear
+              this is an automated mirror, not your official playlist.
             </div>
           </div>
           <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
-            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Remove channel thumbnail only</div>
+            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Remove thumbnail</div>
             <div style={{ color: '#777', fontSize: 13 }}>
-              We replace your proprietary thumbnail with a generic one.
-              Playlist stays as-is otherwise.
+              We replace your channel's thumbnail with a generic one.
             </div>
           </div>
           <div style={{ padding: 16, border: '1px solid #333', borderRadius: 8 }}>
-            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Full removal</div>
+            <div style={{ color: '#d4d4d4', fontWeight: 500, marginBottom: 4 }}>Make private</div>
             <div style={{ color: '#777', fontSize: 13 }}>
-              We delete the playlist entirely. Your channel will be removed
-              from our index.
+              The playlist is hidden from search. Existing followers keep access
+              but new listeners won't find it.
             </div>
           </div>
           <div style={{ padding: 16, border: '1px solid #2a3a2a', borderRadius: 8, background: '#1a2a1a' }}>
@@ -144,6 +142,18 @@ export default function ChannelOwnersPage() {
               Claim your channel on Mirror.FM, receive artist submissions,
               and let us keep the playlist synced for you — for free.{' '}
               <Link to="/inbox/" style={{ color: '#1DB954' }}>Go to curator dashboard</Link>
+            </div>
+          </div>
+          <div style={{ padding: 16, border: '1px dashed #444', borderRadius: 8 }}>
+            <div style={{ color: '#999', fontWeight: 500, marginBottom: 4 }}>
+              Playlist on your own Spotify account
+              <span style={{ fontSize: 11, color: '#666', marginLeft: 8, fontWeight: 400 }}>Gauging interest</span>
+            </div>
+            <div style={{ color: '#666', fontSize: 13, lineHeight: 1.5 }}>
+              We're exploring a feature where you connect your Spotify account
+              and we sync directly to a playlist you own — full control over
+              name, image, and followers. If this is something you'd use,
+              let us know in the form below and we'll prioritize building it.
             </div>
           </div>
         </div>
@@ -186,16 +196,20 @@ export default function ChannelOwnersPage() {
             What would you like?
           </h3>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 500 }}>
-            <RadioGroup value={requestType} onChange={e => setRequestType(e.target.value as RequestType)}>
-              <FormControlLabel value="unofficial" control={<Radio sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
+            <div>
+              <FormControlLabel
+                control={<Checkbox checked={checks.unofficial} onChange={e => setChecks(p => ({ ...p, unofficial: e.target.checked }))} sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
                 label={<span style={{ fontSize: 14 }}>Mark as "Unofficial"</span>} />
-              <FormControlLabel value="remove_thumbnail" control={<Radio sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
-                label={<span style={{ fontSize: 14 }}>Remove thumbnail only</span>} />
-              <FormControlLabel value="takedown" control={<Radio sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
-                label={<span style={{ fontSize: 14 }}>Full removal</span>} />
-              <FormControlLabel value="other" control={<Radio sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
-                label={<span style={{ fontSize: 14 }}>Something else</span>} />
-            </RadioGroup>
+              <FormControlLabel
+                control={<Checkbox checked={checks.remove_thumbnail} onChange={e => setChecks(p => ({ ...p, remove_thumbnail: e.target.checked }))} sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
+                label={<span style={{ fontSize: 14 }}>Remove thumbnail</span>} />
+              <FormControlLabel
+                control={<Checkbox checked={checks.make_private} onChange={e => setChecks(p => ({ ...p, make_private: e.target.checked }))} sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
+                label={<span style={{ fontSize: 14 }}>Make private</span>} />
+              <FormControlLabel
+                control={<Checkbox checked={checks.own_account} onChange={e => setChecks(p => ({ ...p, own_account: e.target.checked }))} sx={{ color: '#555', '&.Mui-checked': { color: '#1DB954' } }} />}
+                label={<span style={{ fontSize: 14 }}>I'd like the playlist on my own Spotify account</span>} />
+            </div>
 
             <TextField
               fullWidth variant="outlined" size="small"
@@ -207,8 +221,17 @@ export default function ChannelOwnersPage() {
             />
             <TextField
               fullWidth variant="outlined" size="small"
-              label="Anything else? (optional)"
-              multiline rows={2}
+              label="Your email (optional, for us to reply)"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+            <TextField
+              fullWidth variant="outlined" size="small"
+              label="Comments or questions"
+              multiline rows={3}
+              placeholder="Tell us what you'd like, ask a question, or just say hi."
               value={message}
               onChange={e => setMessage(e.target.value)}
             />
