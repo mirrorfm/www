@@ -49,17 +49,22 @@ export default function GenresPage() {
   const maxWeight = graphData ? Math.max(...graphData.links.map(l => l.weight), 1) : 1
 
   const paintNode = useCallback((node: any, ctx: CanvasRenderingContext2D) => {
-    const size = 3 + (node.count / maxNodeCount) * 12
+    const size = 5
+    const intensity = 0.3 + (node.count / maxNodeCount) * 0.7
+    const r = Math.round(29 * intensity)
+    const g = Math.round(185 * intensity)
+    const b = Math.round(84 * intensity)
+
     ctx.beginPath()
     ctx.arc(node.x, node.y, size, 0, 2 * Math.PI)
-    ctx.fillStyle = '#1DB954'
+    ctx.fillStyle = `rgb(${r},${g},${b})`
     ctx.fill()
 
-    ctx.font = `${Math.max(3, size * 0.7)}px sans-serif`
+    ctx.font = '4px sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillStyle = '#ccc'
-    ctx.fillText(node.id, node.x, node.y + size + 6)
+    ctx.fillStyle = `rgba(200,200,200,${0.5 + intensity * 0.5})`
+    ctx.fillText(node.id, node.x, node.y + 10)
   }, [maxNodeCount])
 
   return (
@@ -96,9 +101,8 @@ export default function GenresPage() {
             backgroundColor="#1a1a1a"
             nodeCanvasObject={paintNode}
             nodePointerAreaPaint={(node: any, color: string, ctx: CanvasRenderingContext2D) => {
-              const size = 3 + (node.count / maxNodeCount) * 12
               ctx.beginPath()
-              ctx.arc(node.x, node.y, size + 4, 0, 2 * Math.PI)
+              ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI)
               ctx.fillStyle = color
               ctx.fill()
             }}
