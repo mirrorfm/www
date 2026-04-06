@@ -103,9 +103,11 @@ export default function GenresPage() {
               ctx.fill()
             }}
             linkColor={() => 'rgba(29, 185, 84, 0.15)'}
-            linkWidth={(link: any) => 0.5 + (link.weight / maxWeight) * 3}
-            d3VelocityDecay={0.3}
-            cooldownTicks={100}
+            linkWidth={(link: any) => 0.5 + (link.weight / maxWeight) * 2}
+            d3VelocityDecay={0.4}
+            d3AlphaDecay={0.02}
+            cooldownTicks={200}
+            onEngineStop={() => graphRef.current?.zoomToFit(400, 40)}
             onNodeClick={(node: any) => {
               if (graphRef.current) {
                 graphRef.current.centerAt(node.x, node.y, 500)
