@@ -132,10 +132,11 @@ export default function ChannelOwnersPage() {
             <div style={{ color: '#777', fontSize: 12 }}>Hidden from search. Existing followers keep access.</div>
           </div>
           <div style={{ padding: '10px 12px', border: '1px solid #2a3a2a', borderRadius: 6, background: '#1a2a1a' }}>
-            <div style={{ color: '#1DB954', fontWeight: 500, fontSize: 13 }}>Take ownership (recommended)</div>
+            <div style={{ color: '#1DB954', fontWeight: 500, fontSize: 13 }}>Partner with us</div>
             <div style={{ color: '#777', fontSize: 12 }}>
-              Claim your channel, receive artist submissions, free sync.{' '}
-              <Link to="/inbox/" style={{ color: '#1DB954' }}>Curator dashboard</Link>
+              Join as a curator — receive artist submissions matched to your genre,
+              free automatic sync.{' '}
+              <Link to="/inbox/" style={{ color: '#1DB954' }}>Get started</Link>
             </div>
           </div>
           <div style={{ padding: '10px 12px', border: '1px dashed #444', borderRadius: 6 }}>
