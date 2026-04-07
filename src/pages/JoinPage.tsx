@@ -570,7 +570,7 @@ function CuratorFlow() {
         const subRes = await api.get('curator/submissions')
         setSubmissions(subRes.data.submissions || [])
       } else {
-        setError('This channel is not tracked by Mirror.FM yet. We\'ll add it soon.')
+        setError('This channel is not in our index yet. Submit it via GitHub first.')
       }
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to claim channel.')
@@ -646,7 +646,7 @@ function CuratorFlow() {
             Select a channel to claim
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
-            {ytChannels.map(ch => (
+            {ytChannels.filter(ch => ch.tracked).map(ch => (
               <button
                 key={ch.channel_id}
                 onClick={() => setSelectedChannelId(ch.channel_id)}
@@ -660,22 +660,39 @@ function CuratorFlow() {
                 {ch.thumbnail && <img src={ch.thumbnail} alt="" style={{ width: 40, height: 40, borderRadius: 4 }} />}
                 <div>
                   <div style={{ color: '#d4d4d4', fontWeight: 600, fontSize: 14 }}>{ch.channel_name}</div>
-                  {ch.tracked
-                    ? <div style={{ color: '#1DB954', fontSize: 12 }}>Tracked by Mirror.FM</div>
-                    : <div style={{ color: '#666', fontSize: 12 }}>Not yet tracked</div>
-                  }
+                  <div style={{ color: '#1DB954', fontSize: 12 }}>Tracked by Mirror.FM</div>
                 </div>
               </button>
             ))}
+            {ytChannels.filter(ch => !ch.tracked).map(ch => (
+              <div
+                key={ch.channel_id}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, padding: 12,
+                  background: '#262626', border: '1px solid #333',
+                  borderRadius: 8, opacity: 0.6,
+                }}
+              >
+                {ch.thumbnail && <img src={ch.thumbnail} alt="" style={{ width: 40, height: 40, borderRadius: 4 }} />}
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#d4d4d4', fontWeight: 600, fontSize: 14 }}>{ch.channel_name}</div>
+                  <div style={{ color: '#666', fontSize: 12 }}>
+                    Not in our index — <a href="https://github.com/mirrorfm/data" target="_blank" rel="noopener noreferrer" style={{ color: '#1DB954' }}>submit it via GitHub</a> first
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <Button
-            variant="contained"
-            disabled={claiming || !selectedChannelId}
-            onClick={handleClaim}
-            sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
-          >
-            {claiming ? 'Claiming...' : 'Claim this channel'}
-          </Button>
+          {ytChannels.some(ch => ch.tracked) && (
+            <Button
+              variant="contained"
+              disabled={claiming || !selectedChannelId}
+              onClick={handleClaim}
+              sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
+            >
+              {claiming ? 'Claiming...' : 'Claim this channel'}
+            </Button>
+          )}
           {error && <p style={{ color: '#d32f2f', fontSize: 13, marginTop: 12, marginBottom: 0 }}>{error}</p>}
         </div>
       )}
@@ -684,6 +701,9 @@ function CuratorFlow() {
       {ytChannels && ytChannels.length === 0 && (
         <div style={{ padding: 20, background: '#2e2a1a', borderRadius: 8, marginBottom: 24 }}>
           <p style={{ margin: 0, fontSize: 15 }}>No YouTube channels found for this Google account.</p>
+          <p style={{ margin: '8px 0 0', color: '#888', fontSize: 13 }}>
+            This feature is for YouTube channel owners. Make sure you're signed in with the Google account linked to your channel.
+          </p>
         </div>
       )}
 
