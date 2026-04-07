@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -471,6 +471,8 @@ function CuratorFlow() {
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null)
   const [claiming, setClaiming] = useState(false)
 
+  const verifyTriggered = useRef(false)
+
   useEffect(() => {
     api.get('curator/channels')
       .then(({ data }) => {
@@ -486,6 +488,14 @@ function CuratorFlow() {
       .catch(() => {})
       .finally(() => setLoadingChannels(false))
   }, [])
+
+  // Auto-trigger YouTube OAuth when curator has no claimed channels
+  useEffect(() => {
+    if (!loadingChannels && channels.length === 0 && !ytChannels && !verifyTriggered.current) {
+      verifyTriggered.current = true
+      handleVerify()
+    }
+  }, [loadingChannels, channels.length])
 
   // Step 1: Get YouTube access token and fetch channel list
   const handleVerify = async () => {
@@ -587,28 +597,26 @@ function CuratorFlow() {
 
   return (
     <>
-      {/* Step 1: Connect YouTube */}
+      {/* Step 1: Verifying YouTube account (auto-triggered) */}
       {!loadingChannels && channels.length === 0 && !ytChannels && (
         <div style={{
           padding: 24, background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
           border: '1px solid #333', borderRadius: 10, marginBottom: 30,
         }}>
-          <h3 style={{ margin: '0 0 8px', fontWeight: 500, color: '#e0e0e0', fontSize: 16 }}>
-            Claim your YouTube channel
-          </h3>
-          <p style={{ color: '#888', fontSize: 14, lineHeight: 1.5, margin: '0 0 16px' }}>
-            Connect your YouTube account to verify channel ownership.
-            Once linked, you'll receive track submissions from artists matched to your channel's genres.
-          </p>
-          <Button
-            variant="contained"
-            disabled={verifying}
-            onClick={handleVerify}
-            sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
-          >
-            {verifying ? 'Connecting...' : 'Connect YouTube account'}
-          </Button>
-          {error && <p style={{ color: '#d32f2f', fontSize: 13, marginTop: 12, marginBottom: 0 }}>{error}</p>}
+          {verifying ? (
+            <p style={{ margin: 0, color: '#888', fontSize: 14 }}>Connecting to YouTube...</p>
+          ) : error ? (
+            <>
+              <p style={{ color: '#d32f2f', fontSize: 14, margin: '0 0 12px' }}>{error}</p>
+              <Button
+                variant="contained"
+                onClick={handleVerify}
+                sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
+              >
+                Try again
+              </Button>
+            </>
+          ) : null}
         </div>
       )}
 
