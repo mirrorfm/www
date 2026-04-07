@@ -471,7 +471,7 @@ function CuratorFlow() {
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null)
   const [claiming, setClaiming] = useState(false)
 
-  const verifyTriggered = useRef(false)
+  const autoVerifyDone = useRef(false)
 
   useEffect(() => {
     api.get('curator/channels')
@@ -489,15 +489,18 @@ function CuratorFlow() {
       .finally(() => setLoadingChannels(false))
   }, [])
 
-  // Auto-trigger YouTube OAuth when curator has no claimed channels
+  // Auto-verify ONLY if we have a cached token (no popup). Otherwise show a button.
   useEffect(() => {
-    if (!loadingChannels && channels.length === 0 && !ytChannels && !verifyTriggered.current) {
-      verifyTriggered.current = true
-      handleVerify()
+    if (!loadingChannels && channels.length === 0 && !ytChannels && !autoVerifyDone.current) {
+      autoVerifyDone.current = true
+      const cached = getYouTubeAccessToken()
+      if (cached) {
+        handleVerifySilent(cached)
+      }
     }
   }, [loadingChannels, channels.length])
 
-  // Step 1: Get YouTube access token (cached from sign-in) and fetch channel list
+  // Fetch channel list using a token
   const fetchChannelsWithToken = async (token: string) => {
     const { data } = await api.post('curator/claim', {
       youtube_access_token: token,
@@ -510,11 +513,23 @@ function CuratorFlow() {
     }
   }
 
+  // Silent: try cached token only, no popup
+  const handleVerifySilent = async (token: string) => {
+    setVerifying(true)
+    try {
+      await fetchChannelsWithToken(token)
+    } catch {
+      // Token expired — don't show error, just let the button appear
+    } finally {
+      setVerifying(false)
+    }
+  }
+
+  // Interactive: user clicked the button — try cached first, popup if needed
   const handleVerify = async () => {
     setVerifying(true)
     setError(null)
     try {
-      // Try cached token first (no popup)
       const cached = getYouTubeAccessToken()
       if (cached) {
         try {
@@ -524,7 +539,6 @@ function CuratorFlow() {
           // Token expired, fall through to refresh
         }
       }
-      // Need fresh token (popup)
       const fresh = await refreshYouTubeAccessToken()
       if (!fresh) {
         setError('Failed to get YouTube access. Please try again.')
@@ -594,26 +608,32 @@ function CuratorFlow() {
 
   return (
     <>
-      {/* Step 1: Verifying YouTube account (auto-triggered) */}
+      {/* Step 1: Show channels or prompt to verify */}
       {!loadingChannels && channels.length === 0 && !ytChannels && (
         <div style={{
           padding: 24, background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
           border: '1px solid #333', borderRadius: 10, marginBottom: 30,
         }}>
           {verifying ? (
-            <p style={{ margin: 0, color: '#888', fontSize: 14 }}>Connecting to YouTube...</p>
-          ) : error ? (
+            <p style={{ margin: 0, color: '#888', fontSize: 14 }}>Loading your channels...</p>
+          ) : (
             <>
-              <p style={{ color: '#d32f2f', fontSize: 14, margin: '0 0 12px' }}>{error}</p>
+              <h3 style={{ margin: '0 0 8px', fontWeight: 500, color: '#e0e0e0', fontSize: 16 }}>
+                Claim your YouTube channel
+              </h3>
+              <p style={{ color: '#888', fontSize: 14, lineHeight: 1.5, margin: '0 0 16px' }}>
+                We'll check which YouTube channels are linked to your Google account.
+              </p>
               <Button
                 variant="contained"
                 onClick={handleVerify}
                 sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
               >
-                Try again
+                Show my channels
               </Button>
+              {error && <p style={{ color: '#d32f2f', fontSize: 13, marginTop: 12, marginBottom: 0 }}>{error}</p>}
             </>
-          ) : null}
+          )}
         </div>
       )}
 
