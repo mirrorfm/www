@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import { api } from '../config'
 import { useAuth } from '../lib/auth'
-import { signInWithYouTubeScope } from '../lib/firebase'
+import { refreshYouTubeAccessToken } from '../lib/firebase'
 
 interface CuratorChannel {
   channel_id: string
@@ -62,7 +62,7 @@ export default function CuratorInboxPage() {
     setError(null)
     setClaimResult(null)
     try {
-      const accessToken = await signInWithYouTubeScope()
+      const accessToken = await refreshYouTubeAccessToken()
       if (!accessToken) {
         setError('Failed to get YouTube access. Please try again.')
         setClaiming(false)

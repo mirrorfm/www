@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import { api } from '../config'
 import { useAuth } from '../lib/auth'
-import { signInWithYouTubeScope } from '../lib/firebase'
+import { refreshYouTubeAccessToken } from '../lib/firebase'
 
 export default function ChannelOwnersPage() {
   const { user } = useAuth()
@@ -25,7 +25,7 @@ export default function ChannelOwnersPage() {
     setLoading(true)
     setError(null)
     try {
-      const accessToken = await signInWithYouTubeScope()
+      const accessToken = await refreshYouTubeAccessToken()
       if (accessToken) {
         setVerifiedChannel('verified')
         setStep('form')

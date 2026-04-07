@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import { api } from '../config'
 import { useAuth } from '../lib/auth'
-import { signInWithYouTubeScope } from '../lib/firebase'
+import { getYouTubeAccessToken, refreshYouTubeAccessToken } from '../lib/firebase'
 
 type Role = 'artist' | 'curator'
 
@@ -497,28 +497,40 @@ function CuratorFlow() {
     }
   }, [loadingChannels, channels.length])
 
-  // Step 1: Get YouTube access token and fetch channel list
+  // Step 1: Get YouTube access token (cached from sign-in) and fetch channel list
+  const fetchChannelsWithToken = async (token: string) => {
+    const { data } = await api.post('curator/claim', {
+      youtube_access_token: token,
+      channel_ids: ['__none__'],
+    })
+    setYtAccessToken(token)
+    setYtChannels(data.channels || [])
+    if (data.channels?.length === 1) {
+      setSelectedChannelId(data.channels[0].channel_id)
+    }
+  }
+
   const handleVerify = async () => {
     setVerifying(true)
     setError(null)
     try {
-      const accessToken = await signInWithYouTubeScope()
-      if (!accessToken) {
+      // Try cached token first (no popup)
+      const cached = getYouTubeAccessToken()
+      if (cached) {
+        try {
+          await fetchChannelsWithToken(cached)
+          return
+        } catch {
+          // Token expired, fall through to refresh
+        }
+      }
+      // Need fresh token (popup)
+      const fresh = await refreshYouTubeAccessToken()
+      if (!fresh) {
         setError('Failed to get YouTube access. Please try again.')
-        setVerifying(false)
         return
       }
-      setYtAccessToken(accessToken)
-      // Fetch channels without claiming (send a dummy channel_ids to prevent auto-claim)
-      const { data } = await api.post('curator/claim', {
-        youtube_access_token: accessToken,
-        channel_ids: ['__none__'],
-      })
-      setYtChannels(data.channels || [])
-      // Auto-select if only one channel
-      if (data.channels?.length === 1) {
-        setSelectedChannelId(data.channels[0].channel_id)
-      }
+      await fetchChannelsWithToken(fresh)
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to verify YouTube account.')
     } finally {
@@ -553,27 +565,12 @@ function CuratorFlow() {
     }
   }
 
-  // "Claim another" reuses cached token if available
+  // "Claim another" reuses cached token
   const handleClaimAnother = async () => {
-    if (ytAccessToken) {
-      // Reuse token — skip OAuth popup
-      setError(null)
-      setYtChannels(null)
-      setSelectedChannelId(null)
-      try {
-        const { data } = await api.post('curator/claim', {
-          youtube_access_token: ytAccessToken,
-          channel_ids: ['__none__'],
-        })
-        setYtChannels(data.channels || [])
-      } catch {
-        // Token expired, re-auth
-        setYtAccessToken(null)
-        handleVerify()
-      }
-    } else {
-      handleVerify()
-    }
+    setError(null)
+    setYtChannels(null)
+    setSelectedChannelId(null)
+    handleVerify()
   }
 
   const handleRespond = async (id: string, action: 'accept' | 'reject') => {

@@ -18,17 +18,31 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 
 const googleProvider = new GoogleAuthProvider()
+googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly')
+
+const YT_TOKEN_KEY = 'yt_access_token'
 
 export async function signInWithGoogle() {
-  return signInWithPopup(auth, googleProvider)
+  const result = await signInWithPopup(auth, googleProvider)
+  const credential = GoogleAuthProvider.credentialFromResult(result)
+  if (credential?.accessToken) {
+    sessionStorage.setItem(YT_TOKEN_KEY, credential.accessToken)
+  }
+  return result
 }
 
-export async function signInWithYouTubeScope(): Promise<string | null> {
-  const provider = new GoogleAuthProvider()
-  provider.addScope('https://www.googleapis.com/auth/youtube.readonly')
-  const result = await signInWithPopup(auth, provider)
+export function getYouTubeAccessToken(): string | null {
+  return sessionStorage.getItem(YT_TOKEN_KEY)
+}
+
+export async function refreshYouTubeAccessToken(): Promise<string | null> {
+  const result = await signInWithPopup(auth, googleProvider)
   const credential = GoogleAuthProvider.credentialFromResult(result)
-  return credential?.accessToken ?? null
+  if (credential?.accessToken) {
+    sessionStorage.setItem(YT_TOKEN_KEY, credential.accessToken)
+    return credential.accessToken
+  }
+  return null
 }
 
 export async function signOut() {
