@@ -36,7 +36,13 @@ export function getYouTubeAccessToken(): string | null {
 }
 
 export async function refreshYouTubeAccessToken(): Promise<string | null> {
-  const result = await signInWithPopup(auth, googleProvider)
+  // Skip "Choose an account" screen if already signed in
+  const provider = new GoogleAuthProvider()
+  provider.addScope('https://www.googleapis.com/auth/youtube.readonly')
+  if (auth.currentUser?.email) {
+    provider.setCustomParameters({ login_hint: auth.currentUser.email })
+  }
+  const result = await signInWithPopup(auth, provider)
   const credential = GoogleAuthProvider.credentialFromResult(result)
   if (credential?.accessToken) {
     sessionStorage.setItem(YT_TOKEN_KEY, credential.accessToken)
