@@ -15,6 +15,7 @@ import ChannelOwnersPage from './pages/ChannelOwnersPage'
 import ReportPage from './pages/ReportPage'
 import PitchPage from './pages/PitchPage'
 import CuratorInboxPage from './pages/CuratorInboxPage'
+import JoinPage from './pages/JoinPage'
 import LogsPage from './pages/LogsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import Modal from './components/Modal'
@@ -60,11 +61,12 @@ export default function App() {
         {pre && <>
           <Route path="/signin/" element={<LoginPage />} />
           <Route path="/about2/" element={<TakedownPage />} />
-          <Route path="/owners/" element={<ChannelOwnersPage />} />
+          <Route path="/owners/" element={<Navigate to="/join/?as=curator" replace />} />
           <Route path="/report/" element={<ReportPage />} />
           <Route path="/genres/" element={<GenresPage />} />
-          <Route path="/pitch/" element={<PitchPage />} />
-          <Route path="/inbox/" element={<CuratorInboxPage />} />
+          <Route path="/join/" element={<JoinPage />} />
+          <Route path="/pitch/" element={<Navigate to="/join/?as=artist" replace />} />
+          <Route path="/inbox/" element={<Navigate to="/join/?as=curator" replace />} />
         </>}
         <Route path="/logs/" element={<LogsPage />} />
         <Route path="*" element={<NotFoundPage />} />
