@@ -70,30 +70,12 @@ export default function MarketplaceBanner() {
       </div>
 
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        {user ? (
-          <>
-            <Link to="/join/?as=artist" style={{
-              background: '#1DB954', color: 'white', padding: '8px 20px',
-              borderRadius: 4, textDecoration: 'none', fontSize: 14,
-            }}>
-              Submit a track
-            </Link>
-            <Link to="/join/?as=curator" style={{
-              background: 'none', color: '#ccc', padding: '8px 20px',
-              borderRadius: 4, textDecoration: 'none', fontSize: 14,
-              border: '1px solid #555',
-            }}>
-              Claim your channel
-            </Link>
-          </>
-        ) : (
-          <Link to="/signin/" style={{
-            background: '#1DB954', color: 'white', padding: '8px 20px',
-            borderRadius: 4, textDecoration: 'none', fontSize: 14,
-          }}>
-            Sign in to get started
-          </Link>
-        )}
+        <Link to={user ? "/join/" : "/signin/"} style={{
+          background: '#1DB954', color: 'white', padding: '8px 20px',
+          borderRadius: 4, textDecoration: 'none', fontSize: 14,
+        }}>
+          Get started
+        </Link>
       </div>
     </div>
   )

@@ -30,8 +30,7 @@ export default function Footer({ children }: FooterProps) {
           <Link to="/about/">About</Link>
           <Link to="/logs/">Event logs</Link>
           {isPrerelease() && <>
-            <Link to="/join/?as=artist" style={{ color: '#1DB954' }}>Artists</Link>
-            <Link to="/join/?as=curator" style={{ color: '#1DB954' }}>Curators</Link>
+            <Link to="/join/" style={{ color: '#1DB954' }}>Join</Link>
             <Link to="/report/" style={{ color: '#1DB954' }}>Report</Link>
             <Link to="/genres/" style={{ color: '#1DB954' }}>Genres</Link>
           </>}
