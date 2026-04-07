@@ -26,6 +26,7 @@ export default function Header({ toolbar }: HeaderProps) {
         padding: '0px 1.0875rem',
         display: 'flex',
         alignItems: 'center',
+        position: 'relative' as const,
         width: '100%',
         minHeight: 60,
         gap: 12,
@@ -43,14 +44,16 @@ export default function Header({ toolbar }: HeaderProps) {
           </>
         ) : (
           <>
-            <Link to="/browse/" style={{ color: '#999', textDecoration: 'none', fontSize: 14, flexShrink: 0 }}>Browse</Link>
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-              <Link to="/" style={{ color: '#d4d4d4', textDecoration: 'none' }}>
-                <img width="60" alt="Mirror.FM logo" src={logo} />
-              </Link>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <Link to="/browse/" style={{ color: '#999', textDecoration: 'none', fontSize: 14 }}>Browse</Link>
             </div>
-            <Link to="/submit/" style={{ color: '#999', textDecoration: 'none', fontSize: 14, flexShrink: 0 }}>Submit</Link>
-            {isPrerelease() && <AuthStatus />}
+            <Link to="/" style={{ color: '#d4d4d4', textDecoration: 'none', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+              <img width="60" alt="Mirror.FM logo" src={logo} />
+            </Link>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
+              <Link to="/submit/" style={{ color: '#999', textDecoration: 'none', fontSize: 14 }}>Submit</Link>
+              {isPrerelease() && <AuthStatus />}
+            </div>
           </>
         )}
       </div>

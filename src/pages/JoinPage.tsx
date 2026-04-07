@@ -461,10 +461,15 @@ function CuratorFlow() {
   const [submissions, setSubmissions] = useState<CuratorSubmission[]>([])
   const [loadingChannels, setLoadingChannels] = useState(true)
   const [loadingSubmissions, setLoadingSubmissions] = useState(false)
-  const [claiming, setClaiming] = useState(false)
-  const [claimResult, setClaimResult] = useState<{ channels: CuratorChannel[], linked: number } | null>(null)
   const [responding, setResponding] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  // Two-step claim: first verify (get token + list), then pick channel
+  const [ytAccessToken, setYtAccessToken] = useState<string | null>(null)
+  const [verifying, setVerifying] = useState(false)
+  const [ytChannels, setYtChannels] = useState<CuratorChannel[] | null>(null)
+  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null)
+  const [claiming, setClaiming] = useState(false)
 
   useEffect(() => {
     api.get('curator/channels')
@@ -482,29 +487,82 @@ function CuratorFlow() {
       .finally(() => setLoadingChannels(false))
   }, [])
 
-  const handleClaim = async () => {
-    setClaiming(true)
+  // Step 1: Get YouTube access token and fetch channel list
+  const handleVerify = async () => {
+    setVerifying(true)
     setError(null)
-    setClaimResult(null)
     try {
       const accessToken = await signInWithYouTubeScope()
       if (!accessToken) {
         setError('Failed to get YouTube access. Please try again.')
-        setClaiming(false)
+        setVerifying(false)
         return
       }
-      const { data } = await api.post('curator/claim', { youtube_access_token: accessToken })
-      setClaimResult(data)
-      if (data.linked > 0) {
-        const chRes = await api.get('curator/channels')
-        setChannels(chRes.data.channels || [])
-        const subRes = await api.get('curator/submissions')
-        setSubmissions(subRes.data.submissions || [])
+      setYtAccessToken(accessToken)
+      // Fetch channels without claiming (send a dummy channel_ids to prevent auto-claim)
+      const { data } = await api.post('curator/claim', {
+        youtube_access_token: accessToken,
+        channel_ids: ['__none__'],
+      })
+      setYtChannels(data.channels || [])
+      // Auto-select if only one channel
+      if (data.channels?.length === 1) {
+        setSelectedChannelId(data.channels[0].channel_id)
       }
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to verify YouTube account.')
     } finally {
+      setVerifying(false)
+    }
+  }
+
+  // Step 2: Claim selected channel
+  const handleClaim = async () => {
+    if (!ytAccessToken || !selectedChannelId) return
+    setClaiming(true)
+    setError(null)
+    try {
+      const { data } = await api.post('curator/claim', {
+        youtube_access_token: ytAccessToken,
+        channel_ids: [selectedChannelId],
+      })
+      if (data.linked > 0) {
+        setYtChannels(null)
+        setSelectedChannelId(null)
+        const chRes = await api.get('curator/channels')
+        setChannels(chRes.data.channels || [])
+        const subRes = await api.get('curator/submissions')
+        setSubmissions(subRes.data.submissions || [])
+      } else {
+        setError('This channel is not tracked by Mirror.FM yet. We\'ll add it soon.')
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to claim channel.')
+    } finally {
       setClaiming(false)
+    }
+  }
+
+  // "Claim another" reuses cached token if available
+  const handleClaimAnother = async () => {
+    if (ytAccessToken) {
+      // Reuse token — skip OAuth popup
+      setError(null)
+      setYtChannels(null)
+      setSelectedChannelId(null)
+      try {
+        const { data } = await api.post('curator/claim', {
+          youtube_access_token: ytAccessToken,
+          channel_ids: ['__none__'],
+        })
+        setYtChannels(data.channels || [])
+      } catch {
+        // Token expired, re-auth
+        setYtAccessToken(null)
+        handleVerify()
+      }
+    } else {
+      handleVerify()
     }
   }
 
@@ -529,8 +587,8 @@ function CuratorFlow() {
 
   return (
     <>
-      {/* Channel claim section */}
-      {!loadingChannels && channels.length === 0 && !claimResult && (
+      {/* Step 1: Connect YouTube */}
+      {!loadingChannels && channels.length === 0 && !ytChannels && (
         <div style={{
           padding: 24, background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
           border: '1px solid #333', borderRadius: 10, marginBottom: 30,
@@ -544,42 +602,63 @@ function CuratorFlow() {
           </p>
           <Button
             variant="contained"
-            disabled={claiming}
-            onClick={handleClaim}
+            disabled={verifying}
+            onClick={handleVerify}
             sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
           >
-            {claiming ? 'Connecting...' : 'Connect YouTube account'}
+            {verifying ? 'Connecting...' : 'Connect YouTube account'}
           </Button>
           {error && <p style={{ color: '#d32f2f', fontSize: 13, marginTop: 12, marginBottom: 0 }}>{error}</p>}
         </div>
       )}
 
-      {/* Claim result */}
-      {claimResult && (
+      {/* Step 2: Pick a channel */}
+      {ytChannels && ytChannels.length > 0 && (
         <div style={{
-          padding: 20, background: claimResult.linked > 0 ? '#1a2e1a' : '#2e2a1a',
-          borderRadius: 8, marginBottom: 24,
+          padding: 24, border: '1px solid #333', borderRadius: 10, marginBottom: 30,
         }}>
-          {claimResult.linked > 0 ? (
-            <p style={{ margin: 0, fontSize: 15 }}>
-              {claimResult.linked} channel{claimResult.linked !== 1 ? 's' : ''} linked! Track submissions will appear below.
-            </p>
-          ) : (
-            <div>
-              <p style={{ margin: '0 0 8px', fontSize: 15 }}>
-                We found your channel{claimResult.channels.length !== 1 ? 's' : ''} but {claimResult.channels.length === 1 ? "it's" : "they're"} not tracked by Mirror.FM yet.
-              </p>
-              {claimResult.channels.map(ch => (
-                <div key={ch.channel_id} style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
-                  {ch.thumbnail && <img src={ch.thumbnail} alt="" style={{ width: 32, height: 32, borderRadius: 4 }} />}
-                  <span style={{ color: '#ccc' }}>{ch.channel_name}</span>
+          <h3 style={{ margin: '0 0 12px', fontWeight: 500, color: '#e0e0e0', fontSize: 16 }}>
+            Select a channel to claim
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+            {ytChannels.map(ch => (
+              <button
+                key={ch.channel_id}
+                onClick={() => setSelectedChannelId(ch.channel_id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, padding: 12,
+                  background: selectedChannelId === ch.channel_id ? '#1a2e1a' : '#262626',
+                  border: selectedChannelId === ch.channel_id ? '2px solid #1DB954' : '1px solid #333',
+                  borderRadius: 8, cursor: 'pointer', textAlign: 'left', width: '100%',
+                }}
+              >
+                {ch.thumbnail && <img src={ch.thumbnail} alt="" style={{ width: 40, height: 40, borderRadius: 4 }} />}
+                <div>
+                  <div style={{ color: '#d4d4d4', fontWeight: 600, fontSize: 14 }}>{ch.channel_name}</div>
+                  {ch.tracked
+                    ? <div style={{ color: '#1DB954', fontSize: 12 }}>Tracked by Mirror.FM</div>
+                    : <div style={{ color: '#666', fontSize: 12 }}>Not yet tracked</div>
+                  }
                 </div>
-              ))}
-              <p style={{ margin: '12px 0 0', color: '#888', fontSize: 13 }}>
-                We'll add your channel to our index soon. You'll be notified when it's ready.
-              </p>
-            </div>
-          )}
+              </button>
+            ))}
+          </div>
+          <Button
+            variant="contained"
+            disabled={claiming || !selectedChannelId}
+            onClick={handleClaim}
+            sx={{ backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' }, textTransform: 'none' }}
+          >
+            {claiming ? 'Claiming...' : 'Claim this channel'}
+          </Button>
+          {error && <p style={{ color: '#d32f2f', fontSize: 13, marginTop: 12, marginBottom: 0 }}>{error}</p>}
+        </div>
+      )}
+
+      {/* No channels found */}
+      {ytChannels && ytChannels.length === 0 && (
+        <div style={{ padding: 20, background: '#2e2a1a', borderRadius: 8, marginBottom: 24 }}>
+          <p style={{ margin: 0, fontSize: 15 }}>No YouTube channels found for this Google account.</p>
         </div>
       )}
 
@@ -599,8 +678,8 @@ function CuratorFlow() {
           </div>
           <Button
             size="small"
-            onClick={handleClaim}
-            disabled={claiming}
+            onClick={handleClaimAnother}
+            disabled={verifying}
             sx={{ color: '#888', textTransform: 'none', fontSize: 12 }}
           >
             + Claim another channel
