@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Checkbox from '@mui/material/Checkbox'
+import Autocomplete from '@mui/material/Autocomplete'
 import { Grid as GridLoader } from 'react-loader-spinner'
 import { NumericFormat } from 'react-number-format'
+import SearchIcon from '@mui/icons-material/Search'
 
 import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
@@ -40,6 +42,7 @@ interface ChannelMatch {
 interface AnalyzeResponse {
   track: TrackInfo
   matches: ChannelMatch[]
+  genre_source?: string
 }
 
 export default function SubmitPage() {
@@ -53,6 +56,17 @@ export default function SubmitPage() {
   const [interestSubmitted, setInterestSubmitted] = useState(false)
   const [interestError, setInterestError] = useState<string | null>(null)
 
+  // Genre editing state
+  const [allGenres, setAllGenres] = useState<string[]>([])
+  const [editedGenres, setEditedGenres] = useState<string[]>([])
+  const [genresModified, setGenresModified] = useState(false)
+
+  useEffect(() => {
+    api.get('genres')
+      .then(({ data }) => setAllGenres((data.genres || []).map((g: Genre) => g.name)))
+      .catch(() => {})
+  }, [])
+
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!url.trim()) return
@@ -62,13 +76,39 @@ export default function SubmitPage() {
     setResult(null)
     setSelectedChannels(new Set())
     setInterestSubmitted(false)
+    setGenresModified(false)
 
     try {
       const { data } = await api.post('submit/analyze', { url: url.trim() })
       setResult(data)
+      setEditedGenres(data.track.genres || [])
     } catch (err: any) {
       const msg = err.response?.data?.error || 'Something went wrong. Please try again.'
       setError(msg)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGenreChange = (newGenres: string[]) => {
+    const capped = newGenres.slice(0, 3)
+    setEditedGenres(capped)
+    const original = result?.track.genres || []
+    const changed = capped.length !== original.length || capped.some((g, i) => g !== original[i])
+    setGenresModified(changed)
+  }
+
+  const handleUpdateMatches = async () => {
+    if (editedGenres.length === 0) return
+    setLoading(true)
+    setError(null)
+    setGenresModified(false)
+    try {
+      const { data } = await api.post('submit/analyze', { url: url.trim(), genres: editedGenres })
+      setResult(data)
+      setEditedGenres(data.track.genres || [])
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Something went wrong.')
     } finally {
       setLoading(false)
     }
@@ -170,15 +210,52 @@ export default function SubmitPage() {
                 style={{ width: 80, height: 80, borderRadius: 4, filter: 'none' }}
               />
             )}
-            <div>
+            <div style={{ flex: 1, minWidth: 240 }}>
               <div style={{ fontWeight: 700, fontSize: 18 }}>{result.track.name}</div>
               <div style={{ color: '#666', marginBottom: 8 }}>{result.track.artist}</div>
-              <div>
-                {(result.track.genres || []).map(g => (
-                  <Chip key={g} size="small" label={g} className="chip-mui-selected" sx={{ mr: 0.5, mb: 0.5 }} />
-                ))}
-                {(!result.track.genres || result.track.genres.length === 0) && (
-                  <span style={{ color: '#999', fontSize: 14 }}>No genre data available on Spotify for this artist</span>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <Autocomplete
+                  multiple
+                  freeSolo={false as any}
+                  options={allGenres.filter(g => !editedGenres.includes(g))}
+                  value={editedGenres}
+                  onChange={(_, value) => handleGenreChange(value)}
+                  getOptionDisabled={() => editedGenres.length >= 3}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small"
+                      placeholder={editedGenres.length === 0 ? 'Pick up to 3 genres...' : editedGenres.length < 3 ? 'Add genre...' : ''}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
+                  )}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip {...getTagProps({ index })} key={option} size="small" label={option} className="chip-mui-selected" />
+                    ))
+                  }
+                  sx={{ flex: 1, minWidth: 200 }}
+                  size="small"
+                />
+                {genresModified && (
+                  <Button
+                    variant="contained"
+                    disabled={editedGenres.length === 0 || loading}
+                    onClick={handleUpdateMatches}
+                    startIcon={<SearchIcon />}
+                    sx={{
+                      backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' },
+                      textTransform: 'none', borderRadius: '8px', fontWeight: 600, whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                    }}
+                  >
+                    Update matches
+                  </Button>
+                )}
+              </div>
+              <div style={{ fontSize: 11, marginTop: 6, color: editedGenres.length === 0 ? '#d32f2f' : '#888' }}>
+                {editedGenres.length === 0 && 'Select at least 1 genre (up to 3 recommended) to find matching channels.'}
+                {editedGenres.length === 1 && 'Add up to 2 more genres for better matches.'}
+                {editedGenres.length === 2 && 'You can add 1 more genre.'}
+                {result.genre_source === 'related' && !genresModified && editedGenres.length > 0 && (
+                  <span style={{ fontStyle: 'italic' }}> Genres detected via similar artists.</span>
                 )}
               </div>
             </div>
@@ -329,11 +406,14 @@ export default function SubmitPage() {
             </>
           ) : (
             <div style={{ textAlign: 'center', padding: 30, color: '#666' }}>
-              <p>No matching channels found for this track's genres.</p>
-              <p style={{ fontSize: 14 }}>
-                This can happen if the artist has no genre data on Spotify,
-                or if their genres don't overlap with any of our indexed channels.
+              <p>
+                {editedGenres.length === 0
+                  ? 'No genres found — pick genres above to find matching channels.'
+                  : 'No matching channels found for these genres.'}
               </p>
+              {editedGenres.length > 0 && (
+                <p style={{ fontSize: 14 }}>Try different genres above, or check back as we add more channels.</p>
+              )}
             </div>
           )}
         </>

@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import { Grid as GridLoader } from 'react-loader-spinner'
 import { NumericFormat } from 'react-number-format'
+import Autocomplete from '@mui/material/Autocomplete'
 import MusicNoteIcon from '@mui/icons-material/MusicNote'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import SearchIcon from '@mui/icons-material/Search'
@@ -51,6 +52,8 @@ interface ChannelMatch {
 interface AnalyzeResponse {
   track: TrackInfo
   matches: ChannelMatch[]
+  genre_source?: string
+  all_artist_genres?: string[]
 }
 
 interface Submission {
@@ -300,6 +303,11 @@ function ArtistFlow() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loadingHistory, setLoadingHistory] = useState(true)
 
+  // Genre editing state
+  const [allGenres, setAllGenres] = useState<string[]>([])
+  const [editedGenres, setEditedGenres] = useState<string[]>([])
+  const [genresModified, setGenresModified] = useState(false)
+
   const params = new URLSearchParams(window.location.search)
   const sessionId = params.get('session_id')
   const [success, setSuccess] = useState(params.get('success') === 'true')
@@ -310,6 +318,13 @@ function ArtistFlow() {
       .then(({ data }) => setSubmissions(data.submissions || []))
       .catch(() => {})
       .finally(() => setLoadingHistory(false))
+  }, [])
+
+  // Fetch genre list for autocomplete
+  useEffect(() => {
+    api.get('genres')
+      .then(({ data }) => setAllGenres((data.genres || []).map((g: Genre) => g.name)))
+      .catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -325,9 +340,35 @@ function ArtistFlow() {
     setLoading(true)
     setError(null)
     setResult(null)
+    setGenresModified(false)
     try {
       const { data } = await api.post('submit/analyze', { url: url.trim() })
       setResult(data)
+      setEditedGenres(data.track.genres || [])
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Something went wrong.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGenreChange = (newGenres: string[]) => {
+    const capped = newGenres.slice(0, 3)
+    setEditedGenres(capped)
+    const original = result?.track.genres || []
+    const changed = capped.length !== original.length || capped.some((g, i) => g !== original[i])
+    setGenresModified(changed)
+  }
+
+  const handleUpdateMatches = async () => {
+    if (editedGenres.length === 0) return
+    setLoading(true)
+    setError(null)
+    setGenresModified(false)
+    try {
+      const { data } = await api.post('submit/analyze', { url: url.trim(), genres: editedGenres })
+      setResult(data)
+      setEditedGenres(data.track.genres || [])
     } catch (err: any) {
       setError(err.response?.data?.error || 'Something went wrong.')
     } finally {
@@ -453,7 +494,7 @@ function ArtistFlow() {
         <>
           {/* Track card */}
           <div style={{
-            display: 'flex', gap: 20, alignItems: 'center', padding: 20,
+            display: 'flex', gap: 20, alignItems: 'flex-start', padding: 20,
             background: 'linear-gradient(135deg, #262626, #2a2a2a)',
             borderRadius: 10, marginBottom: 28, flexWrap: 'wrap',
             border: '1px solid #333',
@@ -462,13 +503,56 @@ function ArtistFlow() {
               <img src={result.track.image} alt={result.track.name}
                 style={{ width: 88, height: 88, borderRadius: 6, filter: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.4)' }} />
             )}
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, minWidth: 240 }}>
               <div style={{ fontWeight: 700, fontSize: 19, marginBottom: 2 }}>{result.track.name}</div>
-              <div style={{ color: '#999', marginBottom: 10, fontSize: 14 }}>{result.track.artist}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                {(result.track.genres || []).map(g => (
-                  <Chip key={g} size="small" label={g} className="chip-mui-selected" sx={{ mr: 0.5, mb: 0.5 }} />
-                ))}
+              <div style={{ color: '#999', marginBottom: 12, fontSize: 14 }}>{result.track.artist}</div>
+
+              {/* Editable genre selector */}
+              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <Autocomplete
+                  multiple
+                  freeSolo={false as any}
+                  options={allGenres.filter(g => !editedGenres.includes(g))}
+                  value={editedGenres}
+                  onChange={(_, value) => handleGenreChange(value)}
+                  getOptionDisabled={() => editedGenres.length >= 3}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small"
+                      placeholder={editedGenres.length === 0 ? 'Pick up to 3 genres...' : editedGenres.length < 3 ? 'Add genre...' : ''}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
+                  )}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip {...getTagProps({ index })} key={option} size="small" label={option} className="chip-mui-selected" />
+                    ))
+                  }
+                  sx={{ flex: 1, minWidth: 200 }}
+                  size="small"
+                />
+                {genresModified && (
+                  <Button
+                    variant="contained"
+                    disabled={editedGenres.length === 0 || loading}
+                    onClick={handleUpdateMatches}
+                    startIcon={<SearchIcon />}
+                    sx={{
+                      backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' },
+                      textTransform: 'none', borderRadius: '8px', fontWeight: 600, whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                    }}
+                  >
+                    Update matches
+                  </Button>
+                )}
+              </div>
+              <div style={{ fontSize: 11, marginTop: 6, color: editedGenres.length === 0 ? '#d32f2f' : '#888' }}>
+                {editedGenres.length === 0 && 'Select at least 1 genre (up to 3 recommended) to find matching channels.'}
+                {editedGenres.length === 1 && 'Add up to 2 more genres for better matches.'}
+                {editedGenres.length === 2 && 'You can add 1 more genre.'}
+                {editedGenres.length === 3 && ''}
+                {result.genre_source === 'related' && !genresModified && editedGenres.length > 0 && (
+                  <span style={{ fontStyle: 'italic' }}> Genres detected via similar artists.</span>
+                )}
               </div>
             </div>
           </div>
@@ -609,8 +693,14 @@ function ArtistFlow() {
               background: '#1e1e1e', borderRadius: 10, border: '1px solid #2a2a2a',
             }}>
               <SearchIcon sx={{ fontSize: 40, color: '#444', mb: 1 }} />
-              <p style={{ fontSize: 15, marginBottom: 4 }}>No matching channels found for this track's genres.</p>
-              <p style={{ fontSize: 13, color: '#555' }}>Try a different track, or check back as we add more channels.</p>
+              <p style={{ fontSize: 15, marginBottom: 4 }}>
+                {editedGenres.length === 0
+                  ? 'No genres found — pick genres above to find matching channels.'
+                  : 'No matching channels found for these genres.'}
+              </p>
+              <p style={{ fontSize: 13, color: '#555' }}>
+                {editedGenres.length > 0 && 'Try different genres above, or check back as we add more channels.'}
+              </p>
             </div>
           )}
         </>
