@@ -174,10 +174,10 @@ export default function SubmitPage() {
               <div style={{ fontWeight: 700, fontSize: 18 }}>{result.track.name}</div>
               <div style={{ color: '#666', marginBottom: 8 }}>{result.track.artist}</div>
               <div>
-                {result.track.genres.map(g => (
+                {(result.track.genres || []).map(g => (
                   <Chip key={g} size="small" label={g} className="chip-mui-selected" sx={{ mr: 0.5, mb: 0.5 }} />
                 ))}
-                {result.track.genres.length === 0 && (
+                {(!result.track.genres || result.track.genres.length === 0) && (
                   <span style={{ color: '#999', fontSize: 14 }}>No genre data available on Spotify for this artist</span>
                 )}
               </div>

@@ -466,7 +466,7 @@ function ArtistFlow() {
               <div style={{ fontWeight: 700, fontSize: 19, marginBottom: 2 }}>{result.track.name}</div>
               <div style={{ color: '#999', marginBottom: 10, fontSize: 14 }}>{result.track.artist}</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                {result.track.genres.map(g => (
+                {(result.track.genres || []).map(g => (
                   <Chip key={g} size="small" label={g} className="chip-mui-selected" sx={{ mr: 0.5, mb: 0.5 }} />
                 ))}
               </div>
