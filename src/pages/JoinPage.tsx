@@ -788,6 +788,8 @@ function CuratorFlow() {
   const [claiming, setClaiming] = useState(false)
 
   const autoVerifyDone = useRef(false)
+  // Track if we have a cached token so we can skip the button entirely
+  const hasCachedToken = useRef(!!getYouTubeAccessToken())
 
   useEffect(() => {
     api.get('curator/channels')
@@ -805,13 +807,15 @@ function CuratorFlow() {
       .finally(() => setLoadingChannels(false))
   }, [])
 
-  // Auto-verify ONLY if we have a cached token (no popup). Otherwise show a button.
+  // Auto-verify: if we have a cached token, fetch channels immediately (no popup)
   useEffect(() => {
     if (!loadingChannels && channels.length === 0 && !ytChannels && !autoVerifyDone.current) {
       autoVerifyDone.current = true
       const cached = getYouTubeAccessToken()
       if (cached) {
         handleVerifySilent(cached)
+      } else {
+        hasCachedToken.current = false
       }
     }
   }, [loadingChannels, channels.length])
@@ -829,32 +833,22 @@ function CuratorFlow() {
     }
   }
 
-  // Silent: try cached token only, no popup
+  // Silent: try cached token, no popup. If it fails, clear cached flag so button shows.
   const handleVerifySilent = async (token: string) => {
     setVerifying(true)
     try {
       await fetchChannelsWithToken(token)
     } catch {
-      // Token expired — don't show error, just let the button appear
-    } finally {
+      hasCachedToken.current = false
       setVerifying(false)
     }
   }
 
-  // Interactive: user clicked the button — try cached first, popup if needed
+  // Interactive: user clicked the button — go straight to popup
   const handleVerify = async () => {
     setVerifying(true)
     setError(null)
     try {
-      const cached = getYouTubeAccessToken()
-      if (cached) {
-        try {
-          await fetchChannelsWithToken(cached)
-          return
-        } catch {
-          // Token expired, fall through to refresh
-        }
-      }
       const fresh = await refreshYouTubeAccessToken()
       if (!fresh) {
         setError('Failed to get YouTube access. Please try again.')
@@ -931,10 +925,10 @@ function CuratorFlow() {
           background: 'linear-gradient(135deg, #222 0%, #1e2e1e 60%, #243a24 100%)',
           border: '1px solid #2a3a2a', borderRadius: 12, marginBottom: 32,
         }}>
-          {verifying ? (
+          {(verifying || hasCachedToken.current) ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#888', fontSize: 14 }}>
               <GridLoader color="#1DB954" height={20} width={20} wrapperStyle={{}} />
-              <span>Connecting to YouTube...</span>
+              <span>Loading your YouTube channels...</span>
             </div>
           ) : (
             <>
