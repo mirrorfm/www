@@ -3,6 +3,7 @@ import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Loader from '../Loader'
 import { showSpotify } from '../../lib/prerelease'
+import { FaYoutube } from 'react-icons/fa'
 
 interface ChannelDetailProps {
   channel: any
@@ -30,7 +31,14 @@ export default function ChannelDetail({ channel }: ChannelDetailProps) {
     >
       {playlist_id ? (
         <>
-          <h4>{channel_name} <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}>YouTube</a> channel</h4>
+          <h4>
+            <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{ color: '#d4d4d4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              <FaYoutube size={22} color="#FF0000" />
+              {channel_name}
+            </a>
+          </h4>
           {showSpotify() && (
             <>
               <iframe
