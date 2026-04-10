@@ -2,6 +2,8 @@ import Chip from '@mui/material/Chip'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Loader from '../Loader'
+import { showSpotify } from '../../lib/prerelease'
+import { SiDiscogs } from 'react-icons/si'
 
 interface LabelDetailProps {
   label: any
@@ -29,17 +31,29 @@ export default function LabelDetail({ label }: LabelDetailProps) {
     >
       {playlist_id ? (
         <>
-          <h4>{label_name} <a href={`https://discogs.com/label/${label_id}`}>Discogs</a> label</h4>
-          <iframe
-            src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
-            style={{ height: 380, width: '100%' }}
-            frameBorder="0"
-            allow="encrypted-media"
-            title="Spotify playlist"
-          />
-          <p>
-            {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
-          </p>
+          <h4>
+            {label_name}{' '}
+            <a href={`https://discogs.com/label/${label_id}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{ color: '#d4d4d4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, verticalAlign: 'middle' }}>
+              <SiDiscogs size={22} color="#999" />
+              Discogs label
+            </a>
+          </h4>
+          {showSpotify() && (
+            <>
+              <iframe
+                src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
+                style={{ height: 380, width: '100%' }}
+                frameBorder="0"
+                allow="encrypted-media"
+                title="Spotify playlist"
+              />
+              <p>
+                {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
+              </p>
+            </>
+          )}
           <p>
             {primary_genres.map((g: any) => (
               <Chip key={g.name} label={g.name} className="chip-mui" style={{ margin: 2 }} avatar={<Avatar>{g.count}</Avatar>} />
