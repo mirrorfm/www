@@ -1144,7 +1144,7 @@ function CuratorFlow() {
                 <div style={{ flex: 1 }}>
                   <div style={{ color: '#d4d4d4', fontWeight: 600, fontSize: 14 }}>{ch.channel_name}</div>
                   <div style={{ color: '#666', fontSize: 12 }}>
-                    Not in our index — <a href="https://github.com/mirrorfm/data" target="_blank" rel="noopener noreferrer" style={{ color: '#1DB954' }}>submit via GitHub</a> first
+                    Not in our index — <a href="https://github.com/mirrorfm/data" target="_blank" rel="noopener noreferrer" style={{ color: '#1DB954' }}>apply if eligible</a>
                   </div>
                 </div>
               </div>
