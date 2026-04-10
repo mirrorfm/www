@@ -228,11 +228,11 @@ export default function JoinPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
             <PlayCircleOutlineIcon sx={{ fontSize: 22, color: role === 'curator' ? '#1DB954' : '#666' }} />
             <span style={{ color: role === 'curator' ? '#1DB954' : '#d4d4d4', fontWeight: 600, fontSize: 16 }}>
-              I'm a curator
+              I'm a channel owner
             </span>
           </div>
           <div style={{ color: '#888', fontSize: 13, lineHeight: 1.5, paddingLeft: 34 }}>
-            Claim your YouTube channel and receive track submissions from artists
+            Manage your YouTube channel's presence and receive artist submissions
           </div>
         </button>
       </div>
@@ -406,7 +406,7 @@ export default function JoinPage() {
 
   return (
     <Layout>
-      <SEO title={role === 'artist' ? 'Pitch your music' : role === 'curator' ? 'Curator dashboard' : 'Get started'} />
+      <SEO title={role === 'artist' ? 'Pitch your music' : role === 'curator' ? 'Channel owner dashboard' : 'Get started'} />
       {roleSelector}
 
       {role === 'artist' && <ArtistFlow />}
