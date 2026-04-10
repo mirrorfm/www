@@ -22,3 +22,23 @@ export function checkPrerelease(): boolean {
 export function isPrerelease(): boolean {
   return localStorage.getItem(STORAGE_KEY) === '1'
 }
+
+const SPOTIFY_KEY = 'show_spotify'
+
+export function checkShowSpotify(): boolean {
+  const params = new URLSearchParams(window.location.search)
+  if (params.has('spotify')) {
+    const val = params.get('spotify')
+    if (val === '0' || val === 'false') {
+      localStorage.setItem(SPOTIFY_KEY, '0')
+      return false
+    }
+    localStorage.removeItem(SPOTIFY_KEY)
+    return true
+  }
+  return localStorage.getItem(SPOTIFY_KEY) !== '0'
+}
+
+export function showSpotify(): boolean {
+  return localStorage.getItem(SPOTIFY_KEY) !== '0'
+}

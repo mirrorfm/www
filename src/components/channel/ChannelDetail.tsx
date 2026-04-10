@@ -2,6 +2,7 @@ import Chip from '@mui/material/Chip'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Loader from '../Loader'
+import { showSpotify } from '../../lib/prerelease'
 
 interface ChannelDetailProps {
   channel: any
@@ -30,16 +31,20 @@ export default function ChannelDetail({ channel }: ChannelDetailProps) {
       {playlist_id ? (
         <>
           <h4>{channel_name} <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}>YouTube</a> channel</h4>
-          <iframe
-            src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
-            style={{ height: 380, width: '100%' }}
-            frameBorder="0"
-            allow="encrypted-media"
-            title="Spotify playlist"
-          />
-          <p>
-            {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
-          </p>
+          {showSpotify() && (
+            <>
+              <iframe
+                src={`https://open.spotify.com/embed/playlist/${playlist_id}`}
+                style={{ height: 380, width: '100%' }}
+                frameBorder="0"
+                allow="encrypted-media"
+                title="Spotify playlist"
+              />
+              <p>
+                {found_ratio}% found on <a href={`https://open.spotify.com/embed/playlist/${playlist_id}`}>Spotify</a> • {found_tracks} tracks
+              </p>
+            </>
+          )}
           <p>
             {primary_genres.map((g: any) => (
               <Chip key={g.name} label={g.name} className="chip-mui" style={{ margin: 2 }} avatar={<Avatar>{g.count}</Avatar>} />

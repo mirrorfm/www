@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useRef, useEffect, useState } from 'react'
-import { checkPrerelease } from './lib/prerelease'
+import { checkPrerelease, checkShowSpotify } from './lib/prerelease'
 
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
@@ -35,6 +35,7 @@ export default function App() {
   const state = location.state as LocationState | null
   const previousLocation = useRef(location)
   const [pre] = useState(() => checkPrerelease())
+  useState(() => checkShowSpotify())
 
   useEffect(() => {
     if (!state?.modal) {
