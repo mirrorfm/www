@@ -333,16 +333,24 @@ export default function JoinPage() {
               <div style={{ color: '#777', fontSize: 11 }}>Artists matched to your genre pitch their tracks to you</div>
             </div>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Mark as "Unofficial"</div>
-              <div style={{ color: '#777', fontSize: 11 }}>Add "(Unofficial)" to the playlist title</div>
+              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Mark as unofficial</div>
+              <div style={{ color: '#777', fontSize: 11 }}>
+                {showSpotify() ? 'Add "(Unofficial)" to the playlist title' : 'We\'ll clearly label your channel listing as unofficial on our platform'}
+              </div>
             </div>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
               <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Remove thumbnail</div>
-              <div style={{ color: '#777', fontSize: 11 }}>Replace your thumbnail with a generic one</div>
+              <div style={{ color: '#777', fontSize: 11 }}>
+                {showSpotify() ? 'Replace your thumbnail with a generic one' : 'Replace your channel image with a generic one on our platform'}
+              </div>
             </div>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Make private</div>
-              <div style={{ color: '#777', fontSize: 11 }}>Hidden from search. Existing followers keep access.</div>
+              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>
+                {showSpotify() ? 'Make private' : 'Hide from directory'}
+              </div>
+              <div style={{ color: '#777', fontSize: 11 }}>
+                {showSpotify() ? 'Hidden from search. Existing followers keep access.' : 'Your channel won\'t appear in our browse or search'}
+              </div>
             </div>
             {showSpotify() && (
               <div style={{ padding: '8px 12px', border: '1px dashed #444', borderRadius: 6 }}>
@@ -370,13 +378,19 @@ export default function JoinPage() {
 
         {role && (
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <Link to={`/signin/?redirect=${encodeURIComponent(`/join/?as=${role}`)}`} style={{
-              display: 'inline-block', background: '#1DB954', color: 'white',
-              padding: '12px 32px', borderRadius: 6, textDecoration: 'none',
-              fontSize: 15, fontWeight: 600, transition: 'background 0.2s',
-            }}>
+            <button
+              onClick={async () => {
+                const { signInWithGoogle } = await import('../lib/firebase')
+                await signInWithGoogle()
+              }}
+              style={{
+                display: 'inline-block', background: '#1DB954', color: 'white',
+                padding: '12px 32px', borderRadius: 6, border: 'none',
+                fontSize: 15, fontWeight: 600, cursor: 'pointer',
+              }}
+            >
               Sign in to get started
-            </Link>
+            </button>
             <p style={{ color: '#555', fontSize: 13, marginTop: 12 }}>Uses your Google account</p>
           </div>
         )}
