@@ -200,7 +200,7 @@ export default function JoinPage() {
               I'm an artist
             </span>
           </div>
-          <div style={{ color: '#888', fontSize: 13, lineHeight: 1.5, paddingLeft: 34 }}>
+          <div style={{ color: '#aaa', fontSize: 14, lineHeight: 1.5, paddingLeft: 34 }}>
             Submit your tracks to YouTube channel curators who match your genre
           </div>
         </button>
@@ -231,7 +231,7 @@ export default function JoinPage() {
               I'm a channel owner
             </span>
           </div>
-          <div style={{ color: '#888', fontSize: 13, lineHeight: 1.5, paddingLeft: 34 }}>
+          <div style={{ color: '#aaa', fontSize: 14, lineHeight: 1.5, paddingLeft: 34 }}>
             Manage your YouTube channel's presence and receive artist submissions
           </div>
         </button>
@@ -256,15 +256,15 @@ export default function JoinPage() {
             border: '1px solid #2a2a2a', textAlign: 'center',
           }}>
             <div style={{ marginBottom: 8 }}>{step.icon}</div>
-            <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4, color: '#d4d4d4' }}>{step.title}</div>
-            <div style={{ color: '#777', fontSize: 12, lineHeight: 1.5 }}>{step.desc}</div>
+            <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4, color: '#e0e0e0' }}>{step.title}</div>
+            <div style={{ color: '#aaa', fontSize: 13, lineHeight: 1.5 }}>{step.desc}</div>
           </div>
         ))}
       </div>
 
       <div style={{
         padding: '16px 20px', background: '#1e1e1e', borderRadius: 10,
-        border: '1px solid #2a2a2a', fontSize: 13, color: '#888', lineHeight: 1.7,
+        border: '1px solid #2a2a2a', fontSize: 14, color: '#aaa', lineHeight: 1.7,
       }}>
         <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 8, fontSize: 14 }}>How it works</div>
         <p style={{ margin: '0 0 8px' }}>
@@ -288,7 +288,7 @@ export default function JoinPage() {
       <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginBottom: 24 }}>
         <div style={{ flex: '1 1 280px' }}>
           <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>How it works</div>
-          <div style={{ color: '#888', fontSize: 13, lineHeight: 1.7 }}>
+          <div style={{ color: '#aaa', fontSize: 14, lineHeight: 1.7 }}>
             {showSpotify() ? (
               <>
                 <p style={{ margin: '0 0 10px' }}>
@@ -329,26 +329,26 @@ export default function JoinPage() {
           <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>Your options</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Receive artist submissions</div>
-              <div style={{ color: '#777', fontSize: 11 }}>Artists matched to your genre pitch their tracks to you</div>
+              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Receive artist submissions</div>
+              <div style={{ color: '#999', fontSize: 12 }}>Artists matched to your genre pitch their tracks to you</div>
             </div>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Mark as unofficial</div>
-              <div style={{ color: '#777', fontSize: 11 }}>
+              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Mark as unofficial</div>
+              <div style={{ color: '#999', fontSize: 12 }}>
                 {showSpotify() ? 'Add "(Unofficial)" to the playlist title' : 'We\'ll clearly label your channel listing as unofficial on our platform'}
               </div>
             </div>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Remove thumbnail</div>
-              <div style={{ color: '#777', fontSize: 11 }}>
+              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Remove thumbnail</div>
+              <div style={{ color: '#999', fontSize: 12 }}>
                 {showSpotify() ? 'Replace your thumbnail with a generic one' : 'Replace your channel image with a generic one on our platform'}
               </div>
             </div>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>
+              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>
                 {showSpotify() ? 'Make private' : 'Hide from directory'}
               </div>
-              <div style={{ color: '#777', fontSize: 11 }}>
+              <div style={{ color: '#999', fontSize: 12 }}>
                 {showSpotify() ? 'Hidden from search. Existing followers keep access.' : 'Your channel won\'t appear in our browse or search'}
               </div>
             </div>
