@@ -94,7 +94,7 @@ export default function ChannelsPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
               <p style={{ margin: 0 }}>
                 Found <strong>{Math.round(foundTracks * 100 / totalTracks)}%</strong> of <strong><NumericFormat value={totalTracks} displayType="text" thousandSeparator /></strong> total tracks in <strong>{totalCount}</strong> YouTube channels.
-                <Link style={{ marginLeft: 10, fontSize: 30, textDecoration: 'none' }} to="/submit/">+</Link>
+                <Link style={{ marginLeft: 10, fontSize: 30, textDecoration: 'none' }} to="/join/">+</Link>
               </p>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <SearchBar search={search} onSearchChange={(q) => updateAndFetch({ search: q, page: 1 })} />

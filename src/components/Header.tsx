@@ -39,7 +39,7 @@ export default function Header({ toolbar }: HeaderProps) {
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', flex: 1, flexWrap: 'wrap' }}>
               {toolbar}
             </div>
-            <Link to="/submit/" style={{ color: '#d4d4d4', textDecoration: 'none', fontSize: 28, lineHeight: 1, flexShrink: 0 }} title="Submit a channel or label">+</Link>
+            {isPrerelease() && <Link to="/join/" style={{ color: '#1DB954', textDecoration: 'none', fontSize: 14, flexShrink: 0 }}>Join</Link>}
             {isPrerelease() && <AuthStatus />}
           </>
         ) : (
@@ -51,7 +51,7 @@ export default function Header({ toolbar }: HeaderProps) {
               <img width="60" alt="Mirror.FM logo" src={logo} />
             </Link>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
-              <Link to="/submit/" style={{ color: '#999', textDecoration: 'none', fontSize: 14 }}>Submit</Link>
+              {isPrerelease() && <Link to="/join/" style={{ color: '#1DB954', textDecoration: 'none', fontSize: 14 }}>Join</Link>}
               {isPrerelease() && <AuthStatus />}
             </div>
           </>

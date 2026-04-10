@@ -7,7 +7,6 @@ import BrowsePage from './pages/BrowsePage'
 import YouTubePage from './pages/YouTubePage'
 import DiscogsPage from './pages/DiscogsPage'
 import AboutPage from './pages/AboutPage'
-import SubmitPage from './pages/SubmitPage'
 import LoginPage from './pages/LoginPage'
 import TakedownPage from './pages/TakedownPage'
 import GenresPage from './pages/GenresPage'
@@ -54,11 +53,11 @@ export default function App() {
         {/* Redirect old routes to /browse/ with source filter */}
         <Route path="/channels/" element={<Navigate to="/browse/?source=youtube" replace />} />
         <Route path="/labels/" element={<Navigate to="/browse/?source=discogs" replace />} />
-        <Route path="/add/" element={<Navigate to="/submit/" replace />} />
+        <Route path="/add/" element={<Navigate to="/join/?as=artist" replace />} />
+        <Route path="/submit/" element={<Navigate to="/join/?as=artist" replace />} />
         <Route path="/youtube/:id/:name/" element={<YouTubePage />} />
         <Route path="/discogs/:id/:name/" element={<DiscogsPage />} />
         <Route path="/about/" element={<AboutPage />} />
-        <Route path="/submit/" element={<SubmitPage />} />
         {pre && <>
           <Route path="/signin/" element={<LoginPage />} />
           <Route path="/about2/" element={<TakedownPage />} />
