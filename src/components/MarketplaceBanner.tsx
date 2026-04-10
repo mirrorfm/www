@@ -27,7 +27,7 @@ export default function MarketplaceBanner() {
   return (
     <div style={{
       borderBottom: '1px solid #2a2a2a',
-      paddingBottom: 40,
+      paddingBottom: collapsed ? 16 : 32,
       marginBottom: 32,
       position: 'relative',
     }}>
@@ -54,22 +54,29 @@ export default function MarketplaceBanner() {
         Beta
       </div>
 
-      {collapsed ? null : (
+      {!collapsed && (
       <>
-      <h2 style={{ margin: '0 0 16px', fontWeight: 500, color: '#e0e0e0', fontSize: 24, lineHeight: 1.3 }}>
-        Get your music heard by the right channels.
-      </h2>
-
       <div style={{
-        display: 'flex', gap: 32, marginBottom: 24,
-        flexWrap: 'wrap',
+        display: 'flex', gap: 32,
+        flexWrap: 'wrap', alignItems: 'flex-start',
       }}>
         <div style={{ flex: '1 1 300px' }}>
-          <p style={{ color: '#777', fontSize: 15, lineHeight: 1.6, margin: 0 }}>
+          <h2 style={{ margin: '0 0 12px', fontWeight: 500, color: '#e0e0e0', fontSize: 24, lineHeight: 1.3 }}>
+            Get your music heard by the right channels.
+          </h2>
+          <p style={{ color: '#777', fontSize: 15, lineHeight: 1.6, margin: '0 0 20px' }}>
             Mirror.FM syncs YouTube music channels to Spotify playlists.
             Now we match artists to channels based on genre.
             Submit a track, we show it to curators who fit your sound.
           </p>
+          <Link to={user ? "/join/" : "/signin/"} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: '#1DB954', color: 'white', padding: '10px 22px',
+            borderRadius: 6, textDecoration: 'none', fontSize: 14,
+            fontWeight: 600, transition: 'background 0.2s',
+          }}>
+            Get started <ArrowForwardIcon sx={{ fontSize: 16 }} />
+          </Link>
         </div>
 
         <div style={{ flex: '1 1 260px', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -101,15 +108,6 @@ export default function MarketplaceBanner() {
           </div>
         </div>
       </div>
-
-      <Link to={user ? "/join/" : "/signin/"} style={{
-        display: 'inline-flex', alignItems: 'center', gap: 6,
-        background: '#1DB954', color: 'white', padding: '10px 22px',
-        borderRadius: 6, textDecoration: 'none', fontSize: 14,
-        fontWeight: 600, transition: 'background 0.2s',
-      }}>
-        Get started <ArrowForwardIcon sx={{ fontSize: 16 }} />
-      </Link>
       </>
       )}
     </div>
