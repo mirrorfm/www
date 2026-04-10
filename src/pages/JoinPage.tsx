@@ -326,7 +326,7 @@ export default function JoinPage() {
         </div>
 
         <div style={{ flex: '1 1 240px' }}>
-          <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>Your options</div>
+          <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>{showSpotify() ? 'Your options' : 'Why claim your channel'}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
               <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Receive artist submissions</div>
@@ -1223,16 +1223,68 @@ function CuratorFlow() {
           <p style={{ color: '#888', marginTop: 12, fontSize: 14 }}>Loading submissions...</p>
         </div>
       ) : channels.length > 0 && submissions.length === 0 ? (
-        <div style={{
-          textAlign: 'center', padding: 48, color: '#666',
-          background: '#1e1e1e', borderRadius: 10, border: '1px solid #2a2a2a',
-        }}>
-          <InboxIcon sx={{ fontSize: 40, color: '#444', mb: 1 }} />
-          <p style={{ fontSize: 15, marginBottom: 4 }}>No pending submissions</p>
-          <p style={{ fontSize: 13, color: '#555', maxWidth: 320, margin: '0 auto' }}>
-            When artists submit tracks matching your channel's genres, they'll appear here for review.
-          </p>
-        </div>
+        !showSpotify() ? (
+          <div>
+            <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12, fontFamily: 'Arial, sans-serif' }}>
+              Recommended for your channel
+            </div>
+            <p style={{ color: '#888', fontSize: 13, marginBottom: 16 }}>
+              Based on your channel's genres, these artists might be a good fit.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[
+                { name: 'Slow Meadow', artist: 'Slow Meadow', score: 94, genres: ['ambient', 'downtempo'] },
+                { name: 'Weightless', artist: 'Marconi Union', score: 87, genres: ['ambient', 'drone'] },
+                { name: 'Nils Frahm', artist: 'Nils Frahm', score: 82, genres: ['neo-classical', 'ambient'] },
+                { name: 'Bonobo', artist: 'Bonobo', score: 76, genres: ['downtempo', 'electronic'] },
+                { name: 'Tycho', artist: 'Tycho', score: 71, genres: ['chillwave', 'ambient'] },
+              ].map((track, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 16, padding: 16,
+                  border: '1px solid #2a2a2a', borderRadius: 10, background: '#222',
+                }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 8, background: '#333',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    <MusicNoteIcon sx={{ color: '#555', fontSize: 22 }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{track.artist}</div>
+                    <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
+                      {track.genres.map(g => (
+                        <Chip key={g} size="small" label={g} className="chip-mui" />
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <div style={{
+                      fontSize: 14, fontWeight: 700, color: '#1DB954',
+                      fontFamily: 'Arial, sans-serif',
+                    }}>
+                      {track.score}%
+                    </div>
+                    <div style={{ fontSize: 11, color: '#666' }}>match</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p style={{ color: '#555', fontSize: 12, marginTop: 12, textAlign: 'center', fontStyle: 'italic' }}>
+              Preview — real submissions from artists will appear here
+            </p>
+          </div>
+        ) : (
+          <div style={{
+            textAlign: 'center', padding: 48, color: '#666',
+            background: '#1e1e1e', borderRadius: 10, border: '1px solid #2a2a2a',
+          }}>
+            <InboxIcon sx={{ fontSize: 40, color: '#444', mb: 1 }} />
+            <p style={{ fontSize: 15, marginBottom: 4 }}>No pending submissions</p>
+            <p style={{ fontSize: 13, color: '#555', maxWidth: 320, margin: '0 auto' }}>
+              When artists submit tracks matching your channel's genres, they'll appear here for review.
+            </p>
+          </div>
+        )
       ) : channels.length > 0 && (
         <>
           <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12, fontFamily: 'Arial, sans-serif' }}>
