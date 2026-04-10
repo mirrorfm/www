@@ -276,7 +276,7 @@ export default function JoinPage() {
             : 'If a curator likes your track, they feature it on their YouTube channel — reaching their audience directly.'}
         </p>
         <p style={{ margin: 0 }}>
-          <span style={{ color: '#1DB954' }}>Free during beta</span> — your track goes to all matching curators at no cost.
+          {showSpotify() && <><span style={{ color: '#1DB954' }}>Free during beta</span> — your track goes to all matching curators at no cost.</>}
         </p>
       </div>
     </div>
@@ -562,11 +562,13 @@ function ArtistFlow() {
       )}
 
       <p style={{ color: '#666', marginBottom: 24, fontSize: 14, lineHeight: 1.6 }}>
-        Paste a Spotify track link to find matching YouTube channels.
-        {BETA_FREE
-          ? ' Free during beta — your track goes to all matching curators.'
-          : ' Submit for $5 and your track goes to all matching curators. Auto-refund if no one features it within 3 months.'
-        }
+        {showSpotify()
+          ? <>Paste a Spotify track link to find matching YouTube channels.
+            {BETA_FREE
+              ? ' Free during beta — your track goes to all matching curators.'
+              : ' Submit for $5 and your track goes to all matching curators. Auto-refund if no one features it within 3 months.'
+            }</>
+          : 'Paste a track link to find YouTube channels that match your sound.'}
       </p>
 
       <form onSubmit={handleAnalyze} style={{ display: 'flex', gap: 10, marginBottom: 28, flexWrap: 'wrap' }}>
@@ -760,8 +762,8 @@ function ArtistFlow() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: BETA_FREE ? 0 : 20, flexWrap: 'wrap', gap: 16 }}>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 17, color: '#e0e0e0', marginBottom: 4 }}>
-                      Submit to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''}
-                      {BETA_FREE && (
+                      Pitch to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''}
+                      {BETA_FREE && showSpotify() && (
                         <span style={{
                           color: '#1DB954', marginLeft: 10, fontSize: 12, fontWeight: 600,
                           background: 'rgba(29, 185, 84, 0.15)', padding: '3px 10px', borderRadius: 12,
@@ -788,7 +790,7 @@ function ArtistFlow() {
                       borderRadius: '8px', boxShadow: '0 2px 8px rgba(29, 185, 84, 0.3)',
                     }}
                   >
-                    {submitting ? 'Submitting...' : BETA_FREE ? 'Submit' : 'Submit — $5'}
+                    {submitting ? 'Pitching...' : BETA_FREE ? 'Pitch' : 'Pitch — $5'}
                   </Button>
                 </div>
 
