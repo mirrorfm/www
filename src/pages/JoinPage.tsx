@@ -347,7 +347,7 @@ export default function JoinPage() {
 
         {role && (
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <Link to="/signin/" style={{
+            <Link to={`/signin/?redirect=${encodeURIComponent(`/join/?as=${role}`)}`} style={{
               display: 'inline-block', background: '#1DB954', color: 'white',
               padding: '12px 32px', borderRadius: 6, textDecoration: 'none',
               fontSize: 15, fontWeight: 600, transition: 'background 0.2s',

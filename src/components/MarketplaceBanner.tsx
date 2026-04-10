@@ -69,7 +69,7 @@ export default function MarketplaceBanner() {
             Now we match artists to channels based on genre.
             Submit a track, we show it to curators who fit your sound.
           </p>
-          <Link to={user ? "/join/" : "/signin/"} style={{
+          <Link to={user ? "/join/" : "/signin/?redirect=%2Fjoin%2F"} style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             background: '#1DB954', color: 'white', padding: '10px 22px',
             borderRadius: 6, textDecoration: 'none', fontSize: 14,

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { signInWithGoogle } from '../lib/firebase'
 import Header from '../components/Header'
@@ -9,10 +9,12 @@ import { FcGoogle } from 'react-icons/fc'
 export default function LoginPage() {
   const { user, loading } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirect = searchParams.get('redirect') || '/'
 
   useEffect(() => {
-    if (user) navigate('/')
-  }, [user, navigate])
+    if (user) navigate(redirect)
+  }, [user, navigate, redirect])
 
   if (loading) return null
 
