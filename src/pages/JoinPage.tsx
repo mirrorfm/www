@@ -163,66 +163,15 @@ export default function JoinPage() {
 
   if (authLoading) return null
 
-  if (!user) {
-    return (
-      <Layout>
-        <SEO title="Get started" />
-        <div style={{ maxWidth: 560, margin: '0 auto', paddingTop: 40 }}>
-          <h2 style={{ fontWeight: 400, fontSize: 26, textAlign: 'center', marginBottom: 12 }}>
-            Connect artists with curators
-          </h2>
-          <p style={{ color: '#777', fontSize: 15, textAlign: 'center', lineHeight: 1.6, marginBottom: 40 }}>
-            Submit your tracks to YouTube channel curators who match your genre,
-            or claim your channel and discover new music.
-          </p>
-
-          {/* How it works */}
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20,
-            marginBottom: 40, textAlign: 'center',
-          }}>
-            {[
-              { icon: <SearchIcon sx={{ fontSize: 28, color: '#1DB954' }} />, title: 'Analyze', desc: 'Paste a Spotify link, we detect your genres' },
-              { icon: <SendIcon sx={{ fontSize: 28, color: '#1DB954' }} />, title: 'Match', desc: 'We find YouTube channels that fit your sound' },
-              { icon: <CheckCircleOutlineIcon sx={{ fontSize: 28, color: '#1DB954' }} />, title: 'Feature', desc: 'Curators review and add tracks they love' },
-            ].map(step => (
-              <div key={step.title} style={{
-                padding: '24px 16px', background: '#222', borderRadius: 10,
-                border: '1px solid #2a2a2a',
-              }}>
-                <div style={{ marginBottom: 10 }}>{step.icon}</div>
-                <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6, color: '#d4d4d4' }}>{step.title}</div>
-                <div style={{ color: '#777', fontSize: 12, lineHeight: 1.5 }}>{step.desc}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center' }}>
-            <Link to="/signin/" style={{
-              display: 'inline-block', background: '#1DB954', color: 'white',
-              padding: '12px 32px', borderRadius: 6, textDecoration: 'none',
-              fontSize: 15, fontWeight: 600, transition: 'background 0.2s',
-            }}>
-              Sign in to get started
-            </Link>
-            <p style={{ color: '#555', fontSize: 13, marginTop: 12 }}>Uses your Google account</p>
-          </div>
-        </div>
-      </Layout>
-    )
-  }
-
-  return (
-    <Layout>
-      <SEO title={role === 'artist' ? 'Pitch your music' : role === 'curator' ? 'Curator dashboard' : 'Get started'} />
-
-      {/* Role selector */}
+  // Role selector + info sections (shown for both auth states)
+  const roleSelector = (
+    <>
       {!role && (
         <p style={{ color: '#777', fontSize: 15, textAlign: 'center', marginBottom: 8 }}>
           How would you like to use Mirror.FM?
         </p>
       )}
-      <div style={{ display: 'flex', gap: 14, marginBottom: 36 }}>
+      <div style={{ display: 'flex', gap: 14, marginBottom: 32 }}>
         <button
           onClick={() => selectRole('artist')}
           style={{
@@ -286,6 +235,141 @@ export default function JoinPage() {
           </div>
         </button>
       </div>
+    </>
+  )
+
+  // Artist info section (pre-auth pitch)
+  const artistInfo = (
+    <div style={{ marginBottom: 36 }}>
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16,
+        marginBottom: 24,
+      }}>
+        {[
+          { icon: <SearchIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Analyze', desc: 'Paste a Spotify link, we detect your genres automatically' },
+          { icon: <SendIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Match', desc: 'We find YouTube channels that fit your sound based on genre overlap' },
+          { icon: <CheckCircleOutlineIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Feature', desc: 'Curators review your track and add it to their channel if they like it' },
+        ].map(step => (
+          <div key={step.title} style={{
+            padding: '20px 14px', background: '#222', borderRadius: 10,
+            border: '1px solid #2a2a2a', textAlign: 'center',
+          }}>
+            <div style={{ marginBottom: 8 }}>{step.icon}</div>
+            <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4, color: '#d4d4d4' }}>{step.title}</div>
+            <div style={{ color: '#777', fontSize: 12, lineHeight: 1.5 }}>{step.desc}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        padding: '16px 20px', background: '#1e1e1e', borderRadius: 10,
+        border: '1px solid #2a2a2a', fontSize: 13, color: '#888', lineHeight: 1.7,
+      }}>
+        <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 8, fontSize: 14 }}>How it works</div>
+        <p style={{ margin: '0 0 8px' }}>
+          Mirror.FM indexes YouTube music channels and Discogs labels, syncing them to Spotify playlists.
+          When you submit a track, we match it to channels by genre and send it to their curators for review.
+        </p>
+        <p style={{ margin: '0 0 8px' }}>
+          <span style={{ color: '#1DB954' }}>Free during beta</span> — your track goes to all matching curators at no cost.
+        </p>
+        <p style={{ margin: 0 }}>
+          If a curator features your track on their YouTube channel, it automatically appears on their Spotify playlist too.
+        </p>
+      </div>
+    </div>
+  )
+
+  // Curator info section (pre-auth pitch + channel owner options)
+  const curatorInfo = (
+    <div style={{ marginBottom: 36 }}>
+      <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginBottom: 24 }}>
+        <div style={{ flex: '1 1 280px' }}>
+          <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>How it works</div>
+          <div style={{ color: '#888', fontSize: 13, lineHeight: 1.7 }}>
+            <p style={{ margin: '0 0 10px' }}>
+              Mirror.FM automatically creates Spotify playlists that stay in sync
+              with YouTube music channels. When a channel is added to our index, we scan its uploads,
+              match each video title to a Spotify track, and add matches to a playlist.
+            </p>
+            <p style={{ margin: '0 0 10px' }}>
+              All playlists are clearly marked as <strong style={{ color: '#ccc' }}>"Unofficial"</strong> and
+              we don't use channel branding without permission.
+            </p>
+            <p style={{ margin: 0 }}>
+              As a curator, you can claim your channel, receive artist submissions matched
+              to your genre, and manage how your playlist appears on Spotify.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ flex: '1 1 240px' }}>
+          <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>Your options</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Receive artist submissions</div>
+              <div style={{ color: '#777', fontSize: 11 }}>Artists matched to your genre pitch their tracks to you</div>
+            </div>
+            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Mark as "Unofficial"</div>
+              <div style={{ color: '#777', fontSize: 11 }}>Add "(Unofficial)" to the playlist title</div>
+            </div>
+            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Remove thumbnail</div>
+              <div style={{ color: '#777', fontSize: 11 }}>Replace your thumbnail with a generic one</div>
+            </div>
+            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+              <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Make private</div>
+              <div style={{ color: '#777', fontSize: 11 }}>Hidden from search. Existing followers keep access.</div>
+            </div>
+            <div style={{ padding: '8px 12px', border: '1px dashed #444', borderRadius: 6 }}>
+              <div style={{ color: '#999', fontWeight: 500, fontSize: 12 }}>
+                Playlist on your own account
+                <span style={{ fontSize: 10, color: '#666', marginLeft: 6, fontWeight: 400 }}>Coming soon</span>
+              </div>
+              <div style={{ color: '#666', fontSize: 11 }}>Connect your Spotify, we sync to a playlist you own</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  if (!user) {
+    return (
+      <Layout>
+        <SEO title={role === 'artist' ? 'Pitch your music' : role === 'curator' ? 'For channel owners' : 'Get started'} />
+        {roleSelector}
+
+        {role === 'artist' && artistInfo}
+        {role === 'curator' && curatorInfo}
+
+        {role && (
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <Link to="/signin/" style={{
+              display: 'inline-block', background: '#1DB954', color: 'white',
+              padding: '12px 32px', borderRadius: 6, textDecoration: 'none',
+              fontSize: 15, fontWeight: 600, transition: 'background 0.2s',
+            }}>
+              Sign in to get started
+            </Link>
+            <p style={{ color: '#555', fontSize: 13, marginTop: 12 }}>Uses your Google account</p>
+          </div>
+        )}
+
+        {!role && (
+          <p style={{ color: '#555', fontSize: 14, textAlign: 'center' }}>
+            Select a role above to learn more.
+          </p>
+        )}
+      </Layout>
+    )
+  }
+
+  return (
+    <Layout>
+      <SEO title={role === 'artist' ? 'Pitch your music' : role === 'curator' ? 'Curator dashboard' : 'Get started'} />
+      {roleSelector}
 
       {role === 'artist' && <ArtistFlow />}
       {role === 'curator' && <CuratorFlow />}
