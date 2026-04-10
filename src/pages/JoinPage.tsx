@@ -332,12 +332,12 @@ export default function JoinPage() {
               <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Receive artist submissions</div>
               <div style={{ color: '#999', fontSize: 12 }}>Artists matched to your genre pitch their tracks to you</div>
             </div>
-            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Mark as unofficial</div>
-              <div style={{ color: '#999', fontSize: 12 }}>
-                {showSpotify() ? 'Add "(Unofficial)" to the playlist title' : 'We\'ll clearly label your channel listing as unofficial on our platform'}
+            {showSpotify() && (
+              <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+                <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Mark as unofficial</div>
+                <div style={{ color: '#999', fontSize: 12 }}>Add "(Unofficial)" to the playlist title</div>
               </div>
-            </div>
+            )}
             <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
               <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Remove thumbnail</div>
               <div style={{ color: '#999', fontSize: 12 }}>
