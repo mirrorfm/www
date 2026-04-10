@@ -18,6 +18,7 @@ import Layout from '../layouts/Layout'
 import SEO from '../components/SEO'
 import { api } from '../config'
 import { useAuth } from '../lib/auth'
+import { showSpotify } from '../lib/prerelease'
 import { getYouTubeAccessToken, refreshYouTubeAccessToken } from '../lib/firebase'
 
 type Role = 'artist' | 'curator'
@@ -246,7 +247,7 @@ export default function JoinPage() {
         marginBottom: 24,
       }}>
         {[
-          { icon: <SearchIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Analyze', desc: 'Paste a Spotify link, we detect your genres automatically' },
+          { icon: <SearchIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Analyze', desc: showSpotify() ? 'Paste a Spotify link, we detect your genres automatically' : 'Submit your track, we detect your genres automatically' },
           { icon: <SendIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Pitch', desc: 'We send your track to YouTube channel curators who match your sound' },
           { icon: <CheckCircleOutlineIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Feature', desc: 'Curators choose to feature your track on their YouTube channel' },
         ].map(step => (
@@ -267,12 +268,12 @@ export default function JoinPage() {
       }}>
         <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 8, fontSize: 14 }}>How it works</div>
         <p style={{ margin: '0 0 8px' }}>
-          Mirror.FM doesn't add tracks to playlists directly — curators do.
           When you submit a track, we match it by genre and pitch it to YouTube channel owners for review.
         </p>
         <p style={{ margin: '0 0 8px' }}>
-          If a curator likes your track, they feature it on their YouTube channel.
-          Mirror.FM then automatically syncs it to their Spotify playlist.
+          {showSpotify()
+            ? 'If a curator likes your track, they feature it on their YouTube channel. Mirror.FM then automatically syncs it to their Spotify playlist.'
+            : 'If a curator likes your track, they feature it on their YouTube channel — reaching their audience directly.'}
         </p>
         <p style={{ margin: 0 }}>
           <span style={{ color: '#1DB954' }}>Free during beta</span> — your track goes to all matching curators at no cost.
@@ -288,19 +289,39 @@ export default function JoinPage() {
         <div style={{ flex: '1 1 280px' }}>
           <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 10, fontSize: 14 }}>How it works</div>
           <div style={{ color: '#888', fontSize: 13, lineHeight: 1.7 }}>
-            <p style={{ margin: '0 0 10px' }}>
-              Mirror.FM automatically creates Spotify playlists that stay in sync
-              with YouTube music channels. When a channel is added to our index, we scan its uploads,
-              match each video title to a Spotify track, and add matches to a playlist.
-            </p>
-            <p style={{ margin: '0 0 10px' }}>
-              All playlists are clearly marked as <strong style={{ color: '#ccc' }}>"Unofficial"</strong> and
-              we don't use channel branding without permission.
-            </p>
-            <p style={{ margin: 0 }}>
-              As a curator, you can claim your channel, receive artist submissions matched
-              to your genre, and manage how your playlist appears on Spotify.
-            </p>
+            {showSpotify() ? (
+              <>
+                <p style={{ margin: '0 0 10px' }}>
+                  Mirror.FM automatically creates Spotify playlists that stay in sync
+                  with YouTube music channels. When a channel is added to our index, we scan its uploads,
+                  match each video title to a Spotify track, and add matches to a playlist.
+                </p>
+                <p style={{ margin: '0 0 10px' }}>
+                  All playlists are clearly marked as <strong style={{ color: '#ccc' }}>"Unofficial"</strong> and
+                  we don't use channel branding without permission.
+                </p>
+                <p style={{ margin: 0 }}>
+                  As a curator, you can claim your channel, receive artist submissions matched
+                  to your genre, and manage how your playlist appears on Spotify.
+                </p>
+              </>
+            ) : (
+              <>
+                <p style={{ margin: '0 0 10px' }}>
+                  Mirror.FM indexes YouTube music channels by genre.
+                  When a channel is added to our index, we analyze its catalog
+                  and categorize it so artists can discover channels that match their sound.
+                </p>
+                <p style={{ margin: '0 0 10px' }}>
+                  We don't use channel branding or thumbnails without permission,
+                  and channel owners can manage their presence at any time.
+                </p>
+                <p style={{ margin: 0 }}>
+                  As a curator, you can claim your channel, receive artist submissions matched
+                  to your genre, and control how your channel appears on our platform.
+                </p>
+              </>
+            )}
           </div>
         </div>
 
@@ -323,13 +344,15 @@ export default function JoinPage() {
               <div style={{ color: '#d4d4d4', fontWeight: 500, fontSize: 12 }}>Make private</div>
               <div style={{ color: '#777', fontSize: 11 }}>Hidden from search. Existing followers keep access.</div>
             </div>
-            <div style={{ padding: '8px 12px', border: '1px dashed #444', borderRadius: 6 }}>
-              <div style={{ color: '#999', fontWeight: 500, fontSize: 12 }}>
-                Playlist on your own account
-                <span style={{ fontSize: 10, color: '#666', marginLeft: 6, fontWeight: 400 }}>Coming soon</span>
+            {showSpotify() && (
+              <div style={{ padding: '8px 12px', border: '1px dashed #444', borderRadius: 6 }}>
+                <div style={{ color: '#999', fontWeight: 500, fontSize: 12 }}>
+                  Playlist on your own account
+                  <span style={{ fontSize: 10, color: '#666', marginLeft: 6, fontWeight: 400 }}>Coming soon</span>
+                </div>
+                <div style={{ color: '#666', fontSize: 11 }}>Connect your Spotify, we sync to a playlist you own</div>
               </div>
-              <div style={{ color: '#666', fontSize: 11 }}>Connect your Spotify, we sync to a playlist you own</div>
-            </div>
+            )}
           </div>
         </div>
       </div>

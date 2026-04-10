@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
-import { isPrerelease } from '../lib/prerelease'
+import { isPrerelease, showSpotify } from '../lib/prerelease'
 
 interface FooterProps {
   children?: ReactNode
@@ -30,10 +30,9 @@ export default function Footer({ children }: FooterProps) {
           <Link to="/about/">About</Link>
           <Link to="/logs/">Event logs</Link>
           {isPrerelease() && <>
-            <Link to="/join/">Join</Link>
-            <Link to="/owners/">Channel owners</Link>
-            <Link to="/report/">Report</Link>
-            <Link to="/genres/">Genres</Link>
+            {showSpotify() && <Link to="/owners/">Channel owners</Link>}
+            {showSpotify() && <Link to="/report/">Report</Link>}
+            {showSpotify() && <Link to="/genres/">Genres</Link>}
           </>}
         </div>
         {children && (
@@ -44,7 +43,7 @@ export default function Footer({ children }: FooterProps) {
         <div style={{ display: 'flex', gap: 4 }}>
           <SocialIcon url="https://twitter.com/mirror_fm" style={{ width: 24, height: 24 }} />
           <SocialIcon url="https://facebook.com/www.mirror.fm" style={{ width: 24, height: 24 }} />
-          <SocialIcon url="https://open.spotify.com/user/xlqeojt6n7on0j7coh9go8ifd?si=oj2_z5gQRt2TVfQhA4vDCw" style={{ width: 24, height: 24 }} />
+          {showSpotify() && <SocialIcon url="https://open.spotify.com/user/xlqeojt6n7on0j7coh9go8ifd?si=oj2_z5gQRt2TVfQhA4vDCw" style={{ width: 24, height: 24 }} />}
           <SocialIcon url="https://github.com/mirrorfm" style={{ width: 24, height: 24 }} />
           <SocialIcon url="https://instagram.com/mirror.fm" style={{ width: 24, height: 24 }} />
           <SocialIcon url="https://www.youtube.com/c/MirrorFM" style={{ width: 24, height: 24 }} />

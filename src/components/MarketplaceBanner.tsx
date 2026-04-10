@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { isPrerelease } from '../lib/prerelease'
+import { isPrerelease, showSpotify } from '../lib/prerelease'
 import { useAuth } from '../lib/auth'
 import MusicNoteIcon from '@mui/icons-material/MusicNote'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
@@ -65,9 +65,9 @@ export default function MarketplaceBanner() {
             Get your music heard by the right channels.
           </h2>
           <p style={{ color: '#777', fontSize: 15, lineHeight: 1.6, margin: '0 0 20px' }}>
-            Mirror.FM syncs YouTube music channels to Spotify playlists.
-            Now we match artists to channels based on genre.
-            Submit a track, we show it to curators who fit your sound.
+            {showSpotify()
+              ? 'Mirror.FM syncs YouTube music channels to Spotify playlists. Now we match artists to channels based on genre. Submit a track, we show it to curators who fit your sound.'
+              : 'Mirror.FM indexes YouTube music channels by genre. Discover channels that match your sound, or claim your channel and connect with artists.'}
           </p>
           <Link to="/join/" style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -89,8 +89,9 @@ export default function MarketplaceBanner() {
               <span style={{ color: '#d4d4d4', fontSize: 13, fontWeight: 600 }}>For artists</span>
             </div>
             <p style={{ color: '#777', fontSize: 12, lineHeight: 1.5, margin: 0 }}>
-              Paste a Spotify link, we pitch it to matching YouTube channel
-              curators. Free while we're in beta.
+              {showSpotify()
+                ? 'Paste a Spotify link, we pitch it to matching YouTube channel curators. Free while we\'re in beta.'
+                : 'Submit your music, we match you to YouTube channels by genre. Free while we\'re in beta.'}
             </p>
           </div>
           <div style={{
