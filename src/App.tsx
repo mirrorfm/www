@@ -61,7 +61,7 @@ export default function App() {
         {pre && <>
           <Route path="/signin/" element={<LoginPage />} />
           <Route path="/about2/" element={<TakedownPage />} />
-          <Route path="/owners/" element={<Navigate to="/join/?as=curator" replace />} />
+          <Route path="/owners/" element={<ChannelOwnersPage />} />
           <Route path="/report/" element={<ReportPage />} />
           <Route path="/genres/" element={<GenresPage />} />
           <Route path="/join/" element={<JoinPage />} />

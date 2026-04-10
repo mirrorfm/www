@@ -89,8 +89,8 @@ export default function MarketplaceBanner() {
               <span style={{ color: '#d4d4d4', fontSize: 13, fontWeight: 600 }}>For artists</span>
             </div>
             <p style={{ color: '#777', fontSize: 12, lineHeight: 1.5, margin: 0 }}>
-              Paste a Spotify link, see which channels match your genre,
-              and submit. Free while we're in beta.
+              Paste a Spotify link, we pitch it to matching YouTube channel
+              curators. Free while we're in beta.
             </p>
           </div>
           <div style={{

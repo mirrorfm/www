@@ -247,8 +247,8 @@ export default function JoinPage() {
       }}>
         {[
           { icon: <SearchIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Analyze', desc: 'Paste a Spotify link, we detect your genres automatically' },
-          { icon: <SendIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Match', desc: 'We find YouTube channels that fit your sound based on genre overlap' },
-          { icon: <CheckCircleOutlineIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Feature', desc: 'Curators review your track and add it to their channel if they like it' },
+          { icon: <SendIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Pitch', desc: 'We send your track to YouTube channel curators who match your sound' },
+          { icon: <CheckCircleOutlineIcon sx={{ fontSize: 24, color: '#1DB954' }} />, title: 'Feature', desc: 'Curators choose to feature your track on their YouTube channel' },
         ].map(step => (
           <div key={step.title} style={{
             padding: '20px 14px', background: '#222', borderRadius: 10,
@@ -267,14 +267,15 @@ export default function JoinPage() {
       }}>
         <div style={{ fontWeight: 600, color: '#d4d4d4', marginBottom: 8, fontSize: 14 }}>How it works</div>
         <p style={{ margin: '0 0 8px' }}>
-          Mirror.FM indexes YouTube music channels and Discogs labels, syncing them to Spotify playlists.
-          When you submit a track, we match it to channels by genre and send it to their curators for review.
+          Mirror.FM doesn't add tracks to playlists directly — curators do.
+          When you submit a track, we match it by genre and pitch it to YouTube channel owners for review.
         </p>
         <p style={{ margin: '0 0 8px' }}>
-          <span style={{ color: '#1DB954' }}>Free during beta</span> — your track goes to all matching curators at no cost.
+          If a curator likes your track, they feature it on their YouTube channel.
+          Mirror.FM then automatically syncs it to their Spotify playlist.
         </p>
         <p style={{ margin: 0 }}>
-          If a curator features your track on their YouTube channel, it automatically appears on their Spotify playlist too.
+          <span style={{ color: '#1DB954' }}>Free during beta</span> — your track goes to all matching curators at no cost.
         </p>
       </div>
     </div>
@@ -759,7 +760,7 @@ function ArtistFlow() {
                 {!BETA_FREE && (
                   <div style={{ borderTop: '1px solid #333', paddingTop: 16, color: '#888', fontSize: 13, lineHeight: 1.7 }}>
                     <div style={{ marginBottom: 6 }}>
-                      <span style={{ color: '#1DB954', fontWeight: 600 }}>Best case:</span> Curators feature your track on their YouTube channel — it automatically appears on their Spotify playlist too.
+                      <span style={{ color: '#1DB954', fontWeight: 600 }}>Best case:</span> A curator features your track on their YouTube channel. Mirror.FM automatically syncs it to their Spotify playlist.
                     </div>
                     <div style={{ marginBottom: 6 }}>
                       <span style={{ color: '#1DB954', fontWeight: 600 }}>No response:</span> Full refund after 3 months. We verify automatically whether your track was added.
