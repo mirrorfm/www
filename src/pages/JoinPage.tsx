@@ -683,130 +683,76 @@ function ArtistFlow() {
             <>
               <div style={{ marginBottom: 20 }}>
                 <h4 style={{ marginBottom: 6 }}>
-                  {result.matches.length} matching channel{result.matches.length !== 1 ? 's' : ''}
+                  Your track matches {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''}
                 </h4>
-                <p style={{ color: '#777', fontSize: 13, marginBottom: 0, lineHeight: 1.5 }}>
-                  Ranked by genre overlap between your track and each channel's Spotify catalog.
+                <p style={{ color: '#999', fontSize: 13, marginBottom: 0, lineHeight: 1.5 }}>
+                  Your track will be pitched to all channel owners whose catalog matches your genres.
+                  Here's a preview of some of them:
                 </p>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
-                {result.matches.map((match, i) => (
+              {/* Channel preview grid */}
+              <div style={{
+                display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 24,
+              }}>
+                {result.matches.slice(0, 8).map(match => (
                   <div key={match.channel_id} style={{
-                    display: 'flex', alignItems: 'center', gap: 16, padding: 16, flexWrap: 'wrap',
-                    border: '1px solid #2a2a2a', borderRadius: 10,
-                    background: i === 0 ? 'linear-gradient(135deg, #1a2a1a 0%, #222 40%)' : '#222',
-                    transition: 'border-color 0.2s',
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '8px 14px', background: '#222', borderRadius: 20,
+                    border: '1px solid #2a2a2a', fontSize: 13,
                   }}>
-                    <div style={{ position: 'relative', flexShrink: 0 }}>
-                      {match.thumbnail ? (
-                        <img src={match.thumbnail} alt={match.channel_name}
-                          style={{ width: 64, height: 64, borderRadius: 8, filter: 'none' }} />
-                      ) : (
-                        <div style={{
-                          width: 64, height: 64, borderRadius: 8, background: '#333',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                          <PlayCircleOutlineIcon sx={{ color: '#555', fontSize: 28 }} />
-                        </div>
-                      )}
-                      {i === 0 && (
-                        <div style={{
-                          position: 'absolute', top: -6, right: -6,
-                          background: '#1DB954', color: '#fff', borderRadius: 10,
-                          fontSize: 10, fontWeight: 700, padding: '2px 6px',
-                          fontFamily: 'Arial, sans-serif',
-                        }}>
-                          BEST
-                        </div>
-                      )}
-                    </div>
-
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
-                        <span style={{ fontWeight: 700, fontSize: 15 }}>{match.channel_name}</span>
-                        {match.playlist_id && (
-                          <a
-                            href={`https://open.spotify.com/playlist/${match.playlist_id}`}
-                            target="_blank" rel="noopener noreferrer"
-                            style={{ color: '#1DB954', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 2 }}
-                          >
-                            Spotify <OpenInNewIcon sx={{ fontSize: 12 }} />
-                          </a>
-                        )}
-                      </div>
-                      <div style={{ fontSize: 13, color: '#777', marginBottom: 8, fontFamily: 'Arial, sans-serif' }}>
-                        <NumericFormat value={match.followers} displayType="text" thousandSeparator="," /> followers
-                        {' · '}
-                        <NumericFormat value={match.found_tracks} displayType="text" thousandSeparator="," /> tracks on Spotify
-                      </div>
-                      <ScoreBar score={match.score} />
-                      <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
-                        {(match.top_genres || []).map(g => (
-                          <Chip key={g.name} size="small" label={g.name}
-                            className={(match.matching_genres || []).includes(g.name) ? 'chip-mui-selected' : 'chip-mui'} />
-                        ))}
-                      </div>
-                    </div>
+                    {match.thumbnail ? (
+                      <img src={match.thumbnail} alt={match.channel_name}
+                        style={{ width: 24, height: 24, borderRadius: '50%', filter: 'none' }} />
+                    ) : (
+                      <PlayCircleOutlineIcon sx={{ fontSize: 16, color: '#555' }} />
+                    )}
+                    <span style={{ fontWeight: 500, color: '#d4d4d4' }}>{match.channel_name}</span>
+                    <span style={{ color: '#1DB954', fontSize: 11, fontWeight: 700, fontFamily: 'Arial, sans-serif' }}>
+                      {Math.round(match.score * 100)}%
+                    </span>
                   </div>
                 ))}
+                {result.matches.length > 8 && (
+                  <div style={{
+                    display: 'flex', alignItems: 'center',
+                    padding: '8px 14px', color: '#666', fontSize: 13,
+                  }}>
+                    +{result.matches.length - 8} more
+                  </div>
+                )}
               </div>
 
-              {/* Submit section */}
+              {/* Pitch button */}
               <div style={{
-                padding: 28, borderRadius: 12, marginBottom: 32,
+                padding: 24, borderRadius: 12, marginBottom: 32,
                 background: 'linear-gradient(135deg, #1a2a1a 0%, #1a1a2a 100%)',
                 border: '1px solid #2a3a2a',
                 boxShadow: '0 4px 20px rgba(29, 185, 84, 0.08)',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                flexWrap: 'wrap', gap: 16,
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: BETA_FREE ? 0 : 20, flexWrap: 'wrap', gap: 16 }}>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: 17, color: '#e0e0e0', marginBottom: 4 }}>
-                      Pitch to {result.matches.length} channel{result.matches.length !== 1 ? 's' : ''}
-                      {BETA_FREE && showSpotify() && (
-                        <span style={{
-                          color: '#1DB954', marginLeft: 10, fontSize: 12, fontWeight: 600,
-                          background: 'rgba(29, 185, 84, 0.15)', padding: '3px 10px', borderRadius: 12,
-                        }}>
-                          Free during beta
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ color: '#888', fontSize: 13, lineHeight: 1.5 }}>
-                      {BETA_FREE
-                        ? 'All matching curators will see your track in their inbox'
-                        : 'One payment, all matching curators see your track'
-                      }
-                    </div>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 15, color: '#e0e0e0', marginBottom: 4 }}>
+                    All matching channel owners will see your track in their inbox
                   </div>
-                  <Button
-                    variant="contained"
-                    disabled={submitting}
-                    onClick={handleSubmit}
-                    startIcon={<SendIcon />}
-                    sx={{
-                      backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' },
-                      textTransform: 'none', px: 4, py: 1.2, fontSize: 15, fontWeight: 600,
-                      borderRadius: '8px', boxShadow: '0 2px 8px rgba(29, 185, 84, 0.3)',
-                    }}
-                  >
-                    {submitting ? 'Pitching...' : BETA_FREE ? 'Pitch' : 'Pitch — $5'}
-                  </Button>
+                  {showSpotify() && BETA_FREE && (
+                    <div style={{ color: '#1DB954', fontSize: 13 }}>Free during beta</div>
+                  )}
                 </div>
-
-                {!BETA_FREE && (
-                  <div style={{ borderTop: '1px solid #333', paddingTop: 16, color: '#888', fontSize: 13, lineHeight: 1.7 }}>
-                    <div style={{ marginBottom: 6 }}>
-                      <span style={{ color: '#1DB954', fontWeight: 600 }}>Best case:</span> A curator features your track on their YouTube channel. Mirror.FM automatically syncs it to their Spotify playlist.
-                    </div>
-                    <div style={{ marginBottom: 6 }}>
-                      <span style={{ color: '#1DB954', fontWeight: 600 }}>No response:</span> Full refund after 3 months. We verify automatically whether your track was added.
-                    </div>
-                    <div>
-                      <span style={{ color: '#1DB954', fontWeight: 600 }}>Even after refund:</span> Curators can still discover and feature your track at any time — your submission stays visible.
-                    </div>
-                  </div>
-                )}
+                <Button
+                  variant="contained"
+                  disabled={submitting}
+                  onClick={handleSubmit}
+                  startIcon={<SendIcon />}
+                  sx={{
+                    backgroundColor: '#1DB954', '&:hover': { backgroundColor: '#1aa34a' },
+                    textTransform: 'none', px: 4, py: 1.2, fontSize: 15, fontWeight: 600,
+                    borderRadius: '8px', boxShadow: '0 2px 8px rgba(29, 185, 84, 0.3)',
+                  }}
+                >
+                  {submitting ? 'Pitching...' : 'Pitch to recommended channels'}
+                </Button>
               </div>
             </>
           ) : (
