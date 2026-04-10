@@ -338,20 +338,18 @@ export default function JoinPage() {
                 <div style={{ color: '#999', fontSize: 12 }}>Add "(Unofficial)" to the playlist title</div>
               </div>
             )}
-            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Remove thumbnail</div>
-              <div style={{ color: '#999', fontSize: 12 }}>
-                {showSpotify() ? 'Replace your thumbnail with a generic one' : 'Replace your channel image with a generic one on our platform'}
+            {showSpotify() && (
+              <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+                <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Remove thumbnail</div>
+                <div style={{ color: '#999', fontSize: 12 }}>Replace your thumbnail with a generic one</div>
               </div>
-            </div>
-            <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
-              <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>
-                {showSpotify() ? 'Make private' : 'Hide from directory'}
+            )}
+            {showSpotify() && (
+              <div style={{ padding: '8px 12px', border: '1px solid #333', borderRadius: 6, background: '#222' }}>
+                <div style={{ color: '#e0e0e0', fontWeight: 500, fontSize: 13 }}>Make private</div>
+                <div style={{ color: '#999', fontSize: 12 }}>Hidden from search. Existing followers keep access.</div>
               </div>
-              <div style={{ color: '#999', fontSize: 12 }}>
-                {showSpotify() ? 'Hidden from search. Existing followers keep access.' : 'Your channel won\'t appear in our browse or search'}
-              </div>
-            </div>
+            )}
             {showSpotify() && (
               <div style={{ padding: '8px 12px', border: '1px dashed #444', borderRadius: 6 }}>
                 <div style={{ color: '#999', fontWeight: 500, fontSize: 12 }}>
