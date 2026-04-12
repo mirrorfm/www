@@ -910,6 +910,7 @@ function CuratorFlow() {
       await fetchChannelsWithToken(token)
     } catch {
       hasCachedToken.current = false
+    } finally {
       setVerifying(false)
     }
   }
