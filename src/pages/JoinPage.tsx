@@ -854,7 +854,7 @@ function CuratorFlow() {
   const [ytChannels, setYtChannels] = useState<CuratorChannel[] | null>(null)
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null)
   const [claiming, setClaiming] = useState(false)
-  const [demoClaimed, setDemoClaimed] = useState(false)
+  const [demoClaimed, setDemoClaimed] = useState(() => localStorage.getItem('demo_claimed') === '1')
   const [demoGenres, setDemoGenres] = useState<string[]>(['electronic', 'ambient'])
 
   const autoVerifyDone = useRef(false)
@@ -961,13 +961,13 @@ function CuratorFlow() {
           setSubmissions(subRes.data.submissions || [])
         } else {
           // Allow-listed channel not in yt_channels — show demo dashboard
-          setDemoClaimed(true)
+          localStorage.setItem('demo_claimed', '1'); setDemoClaimed(true)
         }
       } else {
         // Allow-listed demo channel — skip API calls, show demo dashboard
         setYtChannels(null)
         setSelectedChannelId(null)
-        setDemoClaimed(true)
+        localStorage.setItem('demo_claimed', '1'); setDemoClaimed(true)
       }
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to claim channel.')
