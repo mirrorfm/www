@@ -854,6 +854,8 @@ function CuratorFlow() {
   const [ytChannels, setYtChannels] = useState<CuratorChannel[] | null>(null)
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null)
   const [claiming, setClaiming] = useState(false)
+  const [demoClaimed, setDemoClaimed] = useState(false)
+  const [demoGenres, setDemoGenres] = useState<string[]>(['electronic', 'ambient'])
 
   const autoVerifyDone = useRef(false)
   // Track if we have a cached token so we can skip the button entirely
@@ -948,7 +950,10 @@ function CuratorFlow() {
         const subRes = await api.get('curator/submissions')
         setSubmissions(subRes.data.submissions || [])
       } else {
-        setError('This channel is not in our index yet. Submit it via GitHub first.')
+        // Allow-listed demo channel — skip API calls, show demo dashboard
+        setYtChannels(null)
+        setSelectedChannelId(null)
+        setDemoClaimed(true)
       }
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to claim channel.')
@@ -982,6 +987,103 @@ function CuratorFlow() {
     if (days === 0) return 'today'
     if (days === 1) return '1 day ago'
     return `${days} days ago`
+  }
+
+  if (demoClaimed) {
+    const demoTracks = [
+      { name: 'Slow Meadow', artist: 'Slow Meadow', score: 94, genres: ['ambient', 'downtempo'] },
+      { name: 'Weightless', artist: 'Marconi Union', score: 87, genres: ['ambient', 'drone'] },
+      { name: 'Nils Frahm', artist: 'Nils Frahm', score: 82, genres: ['neo-classical', 'ambient'] },
+      { name: 'Bonobo', artist: 'Bonobo', score: 76, genres: ['downtempo', 'electronic'] },
+      { name: 'Tycho', artist: 'Tycho', score: 71, genres: ['chillwave', 'ambient'] },
+      { name: 'Kiasmos', artist: 'Kiasmos', score: 68, genres: ['minimal', 'electronic'] },
+    ].filter(t => demoGenres.length === 0 || t.genres.some(g => demoGenres.includes(g)))
+
+    return (
+      <>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24,
+          padding: '16px 20px', background: '#1a2e1a', borderRadius: 10, border: '1px solid #2a3a2a',
+        }}>
+          <CheckCircleOutlineIcon sx={{ fontSize: 24, color: '#1DB954' }} />
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 15 }}>Channel claimed</div>
+            <div style={{ color: '#888', fontSize: 13 }}>You can now receive artist submissions and manage your channel.</div>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, fontFamily: 'Arial, sans-serif' }}>
+            Your channel's genres
+          </div>
+          <p style={{ color: '#999', fontSize: 13, marginBottom: 12 }}>
+            Select genres that describe your channel. Artists will be matched to you based on these.
+          </p>
+          <Autocomplete
+            multiple
+            options={['electronic', 'ambient', 'downtempo', 'techno', 'house', 'minimal', 'drone', 'chillwave', 'neo-classical', 'experimental', 'trance', 'drum and bass', 'dub', 'hip hop', 'indie', 'rock', 'pop', 'jazz', 'soul', 'funk']}
+            value={demoGenres}
+            onChange={(_, value) => setDemoGenres(value.slice(0, 5))}
+            getOptionDisabled={() => demoGenres.length >= 5}
+            renderInput={(params) => (
+              <TextField {...params} size="small" placeholder={demoGenres.length === 0 ? 'Pick up to 5 genres...' : demoGenres.length < 5 ? 'Add genre...' : ''}
+                sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }} />
+            )}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip {...getTagProps({ index })} key={option} size="small" label={option} className="chip-mui-selected" />
+              ))
+            }
+            sx={{ maxWidth: 500 }}
+            size="small"
+          />
+          <div style={{ fontSize: 11, marginTop: 6, color: '#888' }}>
+            {demoGenres.length === 0 && 'Select at least 1 genre.'}
+            {demoGenres.length > 0 && demoGenres.length < 5 && `${5 - demoGenres.length} more available.`}
+          </div>
+        </div>
+
+        <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12, fontFamily: 'Arial, sans-serif' }}>
+          Recommended for your channel ({demoTracks.length})
+        </div>
+        <p style={{ color: '#888', fontSize: 13, marginBottom: 16 }}>
+          Based on your genres, these artists might be a good fit.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {demoTracks.map((track, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 16, padding: 16,
+              border: '1px solid #2a2a2a', borderRadius: 10, background: '#222',
+            }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: 8, background: '#333',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>
+                <MusicNoteIcon sx={{ color: '#555', fontSize: 22 }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, fontSize: 14 }}>{track.artist}</div>
+                <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
+                  {track.genres.map(g => (
+                    <Chip key={g} size="small" label={g}
+                      className={demoGenres.includes(g) ? 'chip-mui-selected' : 'chip-mui'} />
+                  ))}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#1DB954', fontFamily: 'Arial, sans-serif' }}>
+                  {track.score}%
+                </div>
+                <div style={{ fontSize: 11, color: '#666' }}>match</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: '#555', fontSize: 12, marginTop: 12, textAlign: 'center', fontStyle: 'italic' }}>
+          Preview — real submissions from artists will appear here
+        </p>
+      </>
+    )
   }
 
   return (
