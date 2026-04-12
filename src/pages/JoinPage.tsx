@@ -879,16 +879,23 @@ function CuratorFlow() {
 
   // Auto-verify: if we have a cached token, fetch channels immediately (no popup)
   useEffect(() => {
+    if (demoClaimed) return
     if (!loadingChannels && channels.length === 0 && !ytChannels && !autoVerifyDone.current) {
       autoVerifyDone.current = true
       const cached = getYouTubeAccessToken()
       if (cached) {
-        handleVerifySilent(cached)
+        setVerifying(true)
+        fetchChannelsWithToken(cached)
+          .catch(() => {})
+          .finally(() => {
+            hasCachedToken.current = false
+            setVerifying(false)
+          })
       } else {
         hasCachedToken.current = false
       }
     }
-  }, [loadingChannels, channels.length])
+  }, [loadingChannels, channels.length, demoClaimed])
 
   // Fetch channel list using a token
   const fetchChannelsWithToken = async (token: string) => {
