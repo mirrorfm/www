@@ -947,9 +947,15 @@ function CuratorFlow() {
         setYtChannels(null)
         setSelectedChannelId(null)
         const chRes = await api.get('curator/channels')
-        setChannels(chRes.data.channels || [])
-        const subRes = await api.get('curator/submissions')
-        setSubmissions(subRes.data.submissions || [])
+        const claimed = chRes.data.channels || []
+        if (claimed.length > 0) {
+          setChannels(claimed)
+          const subRes = await api.get('curator/submissions')
+          setSubmissions(subRes.data.submissions || [])
+        } else {
+          // Allow-listed channel not in yt_channels — show demo dashboard
+          setDemoClaimed(true)
+        }
       } else {
         // Allow-listed demo channel — skip API calls, show demo dashboard
         setYtChannels(null)
