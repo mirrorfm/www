@@ -26,9 +26,12 @@ export default function Footer({ children }: FooterProps) {
         flexWrap: 'wrap',
         gap: 10,
       }}>
-        <div style={{ display: 'flex', gap: 16, fontSize: 13 }}>
+        <div style={{ display: 'flex', gap: 16, fontSize: 13, flexWrap: 'wrap' }}>
           <Link to="/about/">About</Link>
           <Link to="/logs/">Event logs</Link>
+          <Link to="/privacy/">Privacy</Link>
+          <Link to="/terms/">Terms</Link>
+          <a href="mailto:mirrordotfm@gmail.com" style={{ color: 'inherit' }}>Contact</a>
           {isPrerelease() && <>
             {showSpotify() && <Link to="/owners/">Channel owners</Link>}
             {showSpotify() && <Link to="/report/">Report</Link>}

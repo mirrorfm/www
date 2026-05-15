@@ -7,6 +7,8 @@ import BrowsePage from './pages/BrowsePage'
 import YouTubePage from './pages/YouTubePage'
 import DiscogsPage from './pages/DiscogsPage'
 import AboutPage from './pages/AboutPage'
+import PrivacyPage from './pages/PrivacyPage'
+import TermsPage from './pages/TermsPage'
 import LoginPage from './pages/LoginPage'
 import TakedownPage from './pages/TakedownPage'
 import GenresPage from './pages/GenresPage'
@@ -58,6 +60,8 @@ export default function App() {
         <Route path="/youtube/:id/:name/" element={<YouTubePage />} />
         <Route path="/discogs/:id/:name/" element={<DiscogsPage />} />
         <Route path="/about/" element={<AboutPage />} />
+        <Route path="/privacy/" element={<PrivacyPage />} />
+        <Route path="/terms/" element={<TermsPage />} />
         {pre && <>
           <Route path="/signin/" element={<LoginPage />} />
           <Route path="/about2/" element={<TakedownPage />} />

@@ -141,7 +141,11 @@ export default function SourceThumbnail({ item, items, category, selectedGenresA
           alignItems: 'center',
           gap: 4,
         }}>
-          {isYoutube ? <FaYoutube size={12} color="#999" style={{ flexShrink: 0 }} /> : <SiDiscogs size={12} color="#999" style={{ flexShrink: 0 }} />}
+          {/* YouTube icon replaced with text label to comply with YouTube
+              Branding guidelines (icon must be ≥20px in red/white/black). */}
+          {isYoutube
+            ? <span style={{ fontSize: 10, color: '#999', flexShrink: 0, fontVariant: 'small-caps', textTransform: 'uppercase', letterSpacing: 0.5, fontWeight: 600 }}>YouTube</span>
+            : <SiDiscogs size={12} color="#999" style={{ flexShrink: 0 }} />}
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
         </div>
       </Link>

@@ -36,7 +36,7 @@ export default function ChannelDetail({ channel }: ChannelDetailProps) {
             <a href={`https://youtube.com/playlist?list=${upload_playlist_id}`}
               target="_blank" rel="noopener noreferrer"
               style={{ color: '#d4d4d4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, verticalAlign: 'middle' }}>
-              <FaYoutube size={22} color="#FF0000" />
+              <FaYoutube size={30} color="#FF0000" />
               YouTube channel
             </a>
           </h4>
