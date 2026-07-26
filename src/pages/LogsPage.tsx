@@ -9,16 +9,19 @@ import { api } from '../config'
 
 export default function LogsPage() {
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [data, setData] = useState<any[]>([])
 
   useEffect(() => {
     api.get('events')
-      .then(({ data }) => { setLoading(false); setData(data) })
-      .catch(() => setLoading(false))
+      // The API returns null/[] when there are no events in the last 24 hours,
+      // so coerce to an array to keep the render safe.
+      .then(({ data }) => { setLoading(false); setData(Array.isArray(data) ? data : []) })
+      .catch(() => { setLoading(false); setError(true) })
   }, [])
 
   const grouped = useMemo(() => {
-    return Object.values(data.reduce((acc: Record<string, any>, event: any) => {
+    return Object.values((data ?? []).reduce((acc: Record<string, any>, event: any) => {
       const id = event.spotify_playlist
       if (!acc[id]) {
         acc[id] = { ...event }
@@ -50,8 +53,13 @@ export default function LogsPage() {
               ))}
             </ul>
           </>
+        ) : error ? (
+          <p>Couldn't load event logs. Please try again later.</p>
         ) : (
-          <p>Error fetching event logs</p>
+          <>
+            <h2>Event logs (last 24 hours)</h2>
+            <p>No events in the last 24 hours.</p>
+          </>
         )}
       </div>
     </Layout>
